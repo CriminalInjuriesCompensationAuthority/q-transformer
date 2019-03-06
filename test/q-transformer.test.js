@@ -1225,4 +1225,50 @@ describe('qTransformer', () => {
             expect(result).toEqual(expected);
         });
     });
+
+    describe('Display schema errors', () => {
+        it('should display errors for govukInput instruction', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'event-name',
+                schema: {
+                    type: 'string',
+                    title: 'Event name',
+                    description: "The name you'll use on promotional material."
+                    // TODO: add appropriate ajv errorMessage property e.g. errorMessage: 'Wrong type'
+                },
+                uiSchema: {},
+                data: {
+                    'event-name': 1 // this should cause an error as it's not a string
+                },
+                schemaErrors: {
+                    'event-name': 'Wrong type'
+                }
+            });
+
+            const expected = {
+                id: 'event-name',
+                dependencies: ['{% from "input/macro.njk" import govukInput %}'],
+                componentName: 'govukInput',
+                macroOptions: {
+                    label: {
+                        classes: 'govuk-label--xl',
+                        isPageHeading: true,
+                        text: 'Event name'
+                    },
+                    hint: {
+                        text: "The name you'll use on promotional material."
+                    },
+                    id: 'event-name',
+                    name: 'event-name',
+                    type: 'text',
+                    value: 1,
+                    errorMessage: {
+                        text: 'Wrong type'
+                    }
+                }
+            };
+
+            expect(result).toEqual(expected);
+        });
+    });
 });
