@@ -1,5 +1,5 @@
-const createQTransformer = require('../q-transformer');
-const defaultTransformer = require('../transformers/default');
+const createQTransformer = require('../lib/q-transformer');
+const defaultTransformer = require('../lib/transformers/default');
 
 // Remove indentation from strings when comparing them
 function removeIndentation(val) {
@@ -424,6 +424,83 @@ describe('qTransformer', () => {
                                 "classes": "govuk-label--xl"
                             },
                             "hint": null
+                        }) }}
+                        {{ govukButton({
+                            text: "Continue"
+                        }) }}
+                    </form>`;
+
+                expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+            });
+
+            it('should render a nunjucks representation of a form including an h1 if schema.title is present', () => {
+                const result = qTransformer.transform({
+                    schemaKey: 'event-name',
+                    schema: {
+                        type: 'object',
+                        title: 'Event name',
+                        propertyNames: {
+                            enum: ['email']
+                        },
+                        properties: {
+                            declaration: {
+                                description: `
+                                    <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                                    {{ govukWarningText({
+                                        text: "You could be prosecuted or get less compensation if you give false or misleading information."
+                                    }) }}
+                                `
+                            },
+                            email: {
+                                type: 'string',
+                                description: 'e.g. something@something.com',
+                                format: 'email',
+                                title: 'Email address'
+                            }
+                        }
+                    },
+                    uiSchema: {
+                        'event-name': {
+                            options: {
+                                properties: {
+                                    email: {
+                                        options: {
+                                            macroOptions: {
+                                                label: {
+                                                    isPageHeading: false,
+                                                    classes: ''
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                const expected = `
+                    <form method="post">
+                        {% from "button/macro.njk" import govukButton %}
+                        {% from "warning-text/macro.njk" import govukWarningText %}
+                        {% from "input/macro.njk" import govukInput %}
+                        <h1 class="govuk-heading-xl">Event name</h1>
+                        <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                        {{ govukWarningText({
+                            text: "You could be prosecuted or get less compensation if you give false or misleading information."
+                        }) }}
+                        {{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "text": "Email address",
+                                "isPageHeading": false,
+                                "classes": ""
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com"
+                            }
                         }) }}
                         {{ govukButton({
                             text: "Continue"
