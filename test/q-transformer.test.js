@@ -95,13 +95,13 @@ describe('qTransformer', () => {
                 expect(result).toEqual(expected);
             });
 
-            describe('And a minLength >= 500', () => {
+            describe('And a maxLength >= 500', () => {
                 it('should convert it to a govukTextarea instruction', () => {
                     const result = qTransformer.transform({
                         schemaKey: 'more-detail',
                         schema: {
                             type: 'string',
-                            minLength: 500,
+                            maxLength: 500,
                             title: 'Can you provide more detail?',
                             description:
                                 'Do not include personal or financial information, like your National Insurance number or credit card details.'
@@ -1134,7 +1134,7 @@ describe('qTransformer', () => {
                 schemaKey: 'more-detail',
                 schema: {
                     type: 'string',
-                    minLength: 500,
+                    maxLength: 500,
                     title: 'Can you provide more detail?',
                     description:
                         'Do not include personal or financial information, like your National Insurance number or credit card details.'
