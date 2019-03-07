@@ -264,7 +264,7 @@ describe('qTransformer', () => {
                         description: 'Select all that apply.',
                         type: 'array',
                         items: {
-                            oneOf: [
+                            anyOf: [
                                 {
                                     title: 'Waste from animal carcasses',
                                     const: 'carcasses'
@@ -1068,7 +1068,7 @@ describe('qTransformer', () => {
                     description: 'Select all that apply.',
                     type: 'array',
                     items: {
-                        oneOf: [
+                        anyOf: [
                             {
                                 title: 'Waste from animal carcasses',
                                 const: 'carcasses'
