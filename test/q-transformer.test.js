@@ -369,66 +369,66 @@ describe('qTransformer', () => {
                 });
 
                 const expected = `
-                    <form method="post">
-                        {% from "button/macro.njk" import govukButton %}
-                        {% from "warning-text/macro.njk" import govukWarningText %}
-                        {% from "input/macro.njk" import govukInput %}
-                        {% from "details/macro.njk" import govukDetails %}
-                        <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
-                        {{ govukWarningText({
-                            text: "You could be prosecuted or get less compensation if you give false or misleading information."
-                        }) }}
-                        {{ govukInput({
-                            "id": "email",
-                            "name": "email",
-                            "type": "email",
-                            "label": {
-                                "text": "Email address",
-                                "isPageHeading": true,
-                                "classes": "govuk-label--xl"
-                            },
-                            "hint": {
-                                "text": "e.g. something@something.com"
-                            }
-                        }) }}
-                        <p>Some instructions</p>
-                        {{ govukWarningText({
-                            text: "Follow these exactly as described"
-                        }) }}
-                        <ol>
-                            <li>Instruction 1</li>
-                            <li>Instruction 2</li>
-                        </ol>
-                        {{ govukDetails({
-                            summaryText: "Help",
-                            text: "Follow the instructions"
-                        }) }}
-                        {{ govukInput({
-                            "id": "phone",
-                            "name": "phone",
-                            "type": "text",
-                            "label": {
-                                "text": "Phone number",
-                                "isPageHeading": true,
-                                "classes": "govuk-label--xl"
-                            },
-                            "hint": null
-                        }) }}
-                        {{ govukInput({
-                            "id": "text",
-                            "name": "text",
-                            "type": "text",
-                            "label": {
-                                "text": "Mobile phone number",
-                                "isPageHeading": true,
-                                "classes": "govuk-label--xl"
-                            },
-                            "hint": null
-                        }) }}
-                        {{ govukButton({
-                            text: "Continue"
-                        }) }}
-                    </form>`;
+                        <form method="post">
+                            {% from "button/macro.njk" import govukButton %}
+                            {% from "warning-text/macro.njk" import govukWarningText %}
+                            {% from "input/macro.njk" import govukInput %}
+                            {% from "details/macro.njk" import govukDetails %}
+                            <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                            {{ govukWarningText({
+                                text: "You could be prosecuted or get less compensation if you give false or misleading information."
+                            }) }}
+                            {{ govukInput({
+                                "id": "email",
+                                "name": "email",
+                                "type": "email",
+                                "label": {
+                                    "text": "Email address",
+                                    "isPageHeading": true,
+                                    "classes": "govuk-label--xl"
+                                },
+                                "hint": {
+                                    "text": "e.g. something@something.com"
+                                }
+                            }) }}
+                            <p>Some instructions</p>
+                            {{ govukWarningText({
+                                text: "Follow these exactly as described"
+                            }) }}
+                            <ol>
+                                <li>Instruction 1</li>
+                                <li>Instruction 2</li>
+                            </ol>
+                            {{ govukDetails({
+                                summaryText: "Help",
+                                text: "Follow the instructions"
+                            }) }}
+                            {{ govukInput({
+                                "id": "phone",
+                                "name": "phone",
+                                "type": "text",
+                                "label": {
+                                    "text": "Phone number",
+                                    "isPageHeading": true,
+                                    "classes": "govuk-label--xl"
+                                },
+                                "hint": null
+                            }) }}
+                            {{ govukInput({
+                                "id": "text",
+                                "name": "text",
+                                "type": "text",
+                                "label": {
+                                    "text": "Mobile phone number",
+                                    "isPageHeading": true,
+                                    "classes": "govuk-label--xl"
+                                },
+                                "hint": null
+                            }) }}
+                            {{ govukButton({
+                                text: "Continue"
+                            }) }}
+                        </form>`;
 
                 expect(removeIndentation(result)).toEqual(removeIndentation(expected));
             });
