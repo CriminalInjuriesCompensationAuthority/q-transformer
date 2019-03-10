@@ -642,6 +642,7 @@ describe('qTransformer', () => {
                     const expected = `
                         <form method="post">
                             {% from "button/macro.njk" import govukButton %}
+                            {% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
                             {{ govukRadios({
                                 "idPrefix": "contact",
@@ -828,6 +829,7 @@ describe('qTransformer', () => {
                     const expected = `
                         <form method="post">
                             {% from "button/macro.njk" import govukButton %}
+                            {% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
                             {{ govukRadios({
                                 "idPrefix": "contact",
