@@ -79,8 +79,6 @@ describe('qTransformer', () => {
                     componentName: 'govukInput',
                     macroOptions: {
                         label: {
-                            classes: 'govuk-label--xl',
-                            isPageHeading: true,
                             text: 'Event name'
                         },
                         hint: {
@@ -117,9 +115,7 @@ describe('qTransformer', () => {
                             name: 'more-detail',
                             id: 'more-detail',
                             label: {
-                                text: 'Can you provide more detail?',
-                                classes: 'govuk-label--xl',
-                                isPageHeading: true
+                                text: 'Can you provide more detail?'
                             },
                             hint: {
                                 text:
@@ -170,9 +166,7 @@ describe('qTransformer', () => {
                             name: 'where-do-you-live',
                             fieldset: {
                                 legend: {
-                                    text: 'Where do you live?',
-                                    isPageHeading: true,
-                                    classes: 'govuk-fieldset__legend--xl'
+                                    text: 'Where do you live?'
                                 }
                             },
                             hint: null,
@@ -222,9 +216,7 @@ describe('qTransformer', () => {
                             id: 'passport-issued',
                             fieldset: {
                                 legend: {
-                                    text: 'When was your passport issued?',
-                                    isPageHeading: true,
-                                    classes: 'govuk-fieldset__legend--xl'
+                                    text: 'When was your passport issued?'
                                 }
                             },
                             hint: {
@@ -292,9 +284,7 @@ describe('qTransformer', () => {
                         name: 'waste',
                         fieldset: {
                             legend: {
-                                text: 'Which types of waste do you transport?',
-                                isPageHeading: true,
-                                classes: 'govuk-fieldset__legend--xl'
+                                text: 'Which types of waste do you transport?'
                             }
                         },
                         hint: {
@@ -331,14 +321,6 @@ describe('qTransformer', () => {
                             enum: ['email', 'phone', 'text']
                         },
                         properties: {
-                            declaration: {
-                                description: `
-                                    <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
-                                    {{ govukWarningText({
-                                        text: "You could be prosecuted or get less compensation if you give false or misleading information."
-                                    }) }}
-                                `
-                            },
                             email: {
                                 type: 'string',
                                 description: 'e.g. something@something.com',
@@ -362,7 +344,15 @@ describe('qTransformer', () => {
                                 `
                             },
                             phone: {type: 'string', title: 'Phone number'},
-                            text: {type: 'string', title: 'Mobile phone number'}
+                            text: {type: 'string', title: 'Mobile phone number'},
+                            declaration: {
+                                description: `
+                                    <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                                    {{ govukWarningText({
+                                        text: "You could be prosecuted or get less compensation if you give false or misleading information."
+                                    }) }}
+                                `
+                            }
                         }
                     },
                     uiSchema: {}
@@ -371,13 +361,9 @@ describe('qTransformer', () => {
                 const expected = `
                     <form method="post">
                         {% from "button/macro.njk" import govukButton %}
-                        {% from "warning-text/macro.njk" import govukWarningText %}
                         {% from "input/macro.njk" import govukInput %}
+                        {% from "warning-text/macro.njk" import govukWarningText %}
                         {% from "details/macro.njk" import govukDetails %}
-                        <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
-                        {{ govukWarningText({
-                            text: "You could be prosecuted or get less compensation if you give false or misleading information."
-                        }) }}
                         {{ govukInput({
                             "id": "email",
                             "name": "email",
@@ -408,9 +394,7 @@ describe('qTransformer', () => {
                             "name": "phone",
                             "type": "text",
                             "label": {
-                                "text": "Phone number",
-                                "isPageHeading": true,
-                                "classes": "govuk-label--xl"
+                                "text": "Phone number"
                             },
                             "hint": null
                         }) }}
@@ -419,11 +403,13 @@ describe('qTransformer', () => {
                             "name": "text",
                             "type": "text",
                             "label": {
-                                "text": "Mobile phone number",
-                                "isPageHeading": true,
-                                "classes": "govuk-label--xl"
+                                "text": "Mobile phone number"
                             },
                             "hint": null
+                        }) }}
+                        <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                        {{ govukWarningText({
+                            text: "You could be prosecuted or get less compensation if you give false or misleading information."
                         }) }}
                         {{ govukButton({
                             text: "Continue"
@@ -443,6 +429,12 @@ describe('qTransformer', () => {
                             enum: ['email']
                         },
                         properties: {
+                            email: {
+                                type: 'string',
+                                description: 'e.g. something@something.com',
+                                format: 'email',
+                                title: 'Email address'
+                            },
                             declaration: {
                                 description: `
                                     <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
@@ -450,57 +442,32 @@ describe('qTransformer', () => {
                                         text: "You could be prosecuted or get less compensation if you give false or misleading information."
                                     }) }}
                                 `
-                            },
-                            email: {
-                                type: 'string',
-                                description: 'e.g. something@something.com',
-                                format: 'email',
-                                title: 'Email address'
                             }
                         }
                     },
-                    uiSchema: {
-                        'event-name': {
-                            options: {
-                                properties: {
-                                    email: {
-                                        options: {
-                                            macroOptions: {
-                                                label: {
-                                                    isPageHeading: false,
-                                                    classes: ''
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    uiSchema: {}
                 });
 
                 const expected = `
                     <form method="post">
                         {% from "button/macro.njk" import govukButton %}
-                        {% from "warning-text/macro.njk" import govukWarningText %}
                         {% from "input/macro.njk" import govukInput %}
+                        {% from "warning-text/macro.njk" import govukWarningText %}
                         <h1 class="govuk-heading-xl">Event name</h1>
-                        <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
-                        {{ govukWarningText({
-                            text: "You could be prosecuted or get less compensation if you give false or misleading information."
-                        }) }}
                         {{ govukInput({
                             "id": "email",
                             "name": "email",
                             "type": "email",
                             "label": {
-                                "text": "Email address",
-                                "isPageHeading": false,
-                                "classes": ""
+                                "text": "Email address"
                             },
                             "hint": {
                                 "text": "e.g. something@something.com"
                             }
+                        }) }}
+                        <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                        {{ govukWarningText({
+                            text: "You could be prosecuted or get less compensation if you give false or misleading information."
                         }) }}
                         {{ govukButton({
                             text: "Continue"
@@ -534,9 +501,7 @@ describe('qTransformer', () => {
                         name: 'changed-name',
                         fieldset: {
                             legend: {
-                                text: 'Have you changed your name?',
-                                isPageHeading: true,
-                                classes: 'govuk-fieldset__legend--xl'
+                                text: 'Have you changed your name?'
                             }
                         },
                         hint: {
@@ -702,9 +667,7 @@ describe('qTransformer', () => {
                                                     "name": "email",
                                                     "type": "email",
                                                     "label": {
-                                                        "text": "Email address",
-                                                        "isPageHeading": false,
-                                                        "classes": ""
+                                                        "text": "Email address"
                                                     },
                                                     "hint": {
                                                         "text": "e.g. something@something.com"
@@ -724,9 +687,7 @@ describe('qTransformer', () => {
                                                     "name": "phone",
                                                     "type": "text",
                                                     "label": {
-                                                        "text": "Phone number",
-                                                        "isPageHeading": false,
-                                                        "classes": ""
+                                                        "text": "Phone number"
                                                     },
                                                     "hint": null,
                                                     "classes": "govuk-!-width-one-third"
@@ -744,9 +705,7 @@ describe('qTransformer', () => {
                                                     "name": "text",
                                                     "type": "text",
                                                     "label": {
-                                                        "text": "Mobile phone number",
-                                                        "isPageHeading": false,
-                                                        "classes": ""
+                                                        "text": "Mobile phone number"
                                                     },
                                                     "hint": null,
                                                     "classes": "govuk-!-width-one-third"
@@ -894,9 +853,7 @@ describe('qTransformer', () => {
                                                     "name": "email",
                                                     "type": "email",
                                                     "label": {
-                                                        "text": "Email address",
-                                                        "isPageHeading": false,
-                                                        "classes": ""
+                                                        "text": "Email address"
                                                     },
                                                     "hint": {
                                                         "text": "e.g. something@something.com"
@@ -908,9 +865,7 @@ describe('qTransformer', () => {
                                                     "name": "phone",
                                                     "type": "text",
                                                     "label": {
-                                                        "text": "Phone number",
-                                                        "isPageHeading": false,
-                                                        "classes": ""
+                                                        "text": "Phone number"
                                                     },
                                                     "hint": null,
                                                     "classes": "govuk-!-width-one-third"
@@ -920,9 +875,7 @@ describe('qTransformer', () => {
                                                     "name": "text",
                                                     "type": "text",
                                                     "label": {
-                                                        "text": "Mobile phone number",
-                                                        "isPageHeading": false,
-                                                        "classes": ""
+                                                        "text": "Mobile phone number"
                                                     },
                                                     "hint": null,
                                                     "classes": "govuk-!-width-one-third"
@@ -1021,8 +974,6 @@ describe('qTransformer', () => {
                 componentName: 'govukInput',
                 macroOptions: {
                     label: {
-                        classes: 'govuk-label--xl',
-                        isPageHeading: true,
                         text: 'Event name'
                     },
                     hint: {
@@ -1078,9 +1029,7 @@ describe('qTransformer', () => {
                     name: 'where-do-you-live',
                     fieldset: {
                         legend: {
-                            text: 'Where do you live?',
-                            isPageHeading: true,
-                            classes: 'govuk-fieldset__legend--xl'
+                            text: 'Where do you live?'
                         }
                     },
                     hint: null,
@@ -1148,9 +1097,7 @@ describe('qTransformer', () => {
                     name: 'waste',
                     fieldset: {
                         legend: {
-                            text: 'Which types of waste do you transport?',
-                            isPageHeading: true,
-                            classes: 'govuk-fieldset__legend--xl'
+                            text: 'Which types of waste do you transport?'
                         }
                     },
                     hint: {
@@ -1202,9 +1149,7 @@ describe('qTransformer', () => {
                     name: 'more-detail',
                     id: 'more-detail',
                     label: {
-                        text: 'Can you provide more detail?',
-                        classes: 'govuk-label--xl',
-                        isPageHeading: true
+                        text: 'Can you provide more detail?'
                     },
                     hint: {
                         text:
@@ -1240,9 +1185,7 @@ describe('qTransformer', () => {
                     id: 'passport-issued',
                     fieldset: {
                         legend: {
-                            text: 'When was your passport issued?',
-                            isPageHeading: true,
-                            classes: 'govuk-fieldset__legend--xl'
+                            text: 'When was your passport issued?'
                         }
                     },
                     hint: {
