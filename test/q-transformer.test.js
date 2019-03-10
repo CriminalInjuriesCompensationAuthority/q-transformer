@@ -280,8 +280,7 @@ describe('qTransformer', () => {
                     dependencies: ['{% from "checkboxes/macro.njk" import govukCheckboxes %}'],
                     componentName: 'govukCheckboxes',
                     macroOptions: {
-                        idPrefix: 'waste',
-                        name: 'waste',
+                        name: 'waste[]',
                         fieldset: {
                             legend: {
                                 text: 'Which types of waste do you transport?'
@@ -1086,7 +1085,7 @@ describe('qTransformer', () => {
                 },
                 uiSchema: {},
                 data: {
-                    waste: ['mines', 'farm']
+                    'waste[]': ['mines', 'farm']
                 }
             });
 
@@ -1095,8 +1094,7 @@ describe('qTransformer', () => {
                 dependencies: ['{% from "checkboxes/macro.njk" import govukCheckboxes %}'],
                 componentName: 'govukCheckboxes',
                 macroOptions: {
-                    idPrefix: 'waste',
-                    name: 'waste',
+                    name: 'waste[]',
                     fieldset: {
                         legend: {
                             text: 'Which types of waste do you transport?'
