@@ -952,6 +952,55 @@ describe('qTransformer', () => {
     });
 
     describe('Pre-populate input values with supplied data', () => {
+        it('should pre-populate instructions called from Form', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'event-name',
+                schema: {
+                    type: 'object',
+                    propertyNames: {
+                        enum: ['email']
+                    },
+                    properties: {
+                        email: {
+                            type: 'string',
+                            description: 'e.g. something@something.com',
+                            format: 'email',
+                            title: 'Email address'
+                        }
+                    }
+                },
+                uiSchema: {},
+                data: {
+                    email: 'peppa@peppapig.com'
+                }
+            });
+
+            const expected = `
+                <form method="post">
+                    {% from "button/macro.njk" import govukButton %}
+                    {% from "input/macro.njk" import govukInput %}
+                    {{ govukInput({
+                        "id": "email",
+                        "name": "email",
+                        "type": "email",
+                        "label": {
+                            "text": "Email address",
+                            "isPageHeading": true,
+                            "classes": "govuk-label--xl"
+                        },
+                        "hint": {
+                            "text": "e.g. something@something.com"
+                        },
+                        "value": "peppa@peppapig.com"
+                    }) }}
+                    {{ govukButton({
+                        text: "Continue"
+                    }) }}
+                </form>`;
+
+            expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+        });
+
         it('should pre-populate a govukInput instruction', () => {
             const result = qTransformer.transform({
                 schemaKey: 'event-name',
