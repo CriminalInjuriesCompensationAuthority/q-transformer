@@ -280,8 +280,7 @@ describe('qTransformer', () => {
                     dependencies: ['{% from "checkboxes/macro.njk" import govukCheckboxes %}'],
                     componentName: 'govukCheckboxes',
                     macroOptions: {
-                        idPrefix: 'waste',
-                        name: 'waste',
+                        name: 'waste[]',
                         fieldset: {
                             legend: {
                                 text: 'Which types of waste do you transport?'
@@ -642,6 +641,7 @@ describe('qTransformer', () => {
                     const expected = `
                         <form method="post">
                             {% from "button/macro.njk" import govukButton %}
+                            {% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
                             {{ govukRadios({
                                 "idPrefix": "contact",
@@ -828,6 +828,7 @@ describe('qTransformer', () => {
                     const expected = `
                         <form method="post">
                             {% from "button/macro.njk" import govukButton %}
+                            {% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
                             {{ govukRadios({
                                 "idPrefix": "contact",
@@ -1084,7 +1085,7 @@ describe('qTransformer', () => {
                 },
                 uiSchema: {},
                 data: {
-                    waste: ['mines', 'farm']
+                    'waste[]': ['mines', 'farm']
                 }
             });
 
@@ -1093,8 +1094,7 @@ describe('qTransformer', () => {
                 dependencies: ['{% from "checkboxes/macro.njk" import govukCheckboxes %}'],
                 componentName: 'govukCheckboxes',
                 macroOptions: {
-                    idPrefix: 'waste',
-                    name: 'waste',
+                    name: 'waste[]',
                     fieldset: {
                         legend: {
                             text: 'Which types of waste do you transport?'
