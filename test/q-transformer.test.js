@@ -1226,7 +1226,6 @@ describe('qTransformer', () => {
                     type: 'string',
                     title: 'Event name',
                     description: "The name you'll use on promotional material."
-                    // TODO: add appropriate ajv errorMessage property e.g. errorMessage: 'Wrong type'
                 },
                 uiSchema: {},
                 data: {
@@ -1243,8 +1242,6 @@ describe('qTransformer', () => {
                 componentName: 'govukInput',
                 macroOptions: {
                     label: {
-                        classes: 'govuk-label--xl',
-                        isPageHeading: true,
                         text: 'Event name'
                     },
                     hint: {
@@ -1261,6 +1258,350 @@ describe('qTransformer', () => {
             };
 
             expect(result).toEqual(expected);
+        });
+
+        it('should display errors for govukDateInput instruction', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'event-name',
+                schema: {
+                    type: 'string',
+                    format: 'date-time',
+                    title: 'Event name',
+                    description: "The name you'll use on promotional material."
+                },
+                uiSchema: {},
+                data: {
+                    'event-name': '0000-00-00T00:00:00.000Z' // this should cause an error as it's not a valid date
+                },
+                schemaErrors: {
+                    'event-name': 'Not a valid date'
+                }
+            });
+
+            const expected = {
+                id: 'event-name',
+                dependencies: ['{% from "date-input/macro.njk" import govukDateInput %}'],
+                componentName: 'govukDateInput',
+                macroOptions: {
+                    id: 'event-name',
+                    fieldset: {
+                        legend: {
+                            text: 'Event name'
+                        }
+                    },
+                    hint: {
+                        text: "The name you'll use on promotional material."
+                    },
+                    errorMessage: {
+                        text: 'Not a valid date'
+                    },
+                    items: [
+                        {
+                            label: 'Day',
+                            classes: 'govuk-input--width-2 govuk-input--error',
+                            name: 'event-name[day]',
+                            value: 0
+                        },
+                        {
+                            label: 'Month',
+                            classes: 'govuk-input--width-2 govuk-input--error',
+                            name: 'event-name[month]',
+                            value: 0
+                        },
+                        {
+                            label: 'Year',
+                            classes: 'govuk-input--width-4 govuk-input--error',
+                            name: 'event-name[year]',
+                            value: 0
+                        }
+                    ]
+                }
+            };
+            expect(result).toEqual(expected);
+        });
+
+        it('should display errors for govukCheckboxes instruction', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'waste',
+                schema: {
+                    title: 'Which types of waste do you transport?',
+                    description: 'Select all that apply.',
+                    type: 'array',
+                    items: {
+                        anyOf: [
+                            {
+                                title: 'Waste from animal carcasses',
+                                const: 'carcasses'
+                            },
+                            {
+                                title: 'Waste from mines or quarries',
+                                const: 'mines'
+                            },
+                            {
+                                title: 'Farm or agricultural waste',
+                                const: 'farm'
+                            }
+                        ]
+                    }
+                },
+                uiSchema: {},
+                data: {
+                    waste: ["something that doesn't match any of the items", 'farm'] // this should cause an error
+                },
+                schemaErrors: {
+                    waste: 'Please select an option'
+                }
+            });
+
+            const expected = {
+                id: 'waste',
+                dependencies: ['{% from "checkboxes/macro.njk" import govukCheckboxes %}'],
+                componentName: 'govukCheckboxes',
+                macroOptions: {
+                    idPrefix: 'waste',
+                    name: 'waste',
+                    fieldset: {
+                        legend: {
+                            text: 'Which types of waste do you transport?'
+                        }
+                    },
+                    hint: {
+                        text: 'Select all that apply.'
+                    },
+                    errorMessage: {
+                        text: 'Please select an option'
+                    },
+                    items: [
+                        {
+                            value: 'carcasses',
+                            text: 'Waste from animal carcasses'
+                        },
+                        {
+                            value: 'mines',
+                            text: 'Waste from mines or quarries'
+                        },
+                        {
+                            value: 'farm',
+                            text: 'Farm or agricultural waste',
+                            checked: true
+                        }
+                    ]
+                }
+            };
+
+            expect(result).toEqual(expected);
+        });
+
+        it('should display errors for govukRadios instruction', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'changed-name',
+                schema: {
+                    type: 'boolean',
+                    title: 'Have you changed your name?',
+                    description:
+                        'This includes changing your last name or spelling your name differently.'
+                },
+                uiSchema: {},
+                data: {
+                    'changed-name': '' // this should cause an error
+                },
+                schemaErrors: {
+                    'changed-name': 'Please select Yes if you have changed your name'
+                }
+            });
+
+            const expected = {
+                id: 'changed-name',
+                dependencies: ['{% from "radios/macro.njk" import govukRadios %}'],
+                componentName: 'govukRadios',
+                macroOptions: {
+                    classes: 'govuk-radios--inline',
+                    idPrefix: 'changed-name',
+                    name: 'changed-name',
+                    fieldset: {
+                        legend: {
+                            text: 'Have you changed your name?'
+                        }
+                    },
+                    hint: {
+                        text:
+                            'This includes changing your last name or spelling your name differently.'
+                    },
+                    errorMessage: {
+                        text: 'Please select Yes if you have changed your name'
+                    },
+                    items: [
+                        {
+                            value: true,
+                            text: 'Yes'
+                        },
+                        {
+                            value: false,
+                            text: 'No'
+                        }
+                    ]
+                }
+            };
+
+            expect(result).toEqual(expected);
+        });
+
+        it('should display errors for govukTextarea instruction', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'more-detail',
+                schema: {
+                    type: 'string',
+                    maxLength: 500,
+                    title: 'Can you provide more detail?',
+                    description:
+                        'Do not include personal or financial information, like your National Insurance number or credit card details.'
+                },
+                uiSchema: {},
+                data: {
+                    'more-detail': 123 // this should cause an error as it's not a string
+                },
+                schemaErrors: {
+                    'more-detail': 'Please enter more details'
+                }
+            });
+
+            const expected = {
+                id: 'more-detail',
+                dependencies: ['{% from "textarea/macro.njk" import govukTextarea %}'],
+                componentName: 'govukTextarea',
+                macroOptions: {
+                    name: 'more-detail',
+                    id: 'more-detail',
+                    label: {
+                        text: 'Can you provide more detail?'
+                    },
+                    errorMessage: {
+                        text: 'Please enter more details'
+                    },
+                    hint: {
+                        text:
+                            'Do not include personal or financial information, like your National Insurance number or credit card details.'
+                    },
+                    value: 123
+                }
+            };
+
+            expect(result).toEqual(expected);
+        });
+
+        it('should display an error summary above the form', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'event-name',
+                schema: {
+                    type: 'object',
+                    propertyNames: {
+                        enum: ['email', 'phone', 'text']
+                    },
+                    properties: {
+                        email: {
+                            type: 'string',
+                            description: 'e.g. something@something.com',
+                            format: 'email',
+                            title: 'Email address'
+                        },
+                        instructions: {
+                            description: `
+                                    <p>Some instructions</p>
+                                    {{ govukWarningText({
+                                        text: "Follow these exactly as described"
+                                    }) }}
+                                    <ol>
+                                        <li>Instruction 1</li>
+                                        <li>Instruction 2</li>
+                                    </ol>
+                                    {{ govukDetails({
+                                        summaryText: "Help",
+                                        text: "Follow the instructions"
+                                    }) }}
+                                `
+                        },
+                        phone: {type: 'string', title: 'Phone number'},
+                        text: {type: 'string', title: 'Mobile phone number'},
+                        declaration: {
+                            description: `
+                                    <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                                    {{ govukWarningText({
+                                        text: "You could be prosecuted or get less compensation if you give false or misleading information."
+                                    }) }}
+                                `
+                        }
+                    }
+                },
+                uiSchema: {},
+                schemaErrors: {
+                    'event-one': 'Please enter a value',
+                    'event-two': 'This is not a valid type'
+                }
+            });
+
+            const expected = `
+                    {% from "error-summary/macro.njk" import govukErrorSummary %}
+                      {{ govukErrorSummary({
+                        titleText: "There is a problem",
+                        errorList:[{"href":"#event-one","text":"Please enter a value"},{"href":"#event-two","text":"This is not a valid type"}]}) }}
+                        <form method="post">
+                        {% from "button/macro.njk" import govukButton %}
+                        {% from "input/macro.njk" import govukInput %}
+                        {% from "warning-text/macro.njk" import govukWarningText %}
+                        {% from "details/macro.njk" import govukDetails %}
+                        {{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "text": "Email address",
+                                "isPageHeading": true,
+                                "classes": "govuk-label--xl"
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com"
+                            }
+                        }) }}
+                        <p>Some instructions</p>
+                        {{ govukWarningText({
+                            text: "Follow these exactly as described"
+                        }) }}
+                        <ol>
+                            <li>Instruction 1</li>
+                            <li>Instruction 2</li>
+                        </ol>
+                        {{ govukDetails({
+                            summaryText: "Help",
+                            text: "Follow the instructions"
+                        }) }}
+                        {{ govukInput({
+                            "id": "phone",
+                            "name": "phone",
+                            "type": "text",
+                            "label": {
+                                "text": "Phone number"
+                            },
+                            "hint": null
+                        }) }}
+                        {{ govukInput({
+                            "id": "text",
+                            "name": "text",
+                            "type": "text",
+                            "label": {
+                                "text": "Mobile phone number"
+                            },
+                            "hint": null
+                        }) }}
+                        <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                        {{ govukWarningText({
+                            text: "You could be prosecuted or get less compensation if you give false or misleading information."
+                        }) }}
+                        {{ govukButton({
+                            text: "Continue"
+                        }) }}
+                    </form>`;
+
+            expect(removeIndentation(result)).toEqual(removeIndentation(expected));
         });
     });
 });
