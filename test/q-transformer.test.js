@@ -1085,7 +1085,7 @@ describe('qTransformer', () => {
                 },
                 uiSchema: {},
                 data: {
-                    'waste[]': ['mines', 'farm']
+                    waste: ['mines', 'farm']
                 }
             });
 
