@@ -244,6 +244,59 @@ describe('qTransformer', () => {
 
                     expect(result).toEqual(expected);
                 });
+
+                it('should add the auto-complete class to the govUk object. ', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'passport-issued',
+                        schema: {
+                            type: 'string',
+                            format: 'date-time', // https://www.iso.org/iso-8601-date-and-time-format.html
+                            title: 'When was your passport issued?',
+                            autoComplete: true, //  This will only have an affect if it is true. It is not necessary to include it if the answer is false.
+                            description: 'For example, 12 11 2007'
+                        },
+                        uiSchema: {}
+                    });
+
+                    const expected = {
+                        id: 'passport-issued',
+                        dependencies: ['{% from "date-input/macro.njk" import govukDateInput %}'],
+                        componentName: 'govukDateInput',
+                        macroOptions: {
+                            id: 'passport-issued',
+                            fieldset: {
+                                legend: {
+                                    text: 'When was your passport issued?'
+                                }
+                            },
+                            hint: {
+                                text: 'For example, 12 11 2007'
+                            },
+                            items: [
+                                {
+                                    label: 'Day',
+                                    classes: 'govuk-input--width-2',
+                                    name: 'passport-issued[day]',
+                                    autocomplete: 'bday-day'
+                                },
+                                {
+                                    label: 'Month',
+                                    classes: 'govuk-input--width-2',
+                                    name: 'passport-issued[month]',
+                                    autocomplete: 'bday-month'
+                                },
+                                {
+                                    label: 'Year',
+                                    classes: 'govuk-input--width-4',
+                                    name: 'passport-issued[year]',
+                                    autocomplete: 'bday-year'
+                                }
+                            ]
+                        }
+                    };
+
+                    expect(result).toEqual(expected);
+                });
             });
         });
 
@@ -1615,6 +1668,53 @@ describe('qTransformer', () => {
                         }) }}
                         {{ govukButton({
                             text: "Continue"
+                        }) }}
+                    </form>`;
+
+            expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+        });
+    });
+
+    describe('Display the summary page', () => {
+        it('should display the accept and submit button', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'event-name',
+                schema: {
+                    type: 'object',
+                    propertyNames: {
+                        enum: ['email', 'phone', 'text']
+                    },
+                    properties: {
+                        email: {
+                            type: 'string',
+                            description: 'e.g. something@something.com',
+                            format: 'email',
+                            title: 'Email address'
+                        }
+                    },
+                    context: 'summary'
+                }
+            });
+
+            const expected = `              
+                        <form method="post">
+                        {% from "button/macro.njk" import govukButton %}
+                        {% from "input/macro.njk" import govukInput %}
+                        {{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "text": "Email address",
+                                "isPageHeading": true,
+                                "classes": "govuk-label--xl"
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com"
+                            }
+                        }) }}
+                        {{ govukButton({
+                            text: "Agree and Submit"
                         }) }}
                     </form>`;
 
