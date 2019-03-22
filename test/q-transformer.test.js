@@ -2115,4 +2115,105 @@ describe('qTransformer', () => {
             expect(removeIndentation(result)).toEqual(removeIndentation(expected));
         });
     });
+
+    describe('Display text inputs with appropriate classes', () => {
+        it('should add "width-10" class if text input has maxLength less than 20', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'event-name',
+                schema: {
+                    type: 'string',
+                    title: 'Event name',
+                    description: "The name you'll use on promotional material.",
+                    maxLength: 19
+                },
+                uiSchema: {}
+            });
+
+            const expected = {
+                id: 'event-name',
+                dependencies: ['{% from "input/macro.njk" import govukInput %}'],
+                componentName: 'govukInput',
+                macroOptions: {
+                    label: {
+                        text: 'Event name'
+                    },
+                    hint: {
+                        text: "The name you'll use on promotional material."
+                    },
+                    id: 'event-name',
+                    name: 'event-name',
+                    type: 'text',
+                    classes: 'govuk-input--width-10'
+                }
+            };
+
+            expect(result).toEqual(expected);
+        });
+
+        it('should add "width-20" class if text input has maxLength more than or equal to 20 but less than 60', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'event-name',
+                schema: {
+                    type: 'string',
+                    title: 'Event name',
+                    description: "The name you'll use on promotional material.",
+                    maxLength: 20
+                },
+                uiSchema: {}
+            });
+
+            const expected = {
+                id: 'event-name',
+                dependencies: ['{% from "input/macro.njk" import govukInput %}'],
+                componentName: 'govukInput',
+                macroOptions: {
+                    label: {
+                        text: 'Event name'
+                    },
+                    hint: {
+                        text: "The name you'll use on promotional material."
+                    },
+                    id: 'event-name',
+                    name: 'event-name',
+                    type: 'text',
+                    classes: 'govuk-input--width-20'
+                }
+            };
+
+            expect(result).toEqual(expected);
+        });
+
+        it('should add "width-30" class if text input has maxLength more than or equal to 60 but less than 500', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'event-name',
+                schema: {
+                    type: 'string',
+                    title: 'Event name',
+                    description: "The name you'll use on promotional material.",
+                    maxLength: 60
+                },
+                uiSchema: {}
+            });
+
+            const expected = {
+                id: 'event-name',
+                dependencies: ['{% from "input/macro.njk" import govukInput %}'],
+                componentName: 'govukInput',
+                macroOptions: {
+                    label: {
+                        text: 'Event name'
+                    },
+                    hint: {
+                        text: "The name you'll use on promotional material."
+                    },
+                    id: 'event-name',
+                    name: 'event-name',
+                    type: 'text',
+                    classes: 'govuk-input--width-30'
+                }
+            };
+
+            expect(result).toEqual(expected);
+        });
+    });
 });
