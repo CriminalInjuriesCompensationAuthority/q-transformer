@@ -128,7 +128,7 @@ describe('qTransformer', () => {
                 });
             });
 
-            describe('And a oneOf attribute', () => {
+            describe('And a oneOf attribute with fewer than 20 options', () => {
                 it('should convert it to a govukRadios instruction', () => {
                     const result = qTransformer.transform({
                         schemaKey: 'where-do-you-live',
@@ -290,6 +290,198 @@ describe('qTransformer', () => {
                                     classes: 'govuk-input--width-4',
                                     name: 'passport-issued[year]',
                                     autocomplete: 'bday-year'
+                                }
+                            ]
+                        }
+                    };
+
+                    expect(result).toEqual(expected);
+                });
+            });
+
+            describe('And a oneOf attribute with greater than 20 options', () => {
+                it('should convert it to a govukSelect instruction', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'where-do-you-live',
+                        schema: {
+                            title: 'Where do you live?',
+                            type: 'string',
+                            oneOf: [
+                                {
+                                    const: 'england',
+                                    title: 'England'
+                                },
+                                {
+                                    const: 'scotland',
+                                    title: 'Scotland'
+                                },
+                                {
+                                    const: 'wales',
+                                    title: 'Wales'
+                                },
+                                {
+                                    const: 'northern-ireland',
+                                    title: 'Northern Ireland'
+                                },
+                                {
+                                    const: 'france',
+                                    title: 'France'
+                                },
+                                {
+                                    const: 'germany',
+                                    title: 'Germany'
+                                },
+                                {
+                                    const: 'spain',
+                                    title: 'Spain'
+                                },
+                                {
+                                    const: 'italy',
+                                    title: 'Italy'
+                                },
+                                {
+                                    const: 'switzerland',
+                                    title: 'Switzerland'
+                                },
+                                {
+                                    const: 'austria',
+                                    title: 'Austria'
+                                },
+                                {
+                                    const: 'poland',
+                                    title: 'Poland'
+                                },
+                                {
+                                    const: 'hungary',
+                                    title: 'Hungary'
+                                },
+                                {
+                                    const: 'netherlands',
+                                    title: 'Netherlands'
+                                },
+                                {
+                                    const: 'belgium',
+                                    title: 'Belgium'
+                                },
+                                {
+                                    const: 'denmark',
+                                    title: 'Denmark'
+                                },
+                                {
+                                    const: 'norway',
+                                    title: 'Norway'
+                                },
+                                {
+                                    const: 'sweden',
+                                    title: 'Sweden'
+                                },
+                                {
+                                    const: 'finland',
+                                    title: 'Finland'
+                                },
+                                {
+                                    const: 'croatia',
+                                    title: 'Croatia'
+                                },
+                                {
+                                    const: 'Czech Republic',
+                                    title: 'Czech Republic'
+                                }
+                            ]
+                        },
+                        uiSchema: {}
+                    });
+
+                    const expected = {
+                        id: 'where-do-you-live',
+                        dependencies: ['{% from "select/macro.njk" import govukSelect %}'],
+                        componentName: 'govukSelect',
+                        macroOptions: {
+                            name: 'where-do-you-live',
+                            label: {
+                                text: 'Where do you live?'
+                            },
+                            hint: null,
+                            items: [
+                                {
+                                    value: 'england',
+                                    text: 'England'
+                                },
+                                {
+                                    value: 'scotland',
+                                    text: 'Scotland'
+                                },
+                                {
+                                    value: 'wales',
+                                    text: 'Wales'
+                                },
+                                {
+                                    value: 'northern-ireland',
+                                    text: 'Northern Ireland'
+                                },
+                                {
+                                    value: 'france',
+                                    text: 'France'
+                                },
+                                {
+                                    value: 'germany',
+                                    text: 'Germany'
+                                },
+                                {
+                                    value: 'spain',
+                                    text: 'Spain'
+                                },
+                                {
+                                    value: 'italy',
+                                    text: 'Italy'
+                                },
+                                {
+                                    value: 'switzerland',
+                                    text: 'Switzerland'
+                                },
+                                {
+                                    value: 'austria',
+                                    text: 'Austria'
+                                },
+                                {
+                                    value: 'poland',
+                                    text: 'Poland'
+                                },
+                                {
+                                    value: 'hungary',
+                                    text: 'Hungary'
+                                },
+                                {
+                                    value: 'netherlands',
+                                    text: 'Netherlands'
+                                },
+                                {
+                                    value: 'belgium',
+                                    text: 'Belgium'
+                                },
+                                {
+                                    value: 'denmark',
+                                    text: 'Denmark'
+                                },
+                                {
+                                    value: 'norway',
+                                    text: 'Norway'
+                                },
+                                {
+                                    value: 'sweden',
+                                    text: 'Sweden'
+                                },
+                                {
+                                    value: 'finland',
+                                    text: 'Finland'
+                                },
+                                {
+                                    value: 'croatia',
+                                    text: 'Croatia'
+                                },
+                                {
+                                    value: 'Czech Republic',
+                                    text: 'Czech Republic'
                                 }
                             ]
                         }
@@ -1672,6 +1864,208 @@ describe('qTransformer', () => {
                     </form>`;
 
             expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+        });
+
+        it('should display errors for govukSelect instruction', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'where-do-you-live',
+                schema: {
+                    title: 'Where do you live?',
+                    type: 'string',
+                    description: 'Select all that apply.',
+                    oneOf: [
+                        {
+                            const: 'england',
+                            title: 'England'
+                        },
+                        {
+                            const: 'scotland',
+                            title: 'Scotland'
+                        },
+                        {
+                            const: 'wales',
+                            title: 'Wales'
+                        },
+                        {
+                            const: 'northern-ireland',
+                            title: 'Northern Ireland'
+                        },
+                        {
+                            const: 'france',
+                            title: 'France'
+                        },
+                        {
+                            const: 'germany',
+                            title: 'Germany'
+                        },
+                        {
+                            const: 'spain',
+                            title: 'Spain'
+                        },
+                        {
+                            const: 'italy',
+                            title: 'Italy'
+                        },
+                        {
+                            const: 'switzerland',
+                            title: 'Switzerland'
+                        },
+                        {
+                            const: 'austria',
+                            title: 'Austria'
+                        },
+                        {
+                            const: 'poland',
+                            title: 'Poland'
+                        },
+                        {
+                            const: 'hungary',
+                            title: 'Hungary'
+                        },
+                        {
+                            const: 'netherlands',
+                            title: 'Netherlands'
+                        },
+                        {
+                            const: 'belgium',
+                            title: 'Belgium'
+                        },
+                        {
+                            const: 'denmark',
+                            title: 'Denmark'
+                        },
+                        {
+                            const: 'norway',
+                            title: 'Norway'
+                        },
+                        {
+                            const: 'sweden',
+                            title: 'Sweden'
+                        },
+                        {
+                            const: 'finland',
+                            title: 'Finland'
+                        },
+                        {
+                            const: 'croatia',
+                            title: 'Croatia'
+                        },
+                        {
+                            const: 'Czech Republic',
+                            title: 'Czech Republic'
+                        }
+                    ]
+                },
+                uiSchema: {},
+                data: {
+                    'where-do-you-live': "something that doesn't match any of the items" // this should cause an error
+                },
+                schemaErrors: {
+                    'where-do-you-live': 'Please select an option'
+                }
+            });
+
+            const expected = {
+                id: 'where-do-you-live',
+                dependencies: ['{% from "select/macro.njk" import govukSelect %}'],
+                componentName: 'govukSelect',
+                macroOptions: {
+                    name: 'where-do-you-live',
+                    label: {
+                        text: 'Where do you live?'
+                    },
+                    hint: {
+                        text: 'Select all that apply.'
+                    },
+                    errorMessage: {
+                        text: 'Please select an option'
+                    },
+                    items: [
+                        {
+                            value: 'england',
+                            text: 'England'
+                        },
+                        {
+                            value: 'scotland',
+                            text: 'Scotland'
+                        },
+                        {
+                            value: 'wales',
+                            text: 'Wales'
+                        },
+                        {
+                            value: 'northern-ireland',
+                            text: 'Northern Ireland'
+                        },
+                        {
+                            value: 'france',
+                            text: 'France'
+                        },
+                        {
+                            value: 'germany',
+                            text: 'Germany'
+                        },
+                        {
+                            value: 'spain',
+                            text: 'Spain'
+                        },
+                        {
+                            value: 'italy',
+                            text: 'Italy'
+                        },
+                        {
+                            value: 'switzerland',
+                            text: 'Switzerland'
+                        },
+                        {
+                            value: 'austria',
+                            text: 'Austria'
+                        },
+                        {
+                            value: 'poland',
+                            text: 'Poland'
+                        },
+                        {
+                            value: 'hungary',
+                            text: 'Hungary'
+                        },
+                        {
+                            value: 'netherlands',
+                            text: 'Netherlands'
+                        },
+                        {
+                            value: 'belgium',
+                            text: 'Belgium'
+                        },
+                        {
+                            value: 'denmark',
+                            text: 'Denmark'
+                        },
+                        {
+                            value: 'norway',
+                            text: 'Norway'
+                        },
+                        {
+                            value: 'sweden',
+                            text: 'Sweden'
+                        },
+                        {
+                            value: 'finland',
+                            text: 'Finland'
+                        },
+                        {
+                            value: 'croatia',
+                            text: 'Croatia'
+                        },
+                        {
+                            value: 'Czech Republic',
+                            text: 'Czech Republic'
+                        }
+                    ]
+                }
+            };
+
+            expect(result).toEqual(expected);
         });
     });
 
