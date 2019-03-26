@@ -916,8 +916,7 @@ describe('qTransformer', () => {
                                                     },
                                                     "hint": {
                                                         "text": "e.g. something@something.com"
-                                                    },
-                                                    "classes": "govuk-!-width-one-third"
+                                                    }
                                                 })
                                             ] | join())
                                         }
@@ -934,8 +933,7 @@ describe('qTransformer', () => {
                                                     "label": {
                                                         "text": "Phone number"
                                                     },
-                                                    "hint": null,
-                                                    "classes": "govuk-!-width-one-third"
+                                                    "hint": null
                                                 })
                                             ] | join())
                                         }
@@ -952,8 +950,7 @@ describe('qTransformer', () => {
                                                     "label": {
                                                         "text": "Mobile phone number"
                                                     },
-                                                    "hint": null,
-                                                    "classes": "govuk-!-width-one-third"
+                                                    "hint": null
                                                 })
                                             ] | join())
                                         }
@@ -1103,8 +1100,7 @@ describe('qTransformer', () => {
                                                     },
                                                     "hint": {
                                                         "text": "e.g. something@something.com"
-                                                    },
-                                                    "classes": "govuk-!-width-one-third"
+                                                    }
                                                 }),
                                                 govukInput({
                                                     "id": "phone",
@@ -1113,8 +1109,7 @@ describe('qTransformer', () => {
                                                     "label": {
                                                         "text": "Phone number"
                                                     },
-                                                    "hint": null,
-                                                    "classes": "govuk-!-width-one-third"
+                                                    "hint": null
                                                 }),
                                                 govukInput({
                                                     "id": "text",
@@ -1123,8 +1118,7 @@ describe('qTransformer', () => {
                                                     "label": {
                                                         "text": "Mobile phone number"
                                                     },
-                                                    "hint": null,
-                                                    "classes": "govuk-!-width-one-third"
+                                                    "hint": null
                                                 })
                                             ] | join())
                                         }
