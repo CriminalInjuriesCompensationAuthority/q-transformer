@@ -252,10 +252,15 @@ describe('qTransformer', () => {
                             type: 'string',
                             format: 'date-time', // https://www.iso.org/iso-8601-date-and-time-format.html
                             title: 'When was your passport issued?',
-                            autoComplete: true, //  This will only have an affect if it is true. It is not necessary to include it if the answer is false.
                             description: 'For example, 12 11 2007'
                         },
-                        uiSchema: {}
+                        uiSchema: {
+                            'passport-issued': {
+                                options: {
+                                    autoComplete: true
+                                }
+                            }
+                        }
                     });
 
                     const expected = {
@@ -2079,8 +2084,14 @@ describe('qTransformer', () => {
                             format: 'email',
                             title: 'Email address'
                         }
-                    },
-                    context: 'summary'
+                    }
+                },
+                uiSchema: {
+                    'event-name': {
+                        options: {
+                            isSummary: true
+                        }
+                    }
                 }
             });
 
