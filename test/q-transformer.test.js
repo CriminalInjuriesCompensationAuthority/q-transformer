@@ -128,7 +128,7 @@ describe('qTransformer', () => {
                 });
             });
 
-            describe('And a oneOf attribute', () => {
+            describe('And a oneOf attribute with fewer than 20 options', () => {
                 it('should convert it to a govukRadios instruction', () => {
                     const result = qTransformer.transform({
                         schemaKey: 'where-do-you-live',
@@ -237,6 +237,256 @@ describe('qTransformer', () => {
                                     label: 'Year',
                                     classes: 'govuk-input--width-4',
                                     name: 'passport-issued[year]'
+                                }
+                            ]
+                        }
+                    };
+
+                    expect(result).toEqual(expected);
+                });
+
+                it('should add the auto-complete class to the govUk object. ', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'passport-issued',
+                        schema: {
+                            type: 'string',
+                            format: 'date-time', // https://www.iso.org/iso-8601-date-and-time-format.html
+                            title: 'When was your passport issued?',
+                            description: 'For example, 12 11 2007'
+                        },
+                        uiSchema: {
+                            'passport-issued': {
+                                options: {
+                                    autoComplete: true
+                                }
+                            }
+                        }
+                    });
+
+                    const expected = {
+                        id: 'passport-issued',
+                        dependencies: ['{% from "date-input/macro.njk" import govukDateInput %}'],
+                        componentName: 'govukDateInput',
+                        macroOptions: {
+                            id: 'passport-issued',
+                            fieldset: {
+                                legend: {
+                                    text: 'When was your passport issued?'
+                                }
+                            },
+                            hint: {
+                                text: 'For example, 12 11 2007'
+                            },
+                            items: [
+                                {
+                                    label: 'Day',
+                                    classes: 'govuk-input--width-2',
+                                    name: 'passport-issued[day]',
+                                    autocomplete: 'bday-day'
+                                },
+                                {
+                                    label: 'Month',
+                                    classes: 'govuk-input--width-2',
+                                    name: 'passport-issued[month]',
+                                    autocomplete: 'bday-month'
+                                },
+                                {
+                                    label: 'Year',
+                                    classes: 'govuk-input--width-4',
+                                    name: 'passport-issued[year]',
+                                    autocomplete: 'bday-year'
+                                }
+                            ]
+                        }
+                    };
+
+                    expect(result).toEqual(expected);
+                });
+            });
+
+            describe('And a oneOf attribute with greater than 20 options', () => {
+                it('should convert it to a govukSelect instruction', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'where-do-you-live',
+                        schema: {
+                            title: 'Where do you live?',
+                            type: 'string',
+                            oneOf: [
+                                {
+                                    const: 'england',
+                                    title: 'England'
+                                },
+                                {
+                                    const: 'scotland',
+                                    title: 'Scotland'
+                                },
+                                {
+                                    const: 'wales',
+                                    title: 'Wales'
+                                },
+                                {
+                                    const: 'northern-ireland',
+                                    title: 'Northern Ireland'
+                                },
+                                {
+                                    const: 'france',
+                                    title: 'France'
+                                },
+                                {
+                                    const: 'germany',
+                                    title: 'Germany'
+                                },
+                                {
+                                    const: 'spain',
+                                    title: 'Spain'
+                                },
+                                {
+                                    const: 'italy',
+                                    title: 'Italy'
+                                },
+                                {
+                                    const: 'switzerland',
+                                    title: 'Switzerland'
+                                },
+                                {
+                                    const: 'austria',
+                                    title: 'Austria'
+                                },
+                                {
+                                    const: 'poland',
+                                    title: 'Poland'
+                                },
+                                {
+                                    const: 'hungary',
+                                    title: 'Hungary'
+                                },
+                                {
+                                    const: 'netherlands',
+                                    title: 'Netherlands'
+                                },
+                                {
+                                    const: 'belgium',
+                                    title: 'Belgium'
+                                },
+                                {
+                                    const: 'denmark',
+                                    title: 'Denmark'
+                                },
+                                {
+                                    const: 'norway',
+                                    title: 'Norway'
+                                },
+                                {
+                                    const: 'sweden',
+                                    title: 'Sweden'
+                                },
+                                {
+                                    const: 'finland',
+                                    title: 'Finland'
+                                },
+                                {
+                                    const: 'croatia',
+                                    title: 'Croatia'
+                                },
+                                {
+                                    const: 'Czech Republic',
+                                    title: 'Czech Republic'
+                                }
+                            ]
+                        },
+                        uiSchema: {}
+                    });
+
+                    const expected = {
+                        id: 'where-do-you-live',
+                        dependencies: ['{% from "select/macro.njk" import govukSelect %}'],
+                        componentName: 'govukSelect',
+                        macroOptions: {
+                            name: 'where-do-you-live',
+                            label: {
+                                text: 'Where do you live?'
+                            },
+                            hint: null,
+                            items: [
+                                {
+                                    value: 'england',
+                                    text: 'England'
+                                },
+                                {
+                                    value: 'scotland',
+                                    text: 'Scotland'
+                                },
+                                {
+                                    value: 'wales',
+                                    text: 'Wales'
+                                },
+                                {
+                                    value: 'northern-ireland',
+                                    text: 'Northern Ireland'
+                                },
+                                {
+                                    value: 'france',
+                                    text: 'France'
+                                },
+                                {
+                                    value: 'germany',
+                                    text: 'Germany'
+                                },
+                                {
+                                    value: 'spain',
+                                    text: 'Spain'
+                                },
+                                {
+                                    value: 'italy',
+                                    text: 'Italy'
+                                },
+                                {
+                                    value: 'switzerland',
+                                    text: 'Switzerland'
+                                },
+                                {
+                                    value: 'austria',
+                                    text: 'Austria'
+                                },
+                                {
+                                    value: 'poland',
+                                    text: 'Poland'
+                                },
+                                {
+                                    value: 'hungary',
+                                    text: 'Hungary'
+                                },
+                                {
+                                    value: 'netherlands',
+                                    text: 'Netherlands'
+                                },
+                                {
+                                    value: 'belgium',
+                                    text: 'Belgium'
+                                },
+                                {
+                                    value: 'denmark',
+                                    text: 'Denmark'
+                                },
+                                {
+                                    value: 'norway',
+                                    text: 'Norway'
+                                },
+                                {
+                                    value: 'sweden',
+                                    text: 'Sweden'
+                                },
+                                {
+                                    value: 'finland',
+                                    text: 'Finland'
+                                },
+                                {
+                                    value: 'croatia',
+                                    text: 'Croatia'
+                                },
+                                {
+                                    value: 'Czech Republic',
+                                    text: 'Czech Republic'
                                 }
                             ]
                         }
@@ -671,8 +921,7 @@ describe('qTransformer', () => {
                                                     },
                                                     "hint": {
                                                         "text": "e.g. something@something.com"
-                                                    },
-                                                    "classes": "govuk-!-width-one-third"
+                                                    }
                                                 })
                                             ] | join())
                                         }
@@ -689,8 +938,7 @@ describe('qTransformer', () => {
                                                     "label": {
                                                         "text": "Phone number"
                                                     },
-                                                    "hint": null,
-                                                    "classes": "govuk-!-width-one-third"
+                                                    "hint": null
                                                 })
                                             ] | join())
                                         }
@@ -707,8 +955,7 @@ describe('qTransformer', () => {
                                                     "label": {
                                                         "text": "Mobile phone number"
                                                     },
-                                                    "hint": null,
-                                                    "classes": "govuk-!-width-one-third"
+                                                    "hint": null
                                                 })
                                             ] | join())
                                         }
@@ -858,8 +1105,7 @@ describe('qTransformer', () => {
                                                     },
                                                     "hint": {
                                                         "text": "e.g. something@something.com"
-                                                    },
-                                                    "classes": "govuk-!-width-one-third"
+                                                    }
                                                 }),
                                                 govukInput({
                                                     "id": "phone",
@@ -868,8 +1114,7 @@ describe('qTransformer', () => {
                                                     "label": {
                                                         "text": "Phone number"
                                                     },
-                                                    "hint": null,
-                                                    "classes": "govuk-!-width-one-third"
+                                                    "hint": null
                                                 }),
                                                 govukInput({
                                                     "id": "text",
@@ -878,8 +1123,7 @@ describe('qTransformer', () => {
                                                     "label": {
                                                         "text": "Mobile phone number"
                                                     },
-                                                    "hint": null,
-                                                    "classes": "govuk-!-width-one-third"
+                                                    "hint": null
                                                 })
                                             ] | join())
                                         }
@@ -1619,6 +1863,362 @@ describe('qTransformer', () => {
                     </form>`;
 
             expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+        });
+
+        it('should display errors for govukSelect instruction', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'where-do-you-live',
+                schema: {
+                    title: 'Where do you live?',
+                    type: 'string',
+                    description: 'Select all that apply.',
+                    oneOf: [
+                        {
+                            const: 'england',
+                            title: 'England'
+                        },
+                        {
+                            const: 'scotland',
+                            title: 'Scotland'
+                        },
+                        {
+                            const: 'wales',
+                            title: 'Wales'
+                        },
+                        {
+                            const: 'northern-ireland',
+                            title: 'Northern Ireland'
+                        },
+                        {
+                            const: 'france',
+                            title: 'France'
+                        },
+                        {
+                            const: 'germany',
+                            title: 'Germany'
+                        },
+                        {
+                            const: 'spain',
+                            title: 'Spain'
+                        },
+                        {
+                            const: 'italy',
+                            title: 'Italy'
+                        },
+                        {
+                            const: 'switzerland',
+                            title: 'Switzerland'
+                        },
+                        {
+                            const: 'austria',
+                            title: 'Austria'
+                        },
+                        {
+                            const: 'poland',
+                            title: 'Poland'
+                        },
+                        {
+                            const: 'hungary',
+                            title: 'Hungary'
+                        },
+                        {
+                            const: 'netherlands',
+                            title: 'Netherlands'
+                        },
+                        {
+                            const: 'belgium',
+                            title: 'Belgium'
+                        },
+                        {
+                            const: 'denmark',
+                            title: 'Denmark'
+                        },
+                        {
+                            const: 'norway',
+                            title: 'Norway'
+                        },
+                        {
+                            const: 'sweden',
+                            title: 'Sweden'
+                        },
+                        {
+                            const: 'finland',
+                            title: 'Finland'
+                        },
+                        {
+                            const: 'croatia',
+                            title: 'Croatia'
+                        },
+                        {
+                            const: 'Czech Republic',
+                            title: 'Czech Republic'
+                        }
+                    ]
+                },
+                uiSchema: {},
+                data: {
+                    'where-do-you-live': "something that doesn't match any of the items" // this should cause an error
+                },
+                schemaErrors: {
+                    'where-do-you-live': 'Please select an option'
+                }
+            });
+
+            const expected = {
+                id: 'where-do-you-live',
+                dependencies: ['{% from "select/macro.njk" import govukSelect %}'],
+                componentName: 'govukSelect',
+                macroOptions: {
+                    name: 'where-do-you-live',
+                    label: {
+                        text: 'Where do you live?'
+                    },
+                    hint: {
+                        text: 'Select all that apply.'
+                    },
+                    errorMessage: {
+                        text: 'Please select an option'
+                    },
+                    items: [
+                        {
+                            value: 'england',
+                            text: 'England'
+                        },
+                        {
+                            value: 'scotland',
+                            text: 'Scotland'
+                        },
+                        {
+                            value: 'wales',
+                            text: 'Wales'
+                        },
+                        {
+                            value: 'northern-ireland',
+                            text: 'Northern Ireland'
+                        },
+                        {
+                            value: 'france',
+                            text: 'France'
+                        },
+                        {
+                            value: 'germany',
+                            text: 'Germany'
+                        },
+                        {
+                            value: 'spain',
+                            text: 'Spain'
+                        },
+                        {
+                            value: 'italy',
+                            text: 'Italy'
+                        },
+                        {
+                            value: 'switzerland',
+                            text: 'Switzerland'
+                        },
+                        {
+                            value: 'austria',
+                            text: 'Austria'
+                        },
+                        {
+                            value: 'poland',
+                            text: 'Poland'
+                        },
+                        {
+                            value: 'hungary',
+                            text: 'Hungary'
+                        },
+                        {
+                            value: 'netherlands',
+                            text: 'Netherlands'
+                        },
+                        {
+                            value: 'belgium',
+                            text: 'Belgium'
+                        },
+                        {
+                            value: 'denmark',
+                            text: 'Denmark'
+                        },
+                        {
+                            value: 'norway',
+                            text: 'Norway'
+                        },
+                        {
+                            value: 'sweden',
+                            text: 'Sweden'
+                        },
+                        {
+                            value: 'finland',
+                            text: 'Finland'
+                        },
+                        {
+                            value: 'croatia',
+                            text: 'Croatia'
+                        },
+                        {
+                            value: 'Czech Republic',
+                            text: 'Czech Republic'
+                        }
+                    ]
+                }
+            };
+
+            expect(result).toEqual(expected);
+        });
+    });
+
+    describe('Display the summary page', () => {
+        it('should display the accept and submit button', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'event-name',
+                schema: {
+                    type: 'object',
+                    propertyNames: {
+                        enum: ['email', 'phone', 'text']
+                    },
+                    properties: {
+                        email: {
+                            type: 'string',
+                            description: 'e.g. something@something.com',
+                            format: 'email',
+                            title: 'Email address'
+                        }
+                    }
+                },
+                uiSchema: {
+                    'event-name': {
+                        options: {
+                            isSummary: true
+                        }
+                    }
+                }
+            });
+
+            const expected = `              
+                        <form method="post">
+                        {% from "button/macro.njk" import govukButton %}
+                        {% from "input/macro.njk" import govukInput %}
+                        {{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "text": "Email address",
+                                "isPageHeading": true,
+                                "classes": "govuk-label--xl"
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com"
+                            }
+                        }) }}
+                        {{ govukButton({
+                            text: "Agree and Submit"
+                        }) }}
+                    </form>`;
+
+            expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+        });
+    });
+
+    describe('Display text inputs with appropriate classes', () => {
+        it('should add "width-10" class if text input has maxLength less than 20', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'event-name',
+                schema: {
+                    type: 'string',
+                    title: 'Event name',
+                    description: "The name you'll use on promotional material.",
+                    maxLength: 19
+                },
+                uiSchema: {}
+            });
+
+            const expected = {
+                id: 'event-name',
+                dependencies: ['{% from "input/macro.njk" import govukInput %}'],
+                componentName: 'govukInput',
+                macroOptions: {
+                    label: {
+                        text: 'Event name'
+                    },
+                    hint: {
+                        text: "The name you'll use on promotional material."
+                    },
+                    id: 'event-name',
+                    name: 'event-name',
+                    type: 'text',
+                    classes: 'govuk-input--width-10'
+                }
+            };
+
+            expect(result).toEqual(expected);
+        });
+
+        it('should add "width-20" class if text input has maxLength more than or equal to 20 but less than 60', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'event-name',
+                schema: {
+                    type: 'string',
+                    title: 'Event name',
+                    description: "The name you'll use on promotional material.",
+                    maxLength: 20
+                },
+                uiSchema: {}
+            });
+
+            const expected = {
+                id: 'event-name',
+                dependencies: ['{% from "input/macro.njk" import govukInput %}'],
+                componentName: 'govukInput',
+                macroOptions: {
+                    label: {
+                        text: 'Event name'
+                    },
+                    hint: {
+                        text: "The name you'll use on promotional material."
+                    },
+                    id: 'event-name',
+                    name: 'event-name',
+                    type: 'text',
+                    classes: 'govuk-input--width-20'
+                }
+            };
+
+            expect(result).toEqual(expected);
+        });
+
+        it('should add "width-30" class if text input has maxLength more than or equal to 60 but less than 500', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'event-name',
+                schema: {
+                    type: 'string',
+                    title: 'Event name',
+                    description: "The name you'll use on promotional material.",
+                    maxLength: 60
+                },
+                uiSchema: {}
+            });
+
+            const expected = {
+                id: 'event-name',
+                dependencies: ['{% from "input/macro.njk" import govukInput %}'],
+                componentName: 'govukInput',
+                macroOptions: {
+                    label: {
+                        text: 'Event name'
+                    },
+                    hint: {
+                        text: "The name you'll use on promotional material."
+                    },
+                    id: 'event-name',
+                    name: 'event-name',
+                    type: 'text',
+                    classes: 'govuk-input--width-30'
+                }
+            };
+
+            expect(result).toEqual(expected);
         });
     });
 });
