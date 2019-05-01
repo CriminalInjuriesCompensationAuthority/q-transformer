@@ -26,7 +26,8 @@
         "q-base-config": "github:CriminalInjuriesCompensationAuthority/q-base-config#semver:<1.0.0"
     },
     "dependencies": {
-        "lodash.merge": "^4.6.1"
+        "lodash.merge": "^4.6.1",
+        "moment": "^2.24.0"
     },
     "_m0": {
         "devDependencies": {
