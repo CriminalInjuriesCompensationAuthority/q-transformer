@@ -2561,7 +2561,7 @@ describe('qTransformer', () => {
                 });
             });
             describe('arrayFormatter', () => {
-                it('should return all the elements of an array on a single, comma separated line', () => {
+                it('should return all the elements of an array on a new line', () => {
                     const inputArray = ['i-am-an-answer', 'another-answer', 'a-third-answer'];
 
                     const actual = answerFormatHelper.arrayFormatter(inputArray);
