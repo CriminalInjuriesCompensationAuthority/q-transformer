@@ -610,7 +610,6 @@ describe('qTransformer', () => {
                 });
 
                 const expected = `
-                    <form method="post">
                         {% from "button/macro.njk" import govukButton %}
                         {% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
@@ -664,8 +663,7 @@ describe('qTransformer', () => {
                         }) }}
                         {{ govukButton({
                             text: "Continue"
-                        }) }}
-                    </form>`;
+                        }) }}`;
 
                 expect(removeIndentation(result)).toEqual(removeIndentation(expected));
             });
@@ -700,7 +698,6 @@ describe('qTransformer', () => {
                 });
 
                 const expected = `
-                    <form method="post">
                         {% from "button/macro.njk" import govukButton %}
                         {% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
@@ -722,8 +719,7 @@ describe('qTransformer', () => {
                         }) }}
                         {{ govukButton({
                             text: "Continue"
-                        }) }}
-                    </form>`;
+                        }) }}`;
 
                 expect(removeIndentation(result)).toEqual(removeIndentation(expected));
             });
@@ -1049,7 +1045,6 @@ describe('qTransformer', () => {
                         }
                     });
                     const expected = `
-                        <form method="post">
                             {% from "button/macro.njk" import govukButton %}
                             {% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
@@ -1124,8 +1119,7 @@ describe('qTransformer', () => {
                             }) }}
                             {{ govukButton({
                                 text: "Continue"
-                            }) }}
-                        </form>`;
+                            }) }}`;
 
                     expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
@@ -1233,7 +1227,6 @@ describe('qTransformer', () => {
                         }
                     });
                     const expected = `
-                        <form method="post">
                             {% from "button/macro.njk" import govukButton %}
                             {% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
@@ -1300,8 +1293,7 @@ describe('qTransformer', () => {
                             }) }}
                             {{ govukButton({
                                 text: "Continue"
-                            }) }}
-                        </form>`;
+                            }) }}`;
 
                     expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
@@ -1334,7 +1326,6 @@ describe('qTransformer', () => {
             });
 
             const expected = `
-                <form method="post">
                     {% from "button/macro.njk" import govukButton %}
                     {% from "input/macro.njk" import govukInput %}
                     {{ govukInput({
@@ -1353,8 +1344,7 @@ describe('qTransformer', () => {
                     }) }}
                     {{ govukButton({
                         text: "Continue"
-                    }) }}
-                </form>`;
+                    }) }}`;
 
             expect(removeIndentation(result)).toEqual(removeIndentation(expected));
         });
@@ -1959,7 +1949,6 @@ describe('qTransformer', () => {
                                     "text": "This is not a valid type"
                                 }
                         ]}) }}
-                        <form method="post">
                         {% from "button/macro.njk" import govukButton %}
                         {% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
@@ -2019,8 +2008,7 @@ describe('qTransformer', () => {
                         }) }}
                         {{ govukButton({
                             text: "Continue"
-                        }) }}
-                    </form>`;
+                        }) }}`;
 
             expect(removeIndentation(result)).toEqual(removeIndentation(expected));
         });
@@ -2256,7 +2244,6 @@ describe('qTransformer', () => {
             });
 
             const expected = `              
-                        <form method="post">
                         {% from "button/macro.njk" import govukButton %}
                         {% from "input/macro.njk" import govukInput %}
                         {{ govukInput({
@@ -2274,8 +2261,7 @@ describe('qTransformer', () => {
                         }) }}
                         {{ govukButton({
                             text: "Agree and Submit"
-                        }) }}
-                    </form>`;
+                        }) }}`;
 
             expect(removeIndentation(result)).toEqual(removeIndentation(expected));
         });
