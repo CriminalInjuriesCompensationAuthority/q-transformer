@@ -610,8 +610,6 @@ describe('qTransformer', () => {
                 });
 
                 const expected = `
-                    <form method="post">
-                        {% from "button/macro.njk" import govukButton %}
                         {% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
                         {% from "details/macro.njk" import govukDetails %}
@@ -662,10 +660,7 @@ describe('qTransformer', () => {
                         {{ govukWarningText({
                             text: "You could be prosecuted or get less compensation if you give false or misleading information."
                         }) }}
-                        {{ govukButton({
-                            text: "Continue"
-                        }) }}
-                    </form>`;
+                        `;
 
                 expect(removeIndentation(result)).toEqual(removeIndentation(expected));
             });
@@ -700,8 +695,6 @@ describe('qTransformer', () => {
                 });
 
                 const expected = `
-                    <form method="post">
-                        {% from "button/macro.njk" import govukButton %}
                         {% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
                         <h1 class="govuk-heading-xl">Event name</h1>
@@ -720,10 +713,7 @@ describe('qTransformer', () => {
                         {{ govukWarningText({
                             text: "You could be prosecuted or get less compensation if you give false or misleading information."
                         }) }}
-                        {{ govukButton({
-                            text: "Continue"
-                        }) }}
-                    </form>`;
+                        `;
 
                 expect(removeIndentation(result)).toEqual(removeIndentation(expected));
             });
@@ -1049,8 +1039,6 @@ describe('qTransformer', () => {
                         }
                     });
                     const expected = `
-                        <form method="post">
-                            {% from "button/macro.njk" import govukButton %}
                             {% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
                             {{ govukRadios({
@@ -1122,10 +1110,7 @@ describe('qTransformer', () => {
                                     }
                                 ]
                             }) }}
-                            {{ govukButton({
-                                text: "Continue"
-                            }) }}
-                        </form>`;
+                            `;
 
                     expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
@@ -1233,8 +1218,6 @@ describe('qTransformer', () => {
                         }
                     });
                     const expected = `
-                        <form method="post">
-                            {% from "button/macro.njk" import govukButton %}
                             {% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
                             {{ govukRadios({
@@ -1298,10 +1281,7 @@ describe('qTransformer', () => {
                                     }
                                 ]
                             }) }}
-                            {{ govukButton({
-                                text: "Continue"
-                            }) }}
-                        </form>`;
+                            `;
 
                     expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
@@ -1334,8 +1314,6 @@ describe('qTransformer', () => {
             });
 
             const expected = `
-                <form method="post">
-                    {% from "button/macro.njk" import govukButton %}
                     {% from "input/macro.njk" import govukInput %}
                     {{ govukInput({
                         "id": "email",
@@ -1351,10 +1329,7 @@ describe('qTransformer', () => {
                         },
                         "value": "peppa@peppapig.com"
                     }) }}
-                    {{ govukButton({
-                        text: "Continue"
-                    }) }}
-                </form>`;
+                    `;
 
             expect(removeIndentation(result)).toEqual(removeIndentation(expected));
         });
@@ -1895,7 +1870,7 @@ describe('qTransformer', () => {
             expect(result).toEqual(expected);
         });
 
-        it('should display an error summary above the form', () => {
+        it('should display an error summary at the top', () => {
             const result = qTransformer.transform({
                 schemaKey: 'event-name',
                 schema: {
@@ -1959,8 +1934,6 @@ describe('qTransformer', () => {
                                     "text": "This is not a valid type"
                                 }
                         ]}) }}
-                        <form method="post">
-                        {% from "button/macro.njk" import govukButton %}
                         {% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
                         {% from "details/macro.njk" import govukDetails %}
@@ -2017,10 +1990,7 @@ describe('qTransformer', () => {
                         {{ govukWarningText({
                             text: "You could be prosecuted or get less compensation if you give false or misleading information."
                         }) }}
-                        {{ govukButton({
-                            text: "Continue"
-                        }) }}
-                    </form>`;
+                        `;
 
             expect(removeIndentation(result)).toEqual(removeIndentation(expected));
         });
@@ -2225,59 +2195,6 @@ describe('qTransformer', () => {
             };
 
             expect(result).toEqual(expected);
-        });
-    });
-
-    describe('Display the summary button text', () => {
-        it('should display the "accept and submit" button', () => {
-            const result = qTransformer.transform({
-                schemaKey: 'event-name',
-                schema: {
-                    type: 'object',
-                    propertyNames: {
-                        enum: ['email', 'phone', 'text']
-                    },
-                    properties: {
-                        email: {
-                            type: 'string',
-                            description: 'e.g. something@something.com',
-                            format: 'email',
-                            title: 'Email address'
-                        }
-                    }
-                },
-                uiSchema: {
-                    'event-name': {
-                        options: {
-                            isSummary: true
-                        }
-                    }
-                }
-            });
-
-            const expected = `              
-                        <form method="post">
-                        {% from "button/macro.njk" import govukButton %}
-                        {% from "input/macro.njk" import govukInput %}
-                        {{ govukInput({
-                            "id": "email",
-                            "name": "email",
-                            "type": "email",
-                            "label": {
-                                "text": "Email address",
-                                "isPageHeading": true,
-                                "classes": "govuk-label--xl"
-                            },
-                            "hint": {
-                                "text": "e.g. something@something.com"
-                            }
-                        }) }}
-                        {{ govukButton({
-                            text: "Agree and Submit"
-                        }) }}
-                    </form>`;
-
-            expect(removeIndentation(result)).toEqual(removeIndentation(expected));
         });
     });
 
