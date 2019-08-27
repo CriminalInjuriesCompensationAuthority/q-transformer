@@ -2847,7 +2847,6 @@ describe('qTransformer', () => {
                     for (const answer in formattedAnswer) {
                         // eslint-disable-next-line no-prototype-builtins
                         if (formattedAnswer.hasOwnProperty(answer)) {
-                            console.log(answer);
                             expect(Object.keys(formattedAnswer[answer])).toContain('value');
                             expect(Object.keys(formattedAnswer[answer])).toContain('href');
                         }
