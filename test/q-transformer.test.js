@@ -25,6 +25,324 @@ function removeIndentation(val) {
 
 describe('qTransformer', () => {
     let qTransformer;
+    const uiSchema = {
+        'p-applicant-have-you-applied-to-us-before': {
+            // transformer: 'form',
+            options: {
+                transformOrder: [
+                    'q-enter-your-previous-reference-number',
+                    'q-applicant-have-you-applied-to-us-before'
+                ],
+                outputOrder: ['q-applicant-have-you-applied-to-us-before'],
+                properties: {
+                    'q-applicant-have-you-applied-to-us-before': {
+                        // transformer: 'govukRadios',
+                        options: {
+                            conditionalComponentMap: [
+                                {
+                                    itemValue: true,
+                                    componentIds: ['q-enter-your-previous-reference-number']
+                                }
+                            ]
+                        }
+                    },
+                    'q-enter-your-previous-reference-number': {
+                        options: {
+                            macroOptions: {
+                                classes: 'govuk-input--width-20'
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        'p-applicant-have-you-applied-for-or-received-any-other-compensation': {
+            // transformer: 'form',
+            options: {
+                transformOrder: [
+                    'q-applicant-applied-for-other-compensation-briefly-explain-why-not',
+                    'q-applicant-have-you-applied-for-or-received-any-other-compensation'
+                ],
+                outputOrder: [
+                    'q-applicant-have-you-applied-for-or-received-any-other-compensation'
+                ],
+                properties: {
+                    'q-applicant-have-you-applied-for-or-received-any-other-compensation': {
+                        // transformer: 'govukRadios',
+                        options: {
+                            conditionalComponentMap: [
+                                {
+                                    itemValue: false,
+                                    componentIds: [
+                                        'q-applicant-applied-for-other-compensation-briefly-explain-why-not'
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    'q-applicant-applied-for-other-compensation-briefly-explain-why-not': {
+                        options: {
+                            macroOptions: {
+                                classes: 'govuk-input--width-20'
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        'p-applicant-other-compensation-details': {
+            // transformer: 'form',
+            options: {
+                transformOrder: [
+                    'q-applicant-who-did-you-apply-to',
+                    'q-how-much-was-award',
+                    'q-when-will-you-find-out',
+                    'q-applicant-has-a-decision-been-made'
+                ],
+                outputOrder: [
+                    'q-applicant-who-did-you-apply-to',
+                    'q-applicant-has-a-decision-been-made'
+                ],
+                properties: {
+                    'q-applicant-has-a-decision-been-made': {
+                        // transformer: 'govukRadios',
+                        options: {
+                            conditionalComponentMap: [
+                                {
+                                    itemValue: false,
+                                    componentIds: ['q-when-will-you-find-out']
+                                },
+                                {
+                                    itemValue: true,
+                                    componentIds: ['q-how-much-was-award']
+                                }
+                            ]
+                        }
+                    },
+                    'q-how-much-was-award': {
+                        options: {
+                            macroOptions: {
+                                classes: 'govuk-input--width-10'
+                            }
+                        }
+                    },
+                    'q-when-will-you-find-out': {
+                        options: {
+                            macroOptions: {
+                                classes: 'govuk-input--width-20'
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        'p-applicant-when-did-the-crime-start': {
+            options: {
+                properties: {
+                    'q-applicant-when-did-the-crime-start': {
+                        options: {
+                            dateParts: {
+                                day: false,
+                                month: true,
+                                year: true
+                            }
+                        }
+                    }
+                },
+                outputOrder: [
+                    'q-applicant-when-did-the-crime-start',
+                    'i-dont-know-when-the-crime-started'
+                ]
+            }
+        },
+        'p-applicant-when-did-the-crime-stop': {
+            options: {
+                properties: {
+                    'q-applicant-when-did-the-crime-stop': {
+                        options: {
+                            dateParts: {
+                                day: false,
+                                month: true,
+                                year: true
+                            }
+                        }
+                    }
+                },
+                outputOrder: [
+                    'q-applicant-when-did-the-crime-stop',
+                    'i-dont-know-when-the-crime-stopped'
+                ]
+            }
+        },
+        'p-applicant-enter-your-date-of-birth': {
+            options: {
+                properties: {
+                    'q-applicant-enter-your-date-of-birth': {
+                        options: {
+                            autoComplete: true
+                        }
+                    }
+                }
+            }
+        },
+        'p--check-your-answers': {
+            options: {
+                isSummary: true,
+                properties: {
+                    'p-check-your-answers': {
+                        options: {
+                            summaryStructure: [
+                                {
+                                    title: 'Your details',
+                                    questions: [
+                                        'p-applicant-enter-your-name',
+                                        'p-applicant-have-you-been-known-by-any-other-names',
+                                        'p-applicant-what-other-names-have-you-used',
+                                        'p-applicant-enter-your-date-of-birth',
+                                        'p-applicant-enter-your-email-address',
+                                        'p-applicant-enter-your-address',
+                                        'p-applicant-enter-your-telephone-number',
+                                        'p-applicant-british-citizen-or-eu-national',
+                                        'p-applicant-are-you-18-or-over',
+                                        'p-applicant-who-are-you-applying-for',
+                                        'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
+                                        'p-applicant-select-the-option-that-applies-to-you'
+                                    ]
+                                },
+                                {
+                                    title: 'About the crime',
+                                    questions: [
+                                        'p-applicant-did-the-crime-happen-once-or-over-time',
+                                        'p-applicant-when-did-the-crime-happen',
+                                        'p-applicant-when-did-the-crime-start',
+                                        'p-applicant-when-did-the-crime-stop',
+                                        'p-applicant-select-reasons-for-the-delay-in-making-your-application',
+                                        'p-applicant-where-did-the-crime-happen',
+                                        'p-applicant-where-in-england-did-it-happen',
+                                        'p-applicant-where-in-scotland-did-it-happen',
+                                        'p-applicant-where-in-wales-did-it-happen',
+                                        'p-offender-do-you-know-the-name-of-the-offender',
+                                        'p-offender-enter-offenders-name',
+                                        'p-offender-describe-contact-with-offender'
+                                    ]
+                                },
+                                {
+                                    title: 'Police report',
+                                    questions: [
+                                        'p--was-the-crime-reported-to-police',
+                                        'p--when-was-the-crime-reported-to-police',
+                                        'p--whats-the-crime-reference-number',
+                                        'p--which-english-police-force-is-investigating-the-crime',
+                                        'p--which-police-scotland-division-is-investigating-the-crime',
+                                        'p--which-welsh-police-force-is-investigating-the-crime',
+                                        'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police'
+                                    ]
+                                },
+                                {
+                                    title: 'Other compensation',
+                                    questions: [
+                                        'p-applicant-have-you-applied-to-us-before',
+                                        'p-applicant-have-you-applied-for-or-received-any-other-compensation',
+                                        'p-applicant-other-compensation-details'
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        'p-applicant-enter-your-address': {
+            options: {
+                properties: {
+                    'q-applicant-building-and-street': {
+                        options: {
+                            macroOptions: {
+                                classes: ''
+                            }
+                        }
+                    },
+                    'q-applicant-building-and-street-2': {
+                        options: {
+                            macroOptions: {
+                                classes: ''
+                            }
+                        }
+                    }
+                },
+                outputOrder: [
+                    'q-applicant-building-and-street',
+                    'q-applicant-building-and-street-2',
+                    'q-applicant-town-or-city',
+                    'q-applicant-county',
+                    'q-applicant-postcode'
+                ]
+            }
+        },
+        'p--was-the-crime-reported-to-police': {
+            options: {
+                outputOrder: ['q--was-the-crime-reported-to-police', 'dont-know-if-crime-reported']
+            }
+        },
+        'p-applicant-enter-your-name': {
+            options: {
+                outputOrder: [
+                    'q-applicant-title',
+                    'q-applicant-first-name',
+                    'q-applicant-last-name'
+                ]
+            }
+        },
+        'p-applicant-select-reasons-for-the-delay-in-making-your-application': {
+            options: {
+                outputOrder: [
+                    'q-applicant-explain-reason-for-delay-application',
+                    'q-applicant-select-reasons-for-the-delay-in-making-your-application'
+                ]
+            }
+        },
+        'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police': {
+            options: {
+                outputOrder: [
+                    'q-applicant-explain-reason-for-delay-reporting',
+                    'q-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police'
+                ]
+            }
+        },
+        'p-applicant-select-the-option-that-applies-to-you': {
+            options: {
+                outputOrder: ['applicant-your-choices', 'q-applicant-option']
+            }
+        },
+        'p-applicant-when-did-the-crime-happen': {
+            options: {
+                outputOrder: ['q-applicant-when-did-the-crime-happen', 'when-did-the-crime-happen']
+            }
+        },
+        'p-applicant-where-in-england-did-it-happen': {
+            options: {
+                outputOrder: ['q-applicant-english-town-or-city', 'q-applicant-english-location']
+            }
+        },
+        'p-applicant-where-in-wales-did-it-happen': {
+            options: {
+                outputOrder: ['q-applicant-welsh-town-or-city', 'q-applicant-welsh-location']
+            }
+        },
+        'p-applicant-where-in-scotland-did-it-happen': {
+            options: {
+                outputOrder: ['q-applicant-scottish-town-or-city', 'q-applicant-scottish-location']
+            }
+        },
+        'p-offender-describe-contact-with-offender': {
+            options: {
+                outputOrder: [
+                    'q-offender-describe-contact-with-offender',
+                    'q-offender-i-have-no-contact-with-offender'
+                ]
+            }
+        }
+    };
 
     beforeEach(() => {
         qTransformer = createQTransformer({
@@ -771,66 +1089,90 @@ describe('qTransformer', () => {
         describe('Given a JSON schema with only a SummaryInfo key', () => {
             it('should return a govukSummaryList instruction', () => {
                 const result = qTransformer.transform({
-                    schemaKey: 'summaryList',
+                    schemaKey: 'p-check-your-answers',
                     schema: {
                         summaryInfo: {
                             'p-applicant-enter-your-name': {displayName: 'Name'}
                         }
                     },
-                    uiSchema: {},
+                    uiSchema: {
+                        'p-check-your-answers': {
+                            options: {
+                                summaryStructure: [
+                                    {
+                                        title: 'Your details',
+                                        questions: [
+                                            'p-applicant-enter-your-name',
+                                            'p-applicant-have-you-been-known-by-any-other-names',
+                                            'p-applicant-what-other-names-have-you-used',
+                                            'p-applicant-enter-your-date-of-birth',
+                                            'p-applicant-enter-your-email-address',
+                                            'p-applicant-enter-your-address',
+                                            'p-applicant-enter-your-telephone-number',
+                                            'p-applicant-british-citizen-or-eu-national',
+                                            'p-applicant-are-you-18-or-over',
+                                            'p-applicant-who-are-you-applying-for',
+                                            'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
+                                            'p-applicant-select-the-option-that-applies-to-you'
+                                        ]
+                                    },
+                                    {
+                                        title: 'About the crime',
+                                        questions: [
+                                            'p-applicant-did-the-crime-happen-once-or-over-time',
+                                            'p-applicant-when-did-the-crime-happen',
+                                            'p-applicant-when-did-the-crime-start',
+                                            'p-applicant-when-did-the-crime-stop',
+                                            'p-applicant-select-reasons-for-the-delay-in-making-your-application',
+                                            'p-applicant-where-did-the-crime-happen',
+                                            'p-applicant-where-in-england-did-it-happen',
+                                            'p-applicant-where-in-scotland-did-it-happen',
+                                            'p-applicant-where-in-wales-did-it-happen',
+                                            'p-offender-do-you-know-the-name-of-the-offender',
+                                            'p-offender-enter-offenders-name',
+                                            'p-offender-describe-contact-with-offender'
+                                        ]
+                                    },
+                                    {
+                                        title: 'Police report',
+                                        questions: [
+                                            'p--was-the-crime-reported-to-police',
+                                            'p--when-was-the-crime-reported-to-police',
+                                            'p--whats-the-crime-reference-number',
+                                            'p--which-english-police-force-is-investigating-the-crime',
+                                            'p--which-police-scotland-division-is-investigating-the-crime',
+                                            'p--which-welsh-police-force-is-investigating-the-crime',
+                                            'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police'
+                                        ]
+                                    },
+                                    {
+                                        title: 'Other compensation',
+                                        questions: [
+                                            'p-applicant-have-you-applied-to-us-before',
+                                            'p-applicant-have-you-applied-for-or-received-any-other-compensation',
+                                            'p-applicant-other-compensation-details'
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    },
                     data: {
                         'p-applicant-enter-your-name': {
-                            'q-applicant-name-title': 'Mr',
-                            'q-applicant-name-firstname': 'Barry',
-                            'q-applicant-name-lastname': 'Piccinni'
+                            'q-applicant-title': 'Mr',
+                            'q-applicant-first-name': 'Barry',
+                            'q-applicant-last-name': 'Piccinni'
                         }
-                    }
+                    },
+                    fullUiSchema: uiSchema
                 });
 
                 const expected = {
-                    id: 'summaryList',
-                    dependencies: ['{% from "summary-list/macro.njk" import govukSummaryList %}'],
                     componentName: 'summary',
-                    content: `<h2 class="govuk-heading-l">Your details</h2>
-                              {{ govukSummaryList({
-                                classes: 'govuk-!-margin-bottom-9',
-                                rows: [
-                                  {
-                                    "key": {
-                                        "text": "Name",
-                                        "classes": "govuk-!-width-one-half"
-                                    },
-                                    "value": {
-                                        "html": "Mr Barry Piccinni"
-                                    },
-                                    "actions": {
-                                        "items": [
-                                            {
-                                                "href": "/apply/applicant-enter-your-name?next=check-your-answers",
-                                                "text": "Change",
-                                                "visuallyHiddenText": "Name"
-                                            }
-                                        ]
-                                    }
-                                  }
-                                ]
-                              }) }}<h2 class="govuk-heading-l">About the crime</h2>
-                                {{ govukSummaryList({
-                                classes: 'govuk-!-margin-bottom-9',
-                                rows: []
-                                }) }}<h2 class="govuk-heading-l">Police report</h2>
-                                {{ govukSummaryList({
-                                classes: 'govuk-!-margin-bottom-9',
-                                rows: []
-                                }) }}<h2 class="govuk-heading-l">Other compensation</h2>
-                                {{ govukSummaryList({
-                                classes: 'govuk-!-margin-bottom-9',
-                                rows: []
-                                }) }}
-                              <h2 class="govuk-heading-l">Agree and submit your application</h2>
-                              <p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>
-                              <p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice/" target="">read our privacy notice</a>.</p>
-                            `
+                    content:
+                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Barry Piccinni"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}<h2 class="govuk-heading-l">Police report</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}<h2 class="govuk-heading-l">Other compensation</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                    dependencies: ['{% from "summary-list/macro.njk" import govukSummaryList %}'],
+                    id: 'p-check-your-answers'
                 };
 
                 expect(removeIndentation(result)).toEqual(removeIndentation(expected));
@@ -838,7 +1180,7 @@ describe('qTransformer', () => {
 
             it('should return a govukSummaryList instructions under the correct headings', () => {
                 const result = qTransformer.transform({
-                    schemaKey: 'summary',
+                    schemaKey: 'p-check-your-answers',
                     schema: {
                         summaryInfo: {
                             'p-applicant-enter-your-name': {displayName: 'Name'},
@@ -847,82 +1189,184 @@ describe('qTransformer', () => {
                             }
                         }
                     },
-                    uiSchema: {},
+                    uiSchema: {
+                        'p-check-your-answers': {
+                            options: {
+                                summaryStructure: [
+                                    {
+                                        title: 'Your details',
+                                        questions: [
+                                            'p-applicant-enter-your-name',
+                                            'p-applicant-have-you-been-known-by-any-other-names',
+                                            'p-applicant-what-other-names-have-you-used',
+                                            'p-applicant-enter-your-date-of-birth',
+                                            'p-applicant-enter-your-email-address',
+                                            'p-applicant-enter-your-address',
+                                            'p-applicant-enter-your-telephone-number',
+                                            'p-applicant-british-citizen-or-eu-national',
+                                            'p-applicant-are-you-18-or-over',
+                                            'p-applicant-who-are-you-applying-for',
+                                            'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
+                                            'p-applicant-select-the-option-that-applies-to-you'
+                                        ]
+                                    },
+                                    {
+                                        title: 'About the crime',
+                                        questions: [
+                                            'p-applicant-did-the-crime-happen-once-or-over-time',
+                                            'p-applicant-when-did-the-crime-happen',
+                                            'p-applicant-when-did-the-crime-start',
+                                            'p-applicant-when-did-the-crime-stop',
+                                            'p-applicant-select-reasons-for-the-delay-in-making-your-application',
+                                            'p-applicant-where-did-the-crime-happen',
+                                            'p-applicant-where-in-england-did-it-happen',
+                                            'p-applicant-where-in-scotland-did-it-happen',
+                                            'p-applicant-where-in-wales-did-it-happen',
+                                            'p-offender-do-you-know-the-name-of-the-offender',
+                                            'p-offender-enter-offenders-name',
+                                            'p-offender-describe-contact-with-offender'
+                                        ]
+                                    },
+                                    {
+                                        title: 'Police report',
+                                        questions: [
+                                            'p--was-the-crime-reported-to-police',
+                                            'p--when-was-the-crime-reported-to-police',
+                                            'p--whats-the-crime-reference-number',
+                                            'p--which-english-police-force-is-investigating-the-crime',
+                                            'p--which-police-scotland-division-is-investigating-the-crime',
+                                            'p--which-welsh-police-force-is-investigating-the-crime',
+                                            'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police'
+                                        ]
+                                    },
+                                    {
+                                        title: 'Other compensation',
+                                        questions: [
+                                            'p-applicant-have-you-applied-to-us-before',
+                                            'p-applicant-have-you-applied-for-or-received-any-other-compensation',
+                                            'p-applicant-other-compensation-details'
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    },
                     data: {
                         'p-applicant-enter-your-name': {
-                            'q-applicant-name-title': 'Mr',
-                            'q-applicant-name-firstname': 'Barry',
-                            'q-applicant-name-lastname': 'Piccinni'
+                            'q-applicant-last-name': 'Piccinni',
+                            'q-applicant-first-name': 'Barry',
+                            'q-applicant-title': 'Mr'
                         },
                         'p-applicant-when-did-the-crime-happen': {
                             'q-applicant-when-did-the-crime-happen': '2019-01-01T09:55:22.130Z'
                         }
-                    }
+                    },
+                    fullUiSchema: uiSchema
                 });
 
                 const expected = {
-                    id: 'summary',
-                    dependencies: ['{% from "summary-list/macro.njk" import govukSummaryList %}'],
                     componentName: 'summary',
-                    content: `<h2 class="govuk-heading-l">Your details</h2>
-                              {{ govukSummaryList({
-                                classes: 'govuk-!-margin-bottom-9',
-                                rows: [
-                                  {
-                                    "key": {
-                                        "text": "Name",
-                                        "classes": "govuk-!-width-one-half"
+                    content:
+                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Barry Piccinni"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "When did the crime happen?"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">Police report</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}<h2 class="govuk-heading-l">Other compensation</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                    dependencies: ['{% from "summary-list/macro.njk" import govukSummaryList %}'],
+                    id: 'p-check-your-answers'
+                };
+
+                expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+            });
+
+            it('should return a govukSummaryList in the order defined in the uiSchema', () => {
+                const result = qTransformer.transform({
+                    schemaKey: 'p-check-your-answers',
+                    schema: {
+                        summaryInfo: {
+                            'p-applicant-enter-your-name': {displayName: 'Name'},
+                            'p-applicant-when-did-the-crime-happen': {
+                                displayName: 'When did the crime happen?'
+                            }
+                        }
+                    },
+                    uiSchema: {
+                        'p-check-your-answers': {
+                            options: {
+                                summaryStructure: [
+                                    {
+                                        title: 'Your details',
+                                        questions: [
+                                            'p-applicant-enter-your-name',
+                                            'p-applicant-have-you-been-known-by-any-other-names',
+                                            'p-applicant-what-other-names-have-you-used',
+                                            'p-applicant-enter-your-date-of-birth',
+                                            'p-applicant-enter-your-email-address',
+                                            'p-applicant-enter-your-address',
+                                            'p-applicant-enter-your-telephone-number',
+                                            'p-applicant-british-citizen-or-eu-national',
+                                            'p-applicant-are-you-18-or-over',
+                                            'p-applicant-who-are-you-applying-for',
+                                            'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse',
+                                            'p-applicant-select-the-option-that-applies-to-you'
+                                        ]
                                     },
-                                    "value": {
-                                        "html": "Mr Barry Piccinni"
+                                    {
+                                        title: 'About the crime',
+                                        questions: [
+                                            'p-applicant-did-the-crime-happen-once-or-over-time',
+                                            'p-applicant-when-did-the-crime-happen',
+                                            'p-applicant-when-did-the-crime-start',
+                                            'p-applicant-when-did-the-crime-stop',
+                                            'p-applicant-select-reasons-for-the-delay-in-making-your-application',
+                                            'p-applicant-where-did-the-crime-happen',
+                                            'p-applicant-where-in-england-did-it-happen',
+                                            'p-applicant-where-in-scotland-did-it-happen',
+                                            'p-applicant-where-in-wales-did-it-happen',
+                                            'p-offender-do-you-know-the-name-of-the-offender',
+                                            'p-offender-enter-offenders-name',
+                                            'p-offender-describe-contact-with-offender'
+                                        ]
                                     },
-                                    "actions": {
-                                        "items": [
-                                            {
-                                                "href": "/apply/applicant-enter-your-name?next=check-your-answers",
-                                                "text": "Change",
-                                                "visuallyHiddenText": "Name"
-                                            }
+                                    {
+                                        title: 'Police report',
+                                        questions: [
+                                            'p--was-the-crime-reported-to-police',
+                                            'p--when-was-the-crime-reported-to-police',
+                                            'p--whats-the-crime-reference-number',
+                                            'p--which-english-police-force-is-investigating-the-crime',
+                                            'p--which-police-scotland-division-is-investigating-the-crime',
+                                            'p--which-welsh-police-force-is-investigating-the-crime',
+                                            'p-applicant-select-reasons-for-the-delay-in-reporting-the-crime-to-police'
+                                        ]
+                                    },
+                                    {
+                                        title: 'Other compensation',
+                                        questions: [
+                                            'p-applicant-have-you-applied-to-us-before',
+                                            'p-applicant-have-you-applied-for-or-received-any-other-compensation',
+                                            'p-applicant-other-compensation-details'
                                         ]
                                     }
-                                  }
                                 ]
-                              }) }}<h2 class="govuk-heading-l">About the crime</h2>
-                              {{ govukSummaryList({
-                                classes: 'govuk-!-margin-bottom-9',
-                                rows: [
-                                  {
-                                    "key": {
-                                        "text": "When did the crime happen?",
-                                        "classes": "govuk-!-width-one-half"
-                                    },
-                                    "value": {
-                                        "html": "01 January 2019"
-                                    },
-                                    "actions": {
-                                        "items": [
-                                            {
-                                                "href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",
-                                                "text": "Change",
-                                                "visuallyHiddenText": "When did the crime happen?"
-                                            }
-                                        ]
-                                    }
-                                  }
-                                ]
-                              }) }}<h2 class="govuk-heading-l">Police report</h2>
-                                {{ govukSummaryList({
-                                classes: 'govuk-!-margin-bottom-9',
-                                rows: []
-                                }) }}<h2 class="govuk-heading-l">Other compensation</h2>
-                                {{ govukSummaryList({
-                                classes: 'govuk-!-margin-bottom-9',
-                                rows: []
-                                }) }}
-                              <h2 class="govuk-heading-l">Agree and submit your application</h2>
-                              <p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>
-                              <p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>
-                            `
+                            }
+                        }
+                    },
+                    data: {
+                        'p-applicant-enter-your-name': {
+                            'q-applicant-last-name': 'Piccinni',
+                            'q-applicant-first-name': 'Barry',
+                            'q-applicant-title': 'Mr'
+                        },
+                        'p-applicant-when-did-the-crime-happen': {
+                            'q-applicant-when-did-the-crime-happen': '2019-01-01T09:55:22.130Z'
+                        }
+                    },
+                    fullUiSchema: uiSchema
+                });
+
+                const expected = {
+                    componentName: 'summary',
+                    content:
+                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Barry Piccinni"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "When did the crime happen?"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">Police report</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}<h2 class="govuk-heading-l">Other compensation</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                    dependencies: ['{% from "summary-list/macro.njk" import govukSummaryList %}'],
+                    id: 'p-check-your-answers'
                 };
 
                 expect(removeIndentation(result)).toEqual(removeIndentation(expected));
@@ -1114,8 +1558,7 @@ describe('qTransformer', () => {
                                         }
                                     }
                                 ]
-                            }) }}
-                            `;
+                            }) }}`;
 
                     expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
@@ -1285,10 +1728,9 @@ describe('qTransformer', () => {
                                         "text": "Text message"
                                     }
                                 ]
-                            }) }}
-                            `;
+                            }) }}`;
 
-                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                    expect(result.replace(/\s+/g, '')).toEqual(expected.replace(/\s+/g, ''));
                 });
             });
         });
@@ -1333,8 +1775,7 @@ describe('qTransformer', () => {
                             "text": "e.g. something@something.com"
                         },
                         "value": "peppa@peppapig.com"
-                    }) }}
-                    `;
+                    }) }}`;
 
             expect(removeIndentation(result)).toEqual(removeIndentation(expected));
         });
@@ -2236,7 +2677,7 @@ describe('qTransformer', () => {
                 }
             };
 
-            expect(result).toEqual(expected);
+            expect(expected).toEqual(result);
         });
 
         it('should add "width-20" class if text input has maxLength more than or equal to 20 but less than 60', () => {
@@ -2269,7 +2710,7 @@ describe('qTransformer', () => {
                 }
             };
 
-            expect(result).toEqual(expected);
+            expect(expected).toEqual(result);
         });
 
         it('should add "width-30" class if text input has maxLength more than or equal to 60 but less than 500', () => {
@@ -2303,208 +2744,6 @@ describe('qTransformer', () => {
             };
 
             expect(result).toEqual(expected);
-        });
-    });
-
-    describe('Helper tests', () => {
-        let formattedAnswer = [];
-
-        describe('Answer helper', () => {
-            describe('Dynamic answer formatter', () => {
-                beforeAll(() => {
-                    const answerObject = {
-                        'p--start-now': {},
-                        'p-applicant-declaration': {},
-                        'p-applicant-british-citizen-or-eu-national': {
-                            'q-applicant-british-citizen-or-eu-national': 'true'
-                        },
-                        'p-applicant-are-you-18-or-over': {
-                            'q-applicant-are-you-18-or-over': 'true'
-                        },
-                        'p-applicant-who-are-you-applying-for': {
-                            'q-applicant-who-are-you-applying-for': 'myself'
-                        },
-                        'p-applicant-were-you-a-victim-of-sexual-assault-or-abuse': {
-                            'q-applicant-were-you-a-victim-of-sexual-assault-or-abuse': true
-                        },
-                        'p--before-you-continue': {},
-                        'p-applicant-select-the-option-that-applies-to-you': {
-                            'q-applicant-option': 'opt1'
-                        },
-                        'p--was-the-crime-reported-to-police': {
-                            'q-was-the-crime-reported-to-police': 'false'
-                        },
-                        'p--when-was-the-crime-reported-to-police': {
-                            'q--when-was-the-crime-reported-to-police': '2019-01-01T09:55:22.130Z'
-                        },
-                        'p-applicant-enter-your-name': {
-                            'q-applicant-name-title': 'Mr',
-                            'q-applicant-name-firstname': 'Barry',
-                            'q-applicant-name-lastname': 'Piccinni'
-                        },
-                        'p-applicant-enter-your-address': {
-                            'q-applicant-building-and-street': 'Alexander Bain House',
-                            'q-applicant-building-and-street2': 'Atlantic Quay',
-                            'q-applicant-town-or-city': 'Glasgow',
-                            'q-applicant-county': '',
-                            'q-applicant-postcode': 'G2 8JQ'
-                        }
-                    };
-                    formattedAnswer = answerFormatHelper.summaryFormatter(answerObject);
-                });
-
-                it('should format all responses into simple objects containing a value key and a href key', () => {
-                    // eslint-disable-next-line no-restricted-syntax
-                    for (const answer in formattedAnswer) {
-                        // eslint-disable-next-line no-prototype-builtins
-                        if (formattedAnswer.hasOwnProperty(answer)) {
-                            expect(Object.keys(formattedAnswer[answer])).toContain('value');
-                            expect(Object.keys(formattedAnswer[answer])).toContain('href');
-                        }
-                    }
-                });
-
-                it('should format all true/false answers to "Yes" or "No"', () => {
-                    const answerValues = [];
-                    // eslint-disable-next-line no-restricted-syntax
-                    for (const answer in formattedAnswer) {
-                        // eslint-disable-next-line no-prototype-builtins
-                        if (formattedAnswer.hasOwnProperty(answer)) {
-                            answerValues.push(formattedAnswer[answer].value);
-                        }
-                    }
-
-                    expect(answerValues).not.toContain('true');
-                    expect(answerValues).not.toContain('false');
-                    expect(answerValues).toContain('Yes');
-                    expect(answerValues).toContain('No');
-                });
-
-                it('should format a question with more than one but less than 4 answers on a single line', () => {
-                    expect(formattedAnswer['p-applicant-enter-your-name'].value).toMatch(
-                        'Mr Barry Piccinni'
-                    );
-                });
-
-                it('should format a question with 4 or more answers appears in a multi-line format', () => {
-                    expect(formattedAnswer['p-applicant-enter-your-address'].value).toMatch(
-                        'Alexander Bain House<br>Atlantic Quay<br>Glasgow<br>G2 8JQ'
-                    );
-                });
-
-                it('should correctly build the url for each question', () => {
-                    expect(formattedAnswer['p-applicant-enter-your-address'].href).toMatch(
-                        '/apply/applicant-enter-your-address?next=check-your-answers'
-                    );
-                    expect(formattedAnswer['p-applicant-enter-your-name'].href).toMatch(
-                        '/apply/applicant-enter-your-name?next=check-your-answers'
-                    );
-                    expect(
-                        formattedAnswer['p-applicant-were-you-a-victim-of-sexual-assault-or-abuse']
-                            .href
-                    ).toMatch(
-                        '/apply/applicant-were-you-a-victim-of-sexual-assault-or-abuse?next=check-your-answers'
-                    );
-                });
-            });
-            describe('Helper Methods', () => {
-                describe('isValidDate', () => {
-                    it('should return true is a valid date is entered', () => {
-                        const trueString = '2019-01-01T09:55:22.130Z';
-                        const falseString = 'not-a-date';
-
-                        const actual1 = answerFormatHelper.isValidDate(trueString);
-                        const actual2 = answerFormatHelper.isValidDate(falseString);
-
-                        expect(actual1).toBeTruthy();
-                        expect(actual2).not.toBeTruthy();
-                    });
-                });
-                describe('dateFormatter', () => {
-                    it('should return a date in a readable format', () => {
-                        const dateString = '2019-01-01T09:55:22.130Z';
-
-                        const actual = answerFormatHelper.dateFormatter(dateString);
-
-                        expect(actual).toMatch('01 January 2019');
-                    });
-                });
-                describe('textFormatter', () => {
-                    it('should return text in a readable format', () => {
-                        const inputString = 'i-am-an-answer';
-
-                        const actual = answerFormatHelper.textFormatter(inputString);
-
-                        expect(actual).toMatch('I am an answer');
-                    });
-                });
-                describe('multipleAnswersFormat', () => {
-                    describe('questions with more than 1 but less than 5 fields', () => {
-                        it('should return all fields except boolean on a single line separated by spaces', () => {
-                            const inputString = {
-                                'q-applicant-building-and-street': 'Alexander Bain House',
-                                'q-applicant-town-or-city': 'Glasgow',
-                                'q-applicant-postcode': 'G2 8JQ'
-                            };
-
-                            const actual = answerFormatHelper.multipleAnswersFormat(inputString);
-
-                            expect(actual).toMatch('Alexander Bain House Glasgow G2 8JQ');
-                        });
-
-                        it('should return boolean fields on a single comma separated line', () => {
-                            const inputString = {
-                                'q-do-you-live-in-glasgow': true,
-                                'q-applicant-town-or-city': 'Glasgow',
-                                'q-applicant-postcode': 'G2 8JQ'
-                            };
-
-                            const actual = answerFormatHelper.multipleAnswersFormat(inputString);
-
-                            expect(actual).toMatch('Yes, Glasgow G2 8JQ');
-                        });
-                    });
-
-                    describe('questions with more than 4 fields', () => {
-                        it('should return as a multi-row string', () => {
-                            const inputString = {
-                                'q-applicant-building-and-street': 'Alexander Bain House',
-                                'q-applicant-building-and-street2': 'Atlantic Quay',
-                                'q-applicant-town-or-city': 'Glasgow',
-                                'q-applicant-county': '',
-                                'q-applicant-postcode': 'G2 8JQ'
-                            };
-
-                            const actual = answerFormatHelper.multipleAnswersFormat(inputString);
-
-                            expect(actual).toMatch(
-                                'Alexander Bain House<br>Atlantic Quay<br>Glasgow<br>G2 8JQ'
-                            );
-                        });
-                    });
-                });
-            });
-            describe('arrayFormatter', () => {
-                it('should return all the elements of an array on a new line', () => {
-                    const inputArray = ['i-am-an-answer', 'another-answer', 'a-third-answer'];
-
-                    const actual = answerFormatHelper.arrayFormatter(inputArray);
-
-                    expect(actual).toMatch(
-                        'I am an answer<br>Another answer<br>A third answer<br>'
-                    );
-                });
-            });
-        });
-
-        describe('Police lookup', () => {
-            it('Should return the name of a police force given the index code.', () => {
-                const ayrshirePoliceIndex = 12157147;
-                const actual = policeLookup(ayrshirePoliceIndex);
-                const expected = 'Scotland Ayrshire';
-
-                expect(actual).toMatch(expected);
-            });
         });
     });
 
@@ -2542,7 +2781,7 @@ describe('qTransformer', () => {
                             "name": "email",
                             "type": "email",
                             "label": {
-                                "text": "Email address",
+                                "html": "Email address",
                                 "isPageHeading": true,
                                 "classes": "govuk-label--xl"
                             },
@@ -2552,108 +2791,7 @@ describe('qTransformer', () => {
                         }) }}
                     `;
 
-            expect(removeIndentation(result)).toEqual(removeIndentation(expected));
-        });
-    });
-
-    describe('Display text inputs with appropriate classes', () => {
-        it('should add "width-10" class if text input has maxLength less than 20', () => {
-            const result = qTransformer.transform({
-                schemaKey: 'event-name',
-                schema: {
-                    type: 'string',
-                    title: 'Event name',
-                    description: "The name you'll use on promotional material.",
-                    maxLength: 19
-                },
-                uiSchema: {}
-            });
-
-            const expected = {
-                id: 'event-name',
-                dependencies: ['{% from "input/macro.njk" import govukInput %}'],
-                componentName: 'govukInput',
-                macroOptions: {
-                    label: {
-                        text: 'Event name'
-                    },
-                    hint: {
-                        text: "The name you'll use on promotional material."
-                    },
-                    id: 'event-name',
-                    name: 'event-name',
-                    type: 'text',
-                    classes: 'govuk-input--width-10'
-                }
-            };
-
-            expect(result).toEqual(expected);
-        });
-
-        it('should add "width-20" class if text input has maxLength more than or equal to 20 but less than 60', () => {
-            const result = qTransformer.transform({
-                schemaKey: 'event-name',
-                schema: {
-                    type: 'string',
-                    title: 'Event name',
-                    description: "The name you'll use on promotional material.",
-                    maxLength: 20
-                },
-                uiSchema: {}
-            });
-
-            const expected = {
-                id: 'event-name',
-                dependencies: ['{% from "input/macro.njk" import govukInput %}'],
-                componentName: 'govukInput',
-                macroOptions: {
-                    label: {
-                        text: 'Event name'
-                    },
-                    hint: {
-                        text: "The name you'll use on promotional material."
-                    },
-                    id: 'event-name',
-                    name: 'event-name',
-                    type: 'text',
-                    classes: 'govuk-input--width-20'
-                }
-            };
-
-            expect(result).toEqual(expected);
-        });
-
-        it('should add "width-30" class if text input has maxLength more than or equal to 60 but less than 500', () => {
-            const result = qTransformer.transform({
-                schemaKey: 'event-name',
-                schema: {
-                    type: 'string',
-                    title: 'Event name',
-                    description: "The name you'll use on promotional material.",
-                    maxLength: 60
-                },
-                uiSchema: {}
-            });
-
-            const expected = {
-                id: 'event-name',
-                dependencies: ['{% from "input/macro.njk" import govukInput %}'],
-                componentName: 'govukInput',
-                macroOptions: {
-                    label: {
-                        text: 'Event name'
-                    },
-                    hint: {
-                        text: "The name you'll use on promotional material."
-                    },
-                    id: 'event-name',
-                    name: 'event-name',
-                    type: 'text',
-                    classes: 'govuk-input--width-30'
-                }
-            };
-
-            expect(result).toEqual(expected);
+            expect(result.replace(/\s+/g, '')).toEqual(expected.replace(/\s+/g, ''));
         });
     });
 
@@ -2689,19 +2827,19 @@ describe('qTransformer', () => {
                             'q--when-was-the-crime-reported-to-police': '2019-01-01T09:55:22.130Z'
                         },
                         'p-applicant-enter-your-name': {
-                            'q-applicant-name-title': 'Mr',
-                            'q-applicant-name-firstname': 'Barry',
-                            'q-applicant-name-lastname': 'Piccinni'
+                            'q-applicant-title': 'Mr',
+                            'q-applicant-first-name': 'Barry',
+                            'q-applicant-last-name': 'Piccinni'
                         },
                         'p-applicant-enter-your-address': {
                             'q-applicant-building-and-street': 'Alexander Bain House',
-                            'q-applicant-building-and-street2': 'Atlantic Quay',
+                            'q-applicant-building-and-street-2': 'Atlantic Quay',
                             'q-applicant-town-or-city': 'Glasgow',
                             'q-applicant-county': '',
                             'q-applicant-postcode': 'G2 8JQ'
                         }
                     };
-                    formattedAnswer = answerFormatHelper.summaryFormatter(answerObject);
+                    formattedAnswer = answerFormatHelper.summaryFormatter(answerObject, uiSchema);
                 });
 
                 it('should format all responses into simple objects containing a value key and a href key', () => {
