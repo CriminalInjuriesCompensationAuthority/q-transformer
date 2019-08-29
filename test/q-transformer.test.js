@@ -1,6 +1,7 @@
 /* eslint-disable jest/no-identical-title */
 const createQTransformer = require('../lib/q-transformer');
 const defaultTransformer = require('../lib/transformers/default');
+const govukSelectTransformer = require('../lib/transformers/govukSelect');
 const answerFormatHelper = require('../lib/helpers/answerHelper');
 const policeLookup = require('../lib/helpers/policeLookup');
 
@@ -346,7 +347,8 @@ describe('qTransformer', () => {
 
     beforeEach(() => {
         qTransformer = createQTransformer({
-            default: defaultTransformer
+            default: defaultTransformer,
+            govukSelect: govukSelectTransformer
         });
     });
 
@@ -730,10 +732,6 @@ describe('qTransformer', () => {
                             },
                             hint: null,
                             items: [
-                                {
-                                    text: 'Please select...',
-                                    value: ''
-                                },
                                 {
                                     value: 'england',
                                     text: 'England'
@@ -2046,6 +2044,158 @@ describe('qTransformer', () => {
 
             expect(result).toEqual(expected);
         });
+
+        it('should pre-populate a govukSelect instruction', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'sort',
+                schema: {
+                    title: 'Sort by',
+                    type: 'string',
+                    oneOf: [
+                        {
+                            const: 'published',
+                            title: 'Recently published'
+                        },
+                        {
+                            const: 'updated',
+                            title: 'Recently updated'
+                        },
+                        {
+                            const: 'views',
+                            title: 'Most views'
+                        },
+                        {
+                            const: 'comments',
+                            title: 'Most comments'
+                        }
+                    ]
+                },
+                uiSchema: {
+                    sort: {
+                        transformer: 'govukSelect'
+                    }
+                },
+                data: {
+                    sort: 'updated'
+                }
+            });
+
+            const expected = {
+                id: 'sort',
+                dependencies: ['{% from "select/macro.njk" import govukSelect %}'],
+                componentName: 'govukSelect',
+                macroOptions: {
+                    name: 'sort',
+                    hint: null,
+                    label: {
+                        text: 'Sort by'
+                    },
+                    items: [
+                        {
+                            value: 'published',
+                            text: 'Recently published'
+                        },
+                        {
+                            value: 'updated',
+                            text: 'Recently updated',
+                            selected: true
+                        },
+                        {
+                            value: 'views',
+                            text: 'Most views'
+                        },
+                        {
+                            value: 'comments',
+                            text: 'Most comments'
+                        }
+                    ]
+                }
+            };
+
+            expect(result).toEqual(expected);
+        });
+
+        it('should pre-populate a govukSelect instruction and deselect the default item', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'sort',
+                schema: {
+                    title: 'Sort by',
+                    type: 'string',
+                    oneOf: [
+                        {
+                            const: 'published',
+                            title: 'Recently published'
+                        },
+                        {
+                            const: 'updated',
+                            title: 'Recently updated'
+                        },
+                        {
+                            const: 'views',
+                            title: 'Most views'
+                        },
+                        {
+                            const: 'comments',
+                            title: 'Most comments'
+                        }
+                    ]
+                },
+                uiSchema: {
+                    sort: {
+                        transformer: 'govukSelect',
+                        options: {
+                            defaultItem: {
+                                value: '',
+                                text: 'Please select',
+                                selected: true
+                            }
+                        }
+                    }
+                },
+                data: {
+                    sort: 'updated'
+                }
+            });
+
+            const expected = {
+                id: 'sort',
+                dependencies: ['{% from "select/macro.njk" import govukSelect %}'],
+                componentName: 'govukSelect',
+                macroOptions: {
+                    name: 'sort',
+                    hint: null,
+                    label: {
+                        text: 'Sort by'
+                    },
+                    items: [
+                        {
+                            value: '',
+                            text: 'Please select',
+                            selected: false
+                        },
+                        {
+                            value: 'published',
+                            text: 'Recently published'
+                        },
+                        {
+                            value: 'updated',
+                            text: 'Recently updated',
+                            selected: true
+                        },
+                        {
+                            value: 'views',
+                            text: 'Most views'
+                        },
+                        {
+                            value: 'comments',
+                            text: 'Most comments'
+                        }
+                    ]
+                }
+            };
+
+            expect(result).toEqual(expected);
+        });
     });
 
     describe('Display schema errors', () => {
@@ -2563,10 +2713,6 @@ describe('qTransformer', () => {
                     },
                     items: [
                         {
-                            text: 'Please select...',
-                            value: ''
-                        },
-                        {
                             value: 'england',
                             text: 'England'
                         },
@@ -2782,7 +2928,7 @@ describe('qTransformer', () => {
                 }
             });
 
-            const expected = `              
+            const expected = `
                         {% from "input/macro.njk" import govukInput %}
                         {{ govukInput({
                             "id": "email",
@@ -3002,6 +3148,89 @@ describe('qTransformer', () => {
 
                 expect(actual).toMatch(expected);
             });
+        });
+    });
+
+    describe('govukSelect transformer', () => {
+        it('should allow a default option to be injected in to its list of options e.g. "Please select"', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'sort',
+                schema: {
+                    title: 'Sort by',
+                    type: 'string',
+                    oneOf: [
+                        {
+                            const: 'published',
+                            title: 'Recently published'
+                        },
+                        {
+                            const: 'updated',
+                            title: 'Recently updated'
+                        },
+                        {
+                            const: 'views',
+                            title: 'Most views'
+                        },
+                        {
+                            const: 'comments',
+                            title: 'Most comments'
+                        }
+                    ]
+                },
+                uiSchema: {
+                    sort: {
+                        transformer: 'govukSelect',
+                        options: {
+                            defaultItem: {
+                                value: '',
+                                text: 'Please select'
+                            }
+                        }
+                    }
+                },
+                data: {
+                    sort: 'updated'
+                }
+            });
+
+            const expected = {
+                id: 'sort',
+                dependencies: ['{% from "select/macro.njk" import govukSelect %}'],
+                componentName: 'govukSelect',
+                macroOptions: {
+                    name: 'sort',
+                    hint: null,
+                    label: {
+                        text: 'Sort by'
+                    },
+                    items: [
+                        {
+                            value: '',
+                            text: 'Please select',
+                            selected: false
+                        },
+                        {
+                            value: 'published',
+                            text: 'Recently published'
+                        },
+                        {
+                            value: 'updated',
+                            text: 'Recently updated',
+                            selected: true
+                        },
+                        {
+                            value: 'views',
+                            text: 'Most views'
+                        },
+                        {
+                            value: 'comments',
+                            text: 'Most comments'
+                        }
+                    ]
+                }
+            };
+
+            expect(result).toEqual(expected);
         });
     });
 });
