@@ -731,10 +731,6 @@ describe('qTransformer', () => {
                             hint: null,
                             items: [
                                 {
-                                    text: 'Please select...',
-                                    value: ''
-                                },
-                                {
                                     value: 'england',
                                     text: 'England'
                                 },
@@ -2562,10 +2558,6 @@ describe('qTransformer', () => {
                         text: 'Please select an option'
                     },
                     items: [
-                        {
-                            text: 'Please select...',
-                            value: ''
-                        },
                         {
                             value: 'england',
                             text: 'England'
