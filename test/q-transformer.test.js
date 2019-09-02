@@ -3078,7 +3078,7 @@ describe('qTransformer', () => {
 
                         const actual = answerFormatHelper.textFormatter(inputString);
 
-                        expect(actual).toMatch('I am an answer');
+                        expect(actual).toMatch('i am an answer');
                     });
                 });
                 describe('multipleAnswersFormat', () => {
@@ -3134,7 +3134,7 @@ describe('qTransformer', () => {
                     const actual = answerFormatHelper.arrayFormatter(inputArray);
 
                     expect(actual).toMatch(
-                        'I am an answer<br>Another answer<br>A third answer<br>'
+                        'i am an answer<br>another answer<br>a third answer<br>'
                     );
                 });
             });
