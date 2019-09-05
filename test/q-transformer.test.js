@@ -1373,6 +1373,65 @@ describe('qTransformer', () => {
 
                 expect(removeIndentation(result)).toEqual(removeIndentation(expected));
             });
+
+            it('should return a govukSummaryList in the order defined in the uiSchema and append answers which are supplied in the body but not defined in the uiSchema', () => {
+                const result = qTransformer.transform({
+                    schemaKey: 'p-summary',
+                    schema: {
+                        summaryInfo: {
+                            'p-some-section': {displayName: 'Name'}
+                        }
+                    },
+                    uiSchema: {
+                        'p-summary': {
+                            options: {
+                                summaryStructure: [
+                                    {
+                                        title: 'Your details',
+                                        questions: ['p-some-section']
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    data: {
+                        'p-some-section': {
+                            'q-3': 'Piccinni',
+                            'q-2': 'Barry',
+                            'q-1': 'Mr',
+                            'q-5': 'blah',
+                            'q-4': 'foo'
+                        }
+                    },
+                    fullUiSchema: {
+                        'p-summary': {
+                            options: {
+                                summaryStructure: [
+                                    {
+                                        title: 'Your details',
+                                        questions: ['p-some-section']
+                                    }
+                                ]
+                            }
+                        },
+                        'p-some-section': {
+                            options: {
+                                outputOrder: ['q-1', 'q-2', 'q-3']
+                            }
+                        }
+                    }
+                });
+
+                const expected = {
+                    componentName: 'summary',
+                    content:
+                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr<br>Barry<br>Piccinni<br>Blah<br>Foo"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/some-section?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                    dependencies: ['{% from "summary-list/macro.njk" import govukSummaryList %}'],
+                    id: 'p-summary'
+                };
+
+                expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+            });
         });
     });
 
