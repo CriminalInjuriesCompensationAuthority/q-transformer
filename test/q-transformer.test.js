@@ -2395,7 +2395,7 @@ describe('qTransformer', () => {
 
             const expected = {
                 id: 'waste',
-                errorSummaryHREF: '#waste[]-1',
+                errorSummaryHREF: '#waste[]',
                 dependencies: ['{% from "checkboxes/macro.njk" import govukCheckboxes %}'],
                 componentName: 'govukCheckboxes',
                 macroOptions: {
@@ -2452,7 +2452,7 @@ describe('qTransformer', () => {
 
             const expected = {
                 id: 'changed-name',
-                errorSummaryHREF: '#changed-name-1',
+                errorSummaryHREF: '#changed-name',
                 dependencies: ['{% from "radios/macro.njk" import govukRadios %}'],
                 componentName: 'govukRadios',
                 macroOptions: {
