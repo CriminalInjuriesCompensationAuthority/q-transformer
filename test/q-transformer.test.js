@@ -1425,7 +1425,7 @@ describe('qTransformer', () => {
                 const expected = {
                     componentName: 'summary',
                     content:
-                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr<br>Barry<br>Piccinni<br>Blah<br>Foo"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/some-section?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr<br>Barry<br>Piccinni<br>blah<br>foo"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/some-section?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
                     dependencies: ['{% from "summary-list/macro.njk" import govukSummaryList %}'],
                     id: 'p-summary'
                 };
@@ -3137,7 +3137,7 @@ describe('qTransformer', () => {
 
                         const actual = answerFormatHelper.textFormatter(inputString);
 
-                        expect(actual).toMatch('I am an answer');
+                        expect(actual).toMatch('i am an answer');
                     });
                 });
                 describe('multipleAnswersFormat', () => {
@@ -3193,7 +3193,7 @@ describe('qTransformer', () => {
                     const actual = answerFormatHelper.arrayFormatter(inputArray);
 
                     expect(actual).toMatch(
-                        'I am an answer<br>Another answer<br>A third answer<br>'
+                        'i am an answer<br>another answer<br>a third answer<br>'
                     );
                 });
             });
