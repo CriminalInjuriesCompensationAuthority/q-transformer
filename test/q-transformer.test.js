@@ -4,6 +4,7 @@ const defaultTransformer = require('../lib/transformers/default');
 const govukSelectTransformer = require('../lib/transformers/govukSelect');
 const answerFormatHelper = require('../lib/helpers/answerHelper');
 const policeLookup = require('../lib/helpers/policeLookup');
+const answerLookup = require('../lib/helpers/answerLookup');
 
 // Remove indentation from strings when comparing them
 function removeIndentation(val) {
@@ -3131,15 +3132,6 @@ describe('qTransformer', () => {
                         expect(actual).toMatch('01 January 2019');
                     });
                 });
-                describe('textFormatter', () => {
-                    it('should return text in a readable format', () => {
-                        const inputString = 'i-am-an-answer';
-
-                        const actual = answerFormatHelper.textFormatter(inputString);
-
-                        expect(actual).toMatch('i am an answer');
-                    });
-                });
                 describe('multipleAnswersFormat', () => {
                     describe('questions with more than 1 but less than 5 fields', () => {
                         it('should return all fields except boolean on a single line separated by spaces', () => {
@@ -3193,7 +3185,7 @@ describe('qTransformer', () => {
                     const actual = answerFormatHelper.arrayFormatter(inputArray);
 
                     expect(actual).toMatch(
-                        'i am an answer<br>another answer<br>a third answer<br>'
+                        'i-am-an-answer<br>another-answer<br>a-third-answer<br>'
                     );
                 });
             });
@@ -3204,6 +3196,16 @@ describe('qTransformer', () => {
                 const ayrshirePoliceIndex = 12157147;
                 const actual = policeLookup(ayrshirePoliceIndex);
                 const expected = 'Scotland Ayrshire';
+
+                expect(actual).toMatch(expected);
+            });
+        });
+
+        describe('Answer lookup', () => {
+            it('Should return the user friendly display name, given an answer ID.', () => {
+                const iWasUnder18AnswerId = 'i-was-under-18';
+                const actual = answerLookup(iWasUnder18AnswerId);
+                const expected = 'I was under 18';
 
                 expect(actual).toMatch(expected);
             });
