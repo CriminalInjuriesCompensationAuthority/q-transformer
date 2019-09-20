@@ -3177,6 +3177,16 @@ describe('qTransformer', () => {
                         });
                     });
                 });
+                describe('escapeHtml', () => {
+                    it('should replace potentially harmful HTML characters with a safe alternative', () => {
+                        const badString = `<html>&I am a "bad" 'string'</html>`;
+                        const expected = `&lt;html&gt;&amp;I am a &quot;bad&quot; &#039;string&#039;&lt;/html&gt;`;
+
+                        const actual = answerFormatHelper.escapeHtml(badString);
+
+                        expect(actual).toMatch(expected);
+                    });
+                });
             });
             describe('arrayFormatter', () => {
                 it('should return all the elements of an array on a new line', () => {
