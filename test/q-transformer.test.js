@@ -1,4 +1,3 @@
-/* eslint-disable jest/no-identical-title */
 const createQTransformer = require('../lib/q-transformer');
 const defaultTransformer = require('../lib/transformers/default');
 const govukSelectTransformer = require('../lib/transformers/govukSelect');
@@ -1550,77 +1549,73 @@ describe('qTransformer', () => {
                         }
                     });
                     const expected = `
-                            {% from "input/macro.njk" import govukInput %}
-                            {% from "radios/macro.njk" import govukRadios %}
-                            {{ govukRadios({
-                                "idPrefix": "contact",
-                                "name": "contact",
-                                "fieldset": {
-                                    "legend": {
-                                        "text": "How would you prefer to be contacted?",
-                                        "isPageHeading": true,
-                                        "classes": "govuk-fieldset__legend--xl"
+                        {% from "input/macro.njk" import govukInput %}
+                        {% from "radios/macro.njk" import govukRadios %}
+                        {% set email %}{{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "html": "Email address"
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com"
+                            }
+                        }) }}{% endset -%}
+                        {% set phone %}{{ govukInput({
+                            "id": "phone",
+                            "name": "phone",
+                            "type": "text",
+                            "label": {
+                                "html": "Phone number"
+                            },
+                            "hint": null
+                        }) }}{% endset -%}
+                        {% set text %}{{ govukInput({
+                            "id": "text",
+                            "name": "text",
+                            "type": "text",
+                            "label": {
+                                "html": "Mobile phone number"
+                            },
+                            "hint": null
+                        }) }}{% endset -%}{{ govukRadios({
+                            "idPrefix": "contact",
+                            "name": "contact",
+                            "fieldset": {
+                                "legend": {
+                                    "text": "How would you prefer to be contacted?",
+                                    "isPageHeading": true,
+                                    "classes": "govuk-fieldset__legend--xl"
+                                }
+                            },
+                            "hint": {
+                                "text": "Select one option."
+                            },
+                            "items": [
+                                {
+                                    "value": "email",
+                                    "text": "Email",
+                                    "conditional": {
+                                        "html": ([email] | join())
                                     }
                                 },
-                                "hint": {
-                                    "text": "Select one option."
-                                },
-                                "items": [
-                                    {
-                                        "value": "email",
-                                        "text": "Email",
-                                        "conditional": {
-                                            "html": ([
-                                                govukInput({
-                                                    "id": "email",
-                                                    "name": "email",
-                                                    "type": "email",
-                                                    "label": {
-                                                        "html": "Email address"
-                                                    },
-                                                    "hint": {
-                                                        "text": "e.g. something@something.com"
-                                                    }
-                                                })
-                                            ] | join())
-                                        }
-                                    },
-                                    {
-                                        "value": "phone",
-                                        "text": "Phone",
-                                        "conditional": {
-                                            "html": ([
-                                                govukInput({
-                                                    "id": "phone",
-                                                    "name": "phone",
-                                                    "type": "text",
-                                                    "label": {
-                                                        "html": "Phone number"
-                                                    },
-                                                    "hint": null
-                                                })
-                                            ] | join())
-                                        }
-                                    },
-                                    {
-                                        "value": "text",
-                                        "text": "Text message",
-                                        "conditional": {
-                                            "html": ([
-                                                govukInput({
-                                                    "id": "text",
-                                                    "name": "text",
-                                                    "type": "text",
-                                                    "label": {
-                                                        "html": "Mobile phone number"
-                                                    },
-                                                    "hint": null
-                                                })
-                                            ] | join())
-                                        }
+                                {
+                                    "value": "phone",
+                                    "text": "Phone",
+                                    "conditional": {
+                                        "html": ([phone] | join())
                                     }
-                                ]
-                            }) }}`;
+                                },
+                                {
+                                    "value": "text",
+                                    "text": "Text message",
+                                    "conditional": {
+                                        "html": ([text] | join())
+                                    }
+                                }
+                            ]
+                        }) }}`;
 
                     expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
@@ -1728,71 +1723,378 @@ describe('qTransformer', () => {
                         }
                     });
                     const expected = `
-                            {% from "input/macro.njk" import govukInput %}
-                            {% from "radios/macro.njk" import govukRadios %}
-                            {{ govukRadios({
-                                "idPrefix": "contact",
-                                "name": "contact",
-                                "fieldset": {
-                                    "legend": {
-                                        "text": "How would you prefer to be contacted?",
-                                        "isPageHeading": true,
-                                        "classes": "govuk-fieldset__legend--xl"
+                        {% from "input/macro.njk" import govukInput %}
+                        {% from "radios/macro.njk" import govukRadios %}
+                        {% set email %}{{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "html": "Email address"
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com"
+                            }
+                        }) }}{% endset -%}
+                        {% set phone %}{{ govukInput({
+                            "id": "phone",
+                            "name": "phone",
+                            "type": "text",
+                            "label": {
+                                "html": "Phone number"
+                            },
+                            "hint": null
+                        }) }}{% endset -%}
+                        {% set text %}{{ govukInput({
+                            "id": "text",
+                            "name": "text",
+                            "type": "text",
+                            "label": {
+                                "html": "Mobile phone number"
+                            },
+                            "hint": null
+                        }) }}{% endset -%}{{ govukRadios({
+                            "idPrefix": "contact",
+                            "name": "contact",
+                            "fieldset": {
+                                "legend": {
+                                    "text": "How would you prefer to be contacted?",
+                                    "isPageHeading": true,
+                                    "classes": "govuk-fieldset__legend--xl"
+                                }
+                            },
+                            "hint": {
+                                "text": "Select one option."
+                            },
+                            "items": [
+                                {
+                                    "value": "email",
+                                    "text": "Email",
+                                    "conditional": {
+                                        "html": ([email, phone, text] | join())
                                     }
                                 },
-                                "hint": {
-                                    "text": "Select one option."
+                                {
+                                    "value": "phone",
+                                    "text": "Phone"
                                 },
-                                "items": [
-                                    {
-                                        "value": "email",
-                                        "text": "Email",
-                                        "conditional": {
-                                            "html": ([
-                                                govukInput({
-                                                    "id": "email",
-                                                    "name": "email",
-                                                    "type": "email",
-                                                    "label": {
-                                                        "html": "Email address"
-                                                    },
-                                                    "hint": {
-                                                        "text": "e.g. something@something.com"
-                                                    }
-                                                }),
-                                                govukInput({
-                                                    "id": "phone",
-                                                    "name": "phone",
-                                                    "type": "text",
-                                                    "label": {
-                                                        "html": "Phone number"
-                                                    },
-                                                    "hint": null
-                                                }),
-                                                govukInput({
-                                                    "id": "text",
-                                                    "name": "text",
-                                                    "type": "text",
-                                                    "label": {
-                                                        "html": "Mobile phone number"
-                                                    },
-                                                    "hint": null
-                                                })
-                                            ] | join())
-                                        }
-                                    },
-                                    {
-                                        "value": "phone",
-                                        "text": "Phone"
-                                    },
-                                    {
-                                        "value": "text",
-                                        "text": "Text message"
-                                    }
-                                ]
-                            }) }}`;
+                                {
+                                    "value": "text",
+                                    "text": "Text message"
+                                }
+                            ]
+                        }) }}`;
 
                     expect(result.replace(/\s+/g, '')).toEqual(expected.replace(/\s+/g, ''));
+                });
+
+                it('should convert it to a govukRadios with properly escaped user answers', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'p-some-id',
+                        schema: {
+                            type: 'object',
+                            propertyNames: {
+                                enum: ['contact', 'email', 'phone', 'text']
+                            },
+                            properties: {
+                                contact: {
+                                    title: 'How would you prefer to be contacted?',
+                                    description: 'Select one option.',
+                                    type: 'string',
+                                    oneOf: [
+                                        {
+                                            title: 'Email',
+                                            const: 'email'
+                                        },
+                                        {
+                                            title: 'Phone',
+                                            const: 'phone'
+                                        },
+                                        {
+                                            title: 'Text message',
+                                            const: 'text'
+                                        }
+                                    ]
+                                },
+                                email: {
+                                    type: 'string',
+                                    description: 'e.g. something@something.com',
+                                    format: 'email',
+                                    title: 'Email address'
+                                },
+                                phone: {type: 'string', title: 'Phone number'},
+                                text: {type: 'string', title: 'Mobile phone number'}
+                            },
+                            required: ['contact'],
+                            allOf: [
+                                {$ref: '#/definitions/if-email-contact-then-email-is-required'},
+                                {$ref: '#/definitions/if-phone-contact-then-phone-is-required'},
+                                {$ref: '#/definitions/if-text-contact-then-text-is-required'}
+                            ],
+                            definitions: {
+                                'if-email-contact-then-email-is-required': {
+                                    if: {
+                                        properties: {
+                                            contact: {const: 'email'}
+                                        }
+                                    },
+                                    then: {
+                                        required: ['email'],
+                                        propertyNames: {enum: ['contact', 'email']}
+                                    }
+                                },
+                                'if-phone-contact-then-phone-is-required': {
+                                    if: {
+                                        properties: {
+                                            contact: {const: 'phone'}
+                                        }
+                                    },
+                                    then: {
+                                        required: ['phone'],
+                                        propertyNames: {enum: ['contact', 'phone']}
+                                    }
+                                },
+                                'if-text-contact-then-text-is-required': {
+                                    if: {
+                                        properties: {
+                                            contact: {const: 'text'}
+                                        }
+                                    },
+                                    then: {
+                                        required: ['text'],
+                                        propertyNames: {enum: ['contact', 'text']}
+                                    }
+                                }
+                            }
+                        },
+                        uiSchema: {
+                            'p-some-id': {
+                                // transformer: 'form',
+                                options: {
+                                    transformOrder: ['email', 'phone', 'text', 'contact'],
+                                    outputOrder: ['contact'],
+                                    properties: {
+                                        contact: {
+                                            // transformer: 'govukRadios',
+                                            options: {
+                                                conditionalComponentMap: [
+                                                    {
+                                                        itemValue: 'email',
+                                                        componentIds: ['email']
+                                                    },
+                                                    {
+                                                        itemValue: 'phone',
+                                                        componentIds: ['phone']
+                                                    },
+                                                    {
+                                                        itemValue: 'text',
+                                                        componentIds: ['text']
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        data: {
+                            text: '"><script>alert("hello");</script>'
+                        }
+                    });
+                    const expected = `
+                        {% from "input/macro.njk" import govukInput %}
+                        {% from "radios/macro.njk" import govukRadios %}
+                        {% set email %}{{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "html": "Email address"
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com"
+                            }
+                        }) }}{% endset -%}
+                        {% set phone %}{{ govukInput({
+                            "id": "phone",
+                            "name": "phone",
+                            "type": "text",
+                            "label": {
+                                "html": "Phone number"
+                            },
+                            "hint": null
+                        }) }}{% endset -%}
+                        {% set text %}{{ govukInput({
+                            "id": "text",
+                            "name": "text",
+                            "type": "text",
+                            "label": {
+                                "html": "Mobile phone number"
+                            },
+                            "hint": null,
+                            "value": "\\"><script>alert(\\"hello\\");</script>"
+                        }) }}{% endset -%}{{ govukRadios({
+                            "idPrefix": "contact",
+                            "name": "contact",
+                            "fieldset": {
+                                "legend": {
+                                    "text": "How would you prefer to be contacted?",
+                                    "isPageHeading": true,
+                                    "classes": "govuk-fieldset__legend--xl"
+                                }
+                            },
+                            "hint": {
+                                "text": "Select one option."
+                            },
+                            "items": [
+                                {
+                                    "value": "email",
+                                    "text": "Email",
+                                    "conditional": {
+                                        "html": ([email] | join())
+                                    }
+                                },
+                                {
+                                    "value": "phone",
+                                    "text": "Phone",
+                                    "conditional": {
+                                        "html": ([phone] | join())
+                                    }
+                                },
+                                {
+                                    "value": "text",
+                                    "text": "Text message",
+                                    "conditional": {
+                                        "html": ([text] | join())
+                                    }
+                                }
+                            ]
+                        }) }}`;
+
+                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                });
+
+                it('should ensure the conditional component ids have any invalid characters replaced with "_"', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'p-some-id',
+                        schema: {
+                            type: 'object',
+                            propertyNames: {
+                                enum: [
+                                    'contact',
+                                    'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
+                                ]
+                            },
+                            properties: {
+                                contact: {
+                                    title: 'How would you prefer to be contacted?',
+                                    description: 'Select one option.',
+                                    type: 'string',
+                                    oneOf: [
+                                        {
+                                            title: 'Email',
+                                            const: 'email'
+                                        }
+                                    ]
+                                },
+                                'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email': {
+                                    type: 'string',
+                                    description: 'e.g. something@something.com',
+                                    format: 'email',
+                                    title: 'Email address'
+                                }
+                            },
+                            required: ['contact'],
+                            allOf: [
+                                {$ref: '#/definitions/if-email-contact-then-email-is-required'}
+                            ],
+                            definitions: {
+                                'if-email-contact-then-email-is-required': {
+                                    if: {
+                                        properties: {
+                                            contact: {const: 'email'}
+                                        }
+                                    },
+                                    then: {
+                                        required: [
+                                            'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
+                                        ],
+                                        propertyNames: {
+                                            enum: [
+                                                'contact',
+                                                'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        uiSchema: {
+                            'p-some-id': {
+                                // transformer: 'form',
+                                options: {
+                                    transformOrder: [
+                                        'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email',
+                                        'contact'
+                                    ],
+                                    outputOrder: ['contact'],
+                                    properties: {
+                                        contact: {
+                                            // transformer: 'govukRadios',
+                                            options: {
+                                                conditionalComponentMap: [
+                                                    {
+                                                        itemValue: 'email',
+                                                        componentIds: [
+                                                            'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    const expected = `
+                        {% from "input/macro.njk" import govukInput %}
+                        {% from "radios/macro.njk" import govukRadios %}
+                        {% set this_id_cant_be_used_as_a_variable_identifier_as_it_contains_hyphens_email %}{{ govukInput({
+                            "id": "this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email",
+                            "name": "this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email",
+                            "type": "email",
+                            "label": {
+                                "html": "Email address"
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com"
+                            }
+                        }) }}{% endset -%}{{ govukRadios({
+                            "idPrefix": "contact",
+                            "name": "contact",
+                            "fieldset": {
+                                "legend": {
+                                    "text": "How would you prefer to be contacted?",
+                                    "isPageHeading": true,
+                                    "classes": "govuk-fieldset__legend--xl"
+                                }
+                            },
+                            "hint": {
+                                "text": "Select one option."
+                            },
+                            "items": [
+                                {
+                                    "value": "email",
+                                    "text": "Email",
+                                    "conditional": {
+                                        "html": ([this_id_cant_be_used_as_a_variable_identifier_as_it_contains_hyphens_email] | join())
+                                    }
+                                }
+                            ]
+                        }) }}`;
+
+                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
             });
         });
