@@ -2,8 +2,6 @@ const createQTransformer = require('../lib/q-transformer');
 const defaultTransformer = require('../lib/transformers/default');
 const govukSelectTransformer = require('../lib/transformers/govukSelect');
 const answerFormatHelper = require('../lib/helpers/answerHelper');
-const policeLookup = require('../lib/helpers/policeLookup');
-const answerLookup = require('../lib/helpers/answerLookup');
 
 // Remove indentation from strings when comparing them
 function removeIndentation(val) {
@@ -3638,26 +3636,6 @@ describe('qTransformer', () => {
                         'i-am-an-answer<br>another-answer<br>a-third-answer<br>'
                     );
                 });
-            });
-        });
-
-        describe('Police lookup', () => {
-            it('Should return the name of a police force given the index code.', () => {
-                const ayrshirePoliceIndex = 12157147;
-                const actual = policeLookup(ayrshirePoliceIndex);
-                const expected = 'Scotland Ayrshire';
-
-                expect(actual).toMatch(expected);
-            });
-        });
-
-        describe('Answer lookup', () => {
-            it('Should return the user friendly display name, given an answer ID.', () => {
-                const iWasUnder18AnswerId = 'i-was-under-18';
-                const actual = answerLookup(iWasUnder18AnswerId);
-                const expected = 'I was under 18';
-
-                expect(actual).toMatch(expected);
             });
         });
     });
