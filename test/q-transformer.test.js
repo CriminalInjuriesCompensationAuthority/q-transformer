@@ -385,35 +385,75 @@ describe('qTransformer', () => {
         });
 
         describe('Given a JSON Schema with type:string', () => {
-            it('should convert it to a govukInput instruction', () => {
-                const result = qTransformer.transform({
-                    schemaKey: 'event-name',
-                    schema: {
-                        type: 'string',
-                        title: 'Event name',
-                        description: "The name you'll use on promotional material."
-                    },
-                    uiSchema: {}
+            describe('And maxLength < 500 or not included', () => {
+                it('should convert it to a govukInput instruction', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'event-name',
+                        schema: {
+                            type: 'string',
+                            title: 'Event name',
+                            description: "The name you'll use on promotional material."
+                        },
+                        uiSchema: {}
+                    });
+
+                    const expected = {
+                        id: 'event-name',
+                        dependencies: ['{% from "input/macro.njk" import govukInput %}'],
+                        componentName: 'govukInput',
+                        macroOptions: {
+                            label: {
+                                html: 'Event name'
+                            },
+                            hint: {
+                                text: "The name you'll use on promotional material."
+                            },
+                            id: 'event-name',
+                            name: 'event-name',
+                            type: 'text'
+                        }
+                    };
+
+                    expect(result).toEqual(expected);
                 });
 
-                const expected = {
-                    id: 'event-name',
-                    dependencies: ['{% from "input/macro.njk" import govukInput %}'],
-                    componentName: 'govukInput',
-                    macroOptions: {
-                        label: {
-                            html: 'Event name'
+                it('should add the auto-complete class to the govUk object. ', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'passport-sent',
+                        schema: {
+                            type: 'string',
+                            title: 'Where should we send your passport?',
+                            description: 'Enter an address'
                         },
-                        hint: {
-                            text: "The name you'll use on promotional material."
-                        },
-                        id: 'event-name',
-                        name: 'event-name',
-                        type: 'text'
-                    }
-                };
+                        uiSchema: {
+                            'passport-sent': {
+                                options: {
+                                    autoComplete: 'street-address'
+                                }
+                            }
+                        }
+                    });
 
-                expect(result).toEqual(expected);
+                    const expected = {
+                        id: 'passport-sent',
+                        dependencies: ['{% from "input/macro.njk" import govukInput %}'],
+                        componentName: 'govukInput',
+                        macroOptions: {
+                            label: {
+                                html: 'Where should we send your passport?'
+                            },
+                            hint: {
+                                text: 'Enter an address'
+                            },
+                            id: 'passport-sent',
+                            name: 'passport-sent',
+                            type: 'text',
+                            autoComplete: 'street-address'
+                        }
+                    };
+
+                    expect(result).toEqual(expected);
+                });
             });
 
             describe('And a maxLength >= 500', () => {
@@ -445,6 +485,47 @@ describe('qTransformer', () => {
                                 text:
                                     'Do not include personal or financial information, like your National Insurance number or credit card details.'
                             }
+                        }
+                    };
+
+                    expect(result).toEqual(expected);
+                });
+
+                it('should add the auto-complete class to the govUk object. ', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'more-detail',
+                        schema: {
+                            type: 'string',
+                            maxLength: 500,
+                            title: 'Can you provide more detail?',
+                            description:
+                                'Do not include personal or financial information, like your National Insurance number or credit card details.'
+                        },
+                        uiSchema: {
+                            'more-detail': {
+                                options: {
+                                    autoComplete: 'street-address'
+                                }
+                            }
+                        }
+                    });
+
+                    const expected = {
+                        id: 'more-detail',
+                        dependencies: ['{% from "textarea/macro.njk" import govukTextarea %}'],
+                        componentName: 'govukTextarea',
+                        macroOptions: {
+                            name: 'more-detail',
+                            id: 'more-detail',
+                            label: {
+                                classes: 'govuk-label govuk-label--l',
+                                text: 'Can you provide more detail?'
+                            },
+                            hint: {
+                                text:
+                                    'Do not include personal or financial information, like your National Insurance number or credit card details.'
+                            },
+                            autoComplete: 'street-address'
                         }
                     };
 
@@ -581,7 +662,7 @@ describe('qTransformer', () => {
                         uiSchema: {
                             'passport-issued': {
                                 options: {
-                                    autoComplete: true
+                                    autoComplete: 'bday'
                                 }
                             }
                         }
