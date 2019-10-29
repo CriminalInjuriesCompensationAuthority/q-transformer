@@ -411,7 +411,8 @@ describe('qTransformer', () => {
                             id: 'event-name',
                             name: 'event-name',
                             type: 'text'
-                        }
+                        },
+                        pageTitle: ''
                     };
 
                     expect(result).toEqual(expected);
@@ -449,7 +450,8 @@ describe('qTransformer', () => {
                             name: 'passport-sent',
                             type: 'text',
                             autocomplete: 'street-address'
-                        }
+                        },
+                        pageTitle: ''
                     };
 
                     expect(result).toEqual(expected);
@@ -485,7 +487,8 @@ describe('qTransformer', () => {
                                 text:
                                     'Do not include personal or financial information, like your National Insurance number or credit card details.'
                             }
-                        }
+                        },
+                        pageTitle: ''
                     };
 
                     expect(result).toEqual(expected);
@@ -526,7 +529,8 @@ describe('qTransformer', () => {
                                     'Do not include personal or financial information, like your National Insurance number or credit card details.'
                             },
                             autocomplete: 'street-address'
-                        }
+                        },
+                        pageTitle: ''
                     };
 
                     expect(result).toEqual(expected);
@@ -593,7 +597,8 @@ describe('qTransformer', () => {
                                     text: 'Northern Ireland'
                                 }
                             ]
-                        }
+                        },
+                        pageTitle: ''
                     };
 
                     expect(result).toEqual(expected);
@@ -644,7 +649,8 @@ describe('qTransformer', () => {
                                     name: 'passport-issued[year]'
                                 }
                             ]
-                        }
+                        },
+                        pageTitle: ''
                     };
 
                     expect(result).toEqual(expected);
@@ -702,7 +708,8 @@ describe('qTransformer', () => {
                                     autocomplete: 'bday-year'
                                 }
                             ]
-                        }
+                        },
+                        pageTitle: ''
                     };
 
                     expect(result).toEqual(expected);
@@ -894,7 +901,8 @@ describe('qTransformer', () => {
                                     text: 'Czech Republic'
                                 }
                             ]
-                        }
+                        },
+                        pageTitle: ''
                     };
 
                     expect(result).toEqual(expected);
@@ -958,7 +966,8 @@ describe('qTransformer', () => {
                                 text: 'Farm or agricultural waste'
                             }
                         ]
-                    }
+                    },
+                    pageTitle: ''
                 };
 
                 expect(result).toEqual(expected);
@@ -1012,8 +1021,9 @@ describe('qTransformer', () => {
                     uiSchema: {}
                 });
 
-                const expected = `
-                        {% from "input/macro.njk" import govukInput %}
+                const expected = {
+                    pageTitle: 'Email address - claim criminal injuries compensation - GOV.UK',
+                    transformation: `{% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
                         {% from "details/macro.njk" import govukDetails %}
                         {{ govukInput({
@@ -1063,7 +1073,8 @@ describe('qTransformer', () => {
                         {{ govukWarningText({
                             text: "You could be prosecuted or get less compensation if you give false or misleading information."
                         }) }}
-                        `;
+                        `
+                };
 
                 expect(removeIndentation(result)).toEqual(removeIndentation(expected));
             });
@@ -1089,15 +1100,16 @@ describe('qTransformer', () => {
                                     <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
                                     {{ govukWarningText({
                                         text: "You could be prosecuted or get less compensation if you give false or misleading information."
-                                    }) }}
-                                `
+                                    }) }}`
                             }
                         }
                     },
                     uiSchema: {}
                 });
 
-                const expected = `
+                const expected = {
+                    pageTitle: 'Event name - claim criminal injuries compensation - GOV.UK',
+                    transformation: `
                         {% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
                         <h1 class="govuk-heading-xl">Event name</h1>
@@ -1115,10 +1127,11 @@ describe('qTransformer', () => {
                         <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
                         {{ govukWarningText({
                             text: "You could be prosecuted or get less compensation if you give false or misleading information."
-                        }) }}
-                        `;
-
-                expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                        }) }}`
+                };
+                expect(removeIndentation(result.transformation)).toEqual(
+                    removeIndentation(expected.transformation)
+                );
             });
         });
 
@@ -1162,7 +1175,8 @@ describe('qTransformer', () => {
                                 text: 'No'
                             }
                         ]
-                    }
+                    },
+                    pageTitle: ''
                 };
 
                 expect(result).toEqual(expected);
@@ -1629,74 +1643,79 @@ describe('qTransformer', () => {
                             }
                         }
                     });
-                    const expected = `
-                        {% from "input/macro.njk" import govukInput %}
-                        {% from "radios/macro.njk" import govukRadios %}
-                        {% set email %}{{ govukInput({
-                            "id": "email",
-                            "name": "email",
-                            "type": "email",
-                            "label": {
-                                "html": "Email address"
-                            },
-                            "hint": {
-                                "text": "e.g. something@something.com"
-                            }
-                        }) }}{% endset -%}
-                        {% set phone %}{{ govukInput({
-                            "id": "phone",
-                            "name": "phone",
-                            "type": "text",
-                            "label": {
-                                "html": "Phone number"
-                            },
-                            "hint": null
-                        }) }}{% endset -%}
-                        {% set text %}{{ govukInput({
-                            "id": "text",
-                            "name": "text",
-                            "type": "text",
-                            "label": {
-                                "html": "Mobile phone number"
-                            },
-                            "hint": null
-                        }) }}{% endset -%}{{ govukRadios({
-                            "idPrefix": "contact",
-                            "name": "contact",
-                            "fieldset": {
-                                "legend": {
-                                    "text": "How would you prefer to be contacted?",
-                                    "isPageHeading": true,
-                                    "classes": "govuk-fieldset__legend--xl"
+
+                    const expected = {
+                        pageTitle:
+                            'How would you prefer to be contacted? - claim criminal injuries compensation - GOV.UK',
+                        transformation: `
+                            {% from "input/macro.njk" import govukInput %}
+                            {% from "radios/macro.njk" import govukRadios %}
+                            {% set email %}{{ govukInput({
+                                "id": "email",
+                                "name": "email",
+                                "type": "email",
+                                "label": {
+                                    "html": "Email address"
+                                },
+                                "hint": {
+                                    "text": "e.g. something@something.com"
                                 }
-                            },
-                            "hint": {
-                                "text": "Select one option."
-                            },
-                            "items": [
-                                {
-                                    "value": "email",
-                                    "text": "Email",
-                                    "conditional": {
-                                        "html": ([email] | join())
+                            }) }}{% endset -%}
+                            {% set phone %}{{ govukInput({
+                                "id": "phone",
+                                "name": "phone",
+                                "type": "text",
+                                "label": {
+                                    "html": "Phone number"
+                                },
+                                "hint": null
+                            }) }}{% endset -%}
+                            {% set text %}{{ govukInput({
+                                "id": "text",
+                                "name": "text",
+                                "type": "text",
+                                "label": {
+                                    "html": "Mobile phone number"
+                                },
+                                "hint": null
+                            }) }}{% endset -%}{{ govukRadios({
+                                "idPrefix": "contact",
+                                "name": "contact",
+                                "fieldset": {
+                                    "legend": {
+                                        "text": "How would you prefer to be contacted?",
+                                        "isPageHeading": true,
+                                        "classes": "govuk-fieldset__legend--xl"
                                     }
                                 },
-                                {
-                                    "value": "phone",
-                                    "text": "Phone",
-                                    "conditional": {
-                                        "html": ([phone] | join())
-                                    }
+                                "hint": {
+                                    "text": "Select one option."
                                 },
-                                {
-                                    "value": "text",
-                                    "text": "Text message",
-                                    "conditional": {
-                                        "html": ([text] | join())
+                                "items": [
+                                    {
+                                        "value": "email",
+                                        "text": "Email",
+                                        "conditional": {
+                                            "html": ([email] | join())
+                                        }
+                                    },
+                                    {
+                                        "value": "phone",
+                                        "text": "Phone",
+                                        "conditional": {
+                                            "html": ([phone] | join())
+                                        }
+                                    },
+                                    {
+                                        "value": "text",
+                                        "text": "Text message",
+                                        "conditional": {
+                                            "html": ([text] | join())
+                                        }
                                     }
-                                }
-                            ]
-                        }) }}`;
+                                ]
+                            }) }}`
+                    };
 
                     expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
@@ -1803,70 +1822,75 @@ describe('qTransformer', () => {
                             }
                         }
                     });
-                    const expected = `
-                        {% from "input/macro.njk" import govukInput %}
-                        {% from "radios/macro.njk" import govukRadios %}
-                        {% set email %}{{ govukInput({
-                            "id": "email",
-                            "name": "email",
-                            "type": "email",
-                            "label": {
-                                "html": "Email address"
-                            },
-                            "hint": {
-                                "text": "e.g. something@something.com"
-                            }
-                        }) }}{% endset -%}
-                        {% set phone %}{{ govukInput({
-                            "id": "phone",
-                            "name": "phone",
-                            "type": "text",
-                            "label": {
-                                "html": "Phone number"
-                            },
-                            "hint": null
-                        }) }}{% endset -%}
-                        {% set text %}{{ govukInput({
-                            "id": "text",
-                            "name": "text",
-                            "type": "text",
-                            "label": {
-                                "html": "Mobile phone number"
-                            },
-                            "hint": null
-                        }) }}{% endset -%}{{ govukRadios({
-                            "idPrefix": "contact",
-                            "name": "contact",
-                            "fieldset": {
-                                "legend": {
-                                    "text": "How would you prefer to be contacted?",
-                                    "isPageHeading": true,
-                                    "classes": "govuk-fieldset__legend--xl"
+                    const expected = {
+                        pageTitle:
+                            'How would you prefer to be contacted? - claim criminal injuries compensation - GOV.UK',
+                        transformation: `
+                            {% from "input/macro.njk" import govukInput %}
+                            {% from "radios/macro.njk" import govukRadios %}
+                            {% set email %}{{ govukInput({
+                                "id": "email",
+                                "name": "email",
+                                "type": "email",
+                                "label": {
+                                    "html": "Email address"
+                                },
+                                "hint": {
+                                    "text": "e.g. something@something.com"
                                 }
-                            },
-                            "hint": {
-                                "text": "Select one option."
-                            },
-                            "items": [
-                                {
-                                    "value": "email",
-                                    "text": "Email",
-                                    "conditional": {
-                                        "html": ([email, phone, text] | join())
+                            }) }}{% endset -%}
+                            {% set phone %}{{ govukInput({
+                                "id": "phone",
+                                "name": "phone",
+                                "type": "text",
+                                "label": {
+                                    "html": "Phone number"
+                                },
+                                "hint": null
+                            }) }}{% endset -%}
+                            {% set text %}{{ govukInput({
+                                "id": "text",
+                                "name": "text",
+                                "type": "text",
+                                "label": {
+                                    "html": "Mobile phone number"
+                                },
+                                "hint": null
+                            }) }}{% endset -%}{{ govukRadios({
+                                "idPrefix": "contact",
+                                "name": "contact",
+                                "fieldset": {
+                                    "legend": {
+                                        "text": "How would you prefer to be contacted?",
+                                        "isPageHeading": true,
+                                        "classes": "govuk-fieldset__legend--xl"
                                     }
                                 },
-                                {
-                                    "value": "phone",
-                                    "text": "Phone"
+                                "hint": {
+                                    "text": "Select one option."
                                 },
-                                {
-                                    "value": "text",
-                                    "text": "Text message"
-                                }
-                            ]
-                        }) }}`;
-
-                    expect(result.replace(/\s+/g, '')).toEqual(expected.replace(/\s+/g, ''));
+                                "items": [
+                                    {
+                                        "value": "email",
+                                        "text": "Email",
+                                        "conditional": {
+                                            "html": ([email, phone, text] | join())
+                                        }
+                                    },
+                                    {
+                                        "value": "phone",
+                                        "text": "Phone"
+                                    },
+                                    {
+                                        "value": "text",
+                                        "text": "Text message"
+                                    }
+                                ]
+                            }) }}`
+                    };
+                    expect(result.transformation.replace(/\s+/g, '')).toEqual(
+                        expected.transformation.replace(/\s+/g, '')
+                    );
                 });
 
                 it('should convert it to a govukRadios with properly escaped user answers', () => {
@@ -1982,7 +2006,10 @@ describe('qTransformer', () => {
                             text: '"><script>alert("hello");</script>'
                         }
                     });
-                    const expected = `
+                    const expected = {
+                        pageTitle:
+                            'How would you prefer to be contacted? - claim criminal injuries compensation - GOV.UK',
+                        transformation: `
                         {% from "input/macro.njk" import govukInput %}
                         {% from "radios/macro.njk" import govukRadios %}
                         {% set email %}{{ govukInput({
@@ -2050,7 +2077,8 @@ describe('qTransformer', () => {
                                     }
                                 }
                             ]
-                        }) }}`;
+                        }) }}`
+                    };
 
                     expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
@@ -2138,42 +2166,45 @@ describe('qTransformer', () => {
                             }
                         }
                     });
-                    const expected = `
-                        {% from "input/macro.njk" import govukInput %}
-                        {% from "radios/macro.njk" import govukRadios %}
-                        {% set this_id_cant_be_used_as_a_variable_identifier_as_it_contains_hyphens_email %}{{ govukInput({
-                            "id": "this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email",
-                            "name": "this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email",
-                            "type": "email",
-                            "label": {
-                                "html": "Email address"
-                            },
-                            "hint": {
-                                "text": "e.g. something@something.com"
-                            }
-                        }) }}{% endset -%}{{ govukRadios({
-                            "idPrefix": "contact",
-                            "name": "contact",
-                            "fieldset": {
-                                "legend": {
-                                    "text": "How would you prefer to be contacted?",
-                                    "isPageHeading": true,
-                                    "classes": "govuk-fieldset__legend--xl"
+                    const expected = {
+                        pageTitle:
+                            'How would you prefer to be contacted? - claim criminal injuries compensation - GOV.UK',
+                        transformation: `{% from "input/macro.njk" import govukInput %}
+                            {% from "radios/macro.njk" import govukRadios %}
+                            {% set this_id_cant_be_used_as_a_variable_identifier_as_it_contains_hyphens_email %}{{ govukInput({
+                                "id": "this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email",
+                                "name": "this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email",
+                                "type": "email",
+                                "label": {
+                                    "html": "Email address"
+                                },
+                                "hint": {
+                                    "text": "e.g. something@something.com"
                                 }
-                            },
-                            "hint": {
-                                "text": "Select one option."
-                            },
-                            "items": [
-                                {
-                                    "value": "email",
-                                    "text": "Email",
-                                    "conditional": {
-                                        "html": ([this_id_cant_be_used_as_a_variable_identifier_as_it_contains_hyphens_email] | join())
+                            }) }}{% endset -%}{{ govukRadios({
+                                "idPrefix": "contact",
+                                "name": "contact",
+                                "fieldset": {
+                                    "legend": {
+                                        "text": "How would you prefer to be contacted?",
+                                        "isPageHeading": true,
+                                        "classes": "govuk-fieldset__legend--xl"
                                     }
-                                }
-                            ]
-                        }) }}`;
+                                },
+                                "hint": {
+                                    "text": "Select one option."
+                                },
+                                "items": [
+                                    {
+                                        "value": "email",
+                                        "text": "Email",
+                                        "conditional": {
+                                            "html": ([this_id_cant_be_used_as_a_variable_identifier_as_it_contains_hyphens_email] | join())
+                                        }
+                                    }
+                                ]
+                            }) }}`
+                    };
 
                     expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
@@ -2205,8 +2236,9 @@ describe('qTransformer', () => {
                 }
             });
 
-            const expected = `
-                    {% from "input/macro.njk" import govukInput %}
+            const expected = {
+                pageTitle: 'Email address - claim criminal injuries compensation - GOV.UK',
+                transformation: `{% from "input/macro.njk" import govukInput %}
                     {{ govukInput({
                         "id": "email",
                         "name": "email",
@@ -2220,7 +2252,8 @@ describe('qTransformer', () => {
                             "text": "e.g. something@something.com"
                         },
                         "value": "peppa@peppapig.com"
-                    }) }}`;
+                    }) }}`
+            };
 
             expect(removeIndentation(result)).toEqual(removeIndentation(expected));
         });
@@ -2254,7 +2287,8 @@ describe('qTransformer', () => {
                     name: 'event-name',
                     type: 'text',
                     value: 'Peppa Pig'
-                }
+                },
+                pageTitle: ''
             };
 
             expect(result).toEqual(expected);
@@ -2323,9 +2357,9 @@ describe('qTransformer', () => {
                             text: 'Northern Ireland'
                         }
                     ]
-                }
+                },
+                pageTitle: ''
             };
-
             expect(result).toEqual(expected);
         });
 
@@ -2389,7 +2423,8 @@ describe('qTransformer', () => {
                             checked: true
                         }
                     ]
-                }
+                },
+                pageTitle: ''
             };
 
             expect(result).toEqual(expected);
@@ -2427,7 +2462,8 @@ describe('qTransformer', () => {
                             'Do not include personal or financial information, like your National Insurance number or credit card details.'
                     },
                     value: 'Peppa Pig'
-                }
+                },
+                pageTitle: ''
             };
 
             expect(result).toEqual(expected);
@@ -2482,7 +2518,8 @@ describe('qTransformer', () => {
                             value: 1980
                         }
                     ]
-                }
+                },
+                pageTitle: ''
             };
 
             expect(result).toEqual(expected);
@@ -2552,7 +2589,8 @@ describe('qTransformer', () => {
                             text: 'Most comments'
                         }
                     ]
-                }
+                },
+                pageTitle: ''
             };
 
             expect(result).toEqual(expected);
@@ -2634,7 +2672,8 @@ describe('qTransformer', () => {
                             text: 'Most comments'
                         }
                     ]
-                }
+                },
+                pageTitle: ''
             };
 
             expect(result).toEqual(expected);
@@ -2677,7 +2716,8 @@ describe('qTransformer', () => {
                     errorMessage: {
                         text: 'Wrong type'
                     }
-                }
+                },
+                pageTitle: 'Error: '
             };
 
             expect(result).toEqual(expected);
@@ -2739,7 +2779,8 @@ describe('qTransformer', () => {
                             value: 0
                         }
                     ]
-                }
+                },
+                pageTitle: 'Error: '
             };
             expect(result).toEqual(expected);
         });
@@ -2810,7 +2851,8 @@ describe('qTransformer', () => {
                             checked: true
                         }
                     ]
-                }
+                },
+                pageTitle: 'Error: '
             };
 
             expect(result).toEqual(expected);
@@ -2865,7 +2907,8 @@ describe('qTransformer', () => {
                             text: 'No'
                         }
                     ]
-                }
+                },
+                pageTitle: 'Error: '
             };
 
             expect(result).toEqual(expected);
@@ -2909,7 +2952,8 @@ describe('qTransformer', () => {
                             'Do not include personal or financial information, like your National Insurance number or credit card details.'
                     },
                     value: 123
-                }
+                },
+                pageTitle: 'Error: '
             };
 
             expect(result).toEqual(expected);
@@ -2965,79 +3009,84 @@ describe('qTransformer', () => {
                 }
             });
 
-            const expected = `
-                    {% from "error-summary/macro.njk" import govukErrorSummary %}
-                        {{ govukErrorSummary({
-                            titleText: "There is a problem",
-                            errorList: [
-                                {
-                                    "href": "#email",
-                                    "text": "Please enter a value"
-                                },
-                                {
-                                    "href": "#phone",
-                                    "text": "This is not a valid type"
-                                }
-                        ]}) }}
-                        {% from "input/macro.njk" import govukInput %}
-                        {% from "warning-text/macro.njk" import govukWarningText %}
-                        {% from "details/macro.njk" import govukDetails %}
-                        {{ govukInput({
-                            "id": "email",
-                            "name": "email",
-                            "type": "email",
-                            "label": {
-                                "html": "Email address",
-                                "isPageHeading": true,
-                                "classes": "govuk-label--xl"
-                            },
-                            "hint": {
-                                "text": "e.g. something@something.com"
-                            },
-                            "errorMessage": {
+            const expected = {
+                pageTitle: 'Error: Email address - claim criminal injuries compensation - GOV.UK',
+                transformation: `
+                {% from "error-summary/macro.njk" import govukErrorSummary %}
+                    {{ govukErrorSummary({
+                        titleText: "There is a problem",
+                        errorList: [
+                            {
+                                "href": "#email",
                                 "text": "Please enter a value"
-                            }
-                        }) }}
-                        <p>Some instructions</p>
-                        {{ govukWarningText({
-                            text: "Follow these exactly as described"
-                        }) }}
-                        <ol>
-                            <li>Instruction 1</li>
-                            <li>Instruction 2</li>
-                        </ol>
-                        {{ govukDetails({
-                            summaryText: "Help",
-                            text: "Follow the instructions"
-                        }) }}
-                        {{ govukInput({
-                            "id": "phone",
-                            "name": "phone",
-                            "type": "text",
-                            "label": {
-                                "html": "Phone number"
                             },
-                            "hint": null,
-                            "errorMessage": {
+                            {
+                                "href": "#phone",
                                 "text": "This is not a valid type"
                             }
-                        }) }}
-                        {{ govukInput({
-                            "id": "text",
-                            "name": "text",
-                            "type": "text",
-                            "label": {
-                                "html": "Mobile phone number"
-                            },
-                            "hint": null
-                        }) }}
-                        <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
-                        {{ govukWarningText({
-                            text: "You could be prosecuted or get less compensation if you give false or misleading information."
-                        }) }}
-                        `;
+                    ]}) }}
+                    {% from "input/macro.njk" import govukInput %}
+                    {% from "warning-text/macro.njk" import govukWarningText %}
+                    {% from "details/macro.njk" import govukDetails %}
+                    {{ govukInput({
+                        "id": "email",
+                        "name": "email",
+                        "type": "email",
+                        "label": {
+                            "html": "Email address",
+                            "isPageHeading": true,
+                            "classes": "govuk-label--xl"
+                        },
+                        "hint": {
+                            "text": "e.g. something@something.com"
+                        },
+                        "errorMessage": {
+                            "text": "Please enter a value"
+                        }
+                    }) }}
+                    <p>Some instructions</p>
+                    {{ govukWarningText({
+                        text: "Follow these exactly as described"
+                    }) }}
+                    <ol>
+                        <li>Instruction 1</li>
+                        <li>Instruction 2</li>
+                    </ol>
+                    {{ govukDetails({
+                        summaryText: "Help",
+                        text: "Follow the instructions"
+                    }) }}
+                    {{ govukInput({
+                        "id": "phone",
+                        "name": "phone",
+                        "type": "text",
+                        "label": {
+                            "html": "Phone number"
+                        },
+                        "hint": null,
+                        "errorMessage": {
+                            "text": "This is not a valid type"
+                        }
+                    }) }}
+                    {{ govukInput({
+                        "id": "text",
+                        "name": "text",
+                        "type": "text",
+                        "label": {
+                            "html": "Mobile phone number"
+                        },
+                        "hint": null
+                    }) }}
+                    <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                    {{ govukWarningText({
+                        text: "You could be prosecuted or get less compensation if you give false or misleading information."
+                    }) }}
+                    `
+            };
 
-            expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+            expect(removeIndentation(result.transformation)).toEqual(
+                removeIndentation(expected.transformation)
+            );
         });
 
         it('should display errors for govukSelect instruction', () => {
@@ -3236,7 +3285,8 @@ describe('qTransformer', () => {
                             text: 'Czech Republic'
                         }
                     ]
-                }
+                },
+                pageTitle: 'Error: '
             };
 
             expect(result).toEqual(expected);
@@ -3271,7 +3321,8 @@ describe('qTransformer', () => {
                     name: 'event-name',
                     type: 'text',
                     classes: 'govuk-input--width-10'
-                }
+                },
+                pageTitle: ''
             };
 
             expect(expected).toEqual(result);
@@ -3304,7 +3355,8 @@ describe('qTransformer', () => {
                     name: 'event-name',
                     type: 'text',
                     classes: 'govuk-input--width-20'
-                }
+                },
+                pageTitle: ''
             };
 
             expect(expected).toEqual(result);
@@ -3337,7 +3389,8 @@ describe('qTransformer', () => {
                     name: 'event-name',
                     type: 'text',
                     classes: 'govuk-input--width-30'
-                }
+                },
+                pageTitle: ''
             };
 
             expect(result).toEqual(expected);
@@ -3371,24 +3424,28 @@ describe('qTransformer', () => {
                 }
             });
 
-            const expected = `
-                        {% from "input/macro.njk" import govukInput %}
-                        {{ govukInput({
-                            "id": "email",
-                            "name": "email",
-                            "type": "email",
-                            "label": {
-                                "html": "Email address",
-                                "isPageHeading": true,
-                                "classes": "govuk-label--xl"
-                            },
-                            "hint": {
-                                "text": "e.g. something@something.com"
-                            }
-                        }) }}
-                    `;
-
-            expect(result.replace(/\s+/g, '')).toEqual(expected.replace(/\s+/g, ''));
+            const expected = {
+                pageTitle: 'Email address - claim criminal injuries compensation - GOV.UK',
+                transformation: `
+                    {% from "input/macro.njk" import govukInput %}
+                    {{ govukInput({
+                        "id": "email",
+                        "name": "email",
+                        "type": "email",
+                        "label": {
+                            "html": "Email address",
+                            "isPageHeading": true,
+                            "classes": "govuk-label--xl"
+                        },
+                        "hint": {
+                            "text": "e.g. something@something.com"
+                        }
+                    }) }}
+                `
+            };
+            expect(result.transformation.replace(/\s+/g, '')).toEqual(
+                expected.transformation.replace(/\s+/g, '')
+            );
         });
     });
 
@@ -3681,7 +3738,8 @@ describe('qTransformer', () => {
                             text: 'Most comments'
                         }
                     ]
-                }
+                },
+                pageTitle: ''
             };
 
             expect(result).toEqual(expected);
