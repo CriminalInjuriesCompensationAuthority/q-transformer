@@ -1,6 +1,6 @@
 {
     "name": "q-transformer",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "description": "Transforms a questionnaire's JSON Schema in to a different format",
     "main": "index.js",
     "scripts": {
@@ -26,7 +26,7 @@
         "q-base-config": "github:CriminalInjuriesCompensationAuthority/q-base-config#semver:<1.0.0"
     },
     "dependencies": {
-        "lodash.merge": "^4.6.1",
+        "lodash.merge": "^4.6.2",
         "moment": "^2.24.0",
         "nanoid": "^2.1.1"
     },
