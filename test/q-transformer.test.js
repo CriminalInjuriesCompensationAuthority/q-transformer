@@ -411,7 +411,8 @@ describe('qTransformer', () => {
                             id: 'event-name',
                             name: 'event-name',
                             type: 'text'
-                        }
+                        },
+                        pageTitle: ''
                     };
 
                     expect(result).toEqual(expected);
@@ -449,7 +450,8 @@ describe('qTransformer', () => {
                             name: 'passport-sent',
                             type: 'text',
                             autocomplete: 'street-address'
-                        }
+                        },
+                        pageTitle: ''
                     };
 
                     expect(result).toEqual(expected);
@@ -527,7 +529,8 @@ describe('qTransformer', () => {
                                     'Do not include personal or financial information, like your National Insurance number or credit card details.'
                             },
                             autocomplete: 'street-address'
-                        }
+                        },
+                        pageTitle: ''
                     };
 
                     expect(result).toEqual(expected);
