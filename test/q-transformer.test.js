@@ -448,7 +448,7 @@ describe('qTransformer', () => {
                             id: 'passport-sent',
                             name: 'passport-sent',
                             type: 'text',
-                            autoComplete: 'street-address'
+                            autocomplete: 'street-address'
                         }
                     };
 
@@ -525,7 +525,7 @@ describe('qTransformer', () => {
                                 text:
                                     'Do not include personal or financial information, like your National Insurance number or credit card details.'
                             },
-                            autoComplete: 'street-address'
+                            autocomplete: 'street-address'
                         }
                     };
 
