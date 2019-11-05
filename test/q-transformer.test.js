@@ -1014,6 +1014,7 @@ describe('qTransformer', () => {
 
                 const expected = {
                     pageTitle: 'Email address',
+                    hasErrors: false,
                     content: `{% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
                         {% from "details/macro.njk" import govukDetails %}
@@ -1099,8 +1100,9 @@ describe('qTransformer', () => {
                 });
 
                 const expected = {
-                    pageTitle: 'Event name - claim criminal injuries compensation - GOV.UK',
-                    content: `
+                    pageTitle: 'Event name',
+                    hasErrors: false,
+                    content: removeIndentation(`
                         {% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
                         <h1 class="govuk-heading-xl">Event name</h1>
@@ -1118,11 +1120,13 @@ describe('qTransformer', () => {
                         <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
                         {{ govukWarningText({
                             text: "You could be prosecuted or get less compensation if you give false or misleading information."
-                        }) }}`
+                        }) }}`)
                 };
-                expect(removeIndentation(result.content)).toEqual(
-                    removeIndentation(expected.content)
-                );
+                expect({
+                    pageTitle: result.pageTitle,
+                    hasErrors: result.hasErrors,
+                    content: removeIndentation(result.content)
+                }).toEqual(expected);
             });
         });
 
@@ -1636,6 +1640,7 @@ describe('qTransformer', () => {
 
                     const expected = {
                         pageTitle: 'How would you prefer to be contacted?',
+                        hasErrors: false,
                         content: `
                             {% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
@@ -1996,6 +2001,7 @@ describe('qTransformer', () => {
                     });
                     const expected = {
                         pageTitle: 'How would you prefer to be contacted?',
+                        hasErrors: false,
                         content: `
                         {% from "input/macro.njk" import govukInput %}
                         {% from "radios/macro.njk" import govukRadios %}
@@ -2155,6 +2161,7 @@ describe('qTransformer', () => {
                     });
                     const expected = {
                         pageTitle: 'How would you prefer to be contacted?',
+                        hasErrors: false,
                         content: `{% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
                             {% set this_id_cant_be_used_as_a_variable_identifier_as_it_contains_hyphens_email %}{{ govukInput({
@@ -2224,6 +2231,7 @@ describe('qTransformer', () => {
 
             const expected = {
                 pageTitle: 'Email address',
+                hasErrors: false,
                 content: `{% from "input/macro.njk" import govukInput %}
                     {{ govukInput({
                         "id": "email",
@@ -2984,8 +2992,9 @@ describe('qTransformer', () => {
             });
 
             const expected = {
-                pageTitle: 'Error: Email address - claim criminal injuries compensation - GOV.UK',
-                content: `
+                pageTitle: 'Email address',
+                hasErrors: true,
+                content: removeIndentation(`
                 {% from "error-summary/macro.njk" import govukErrorSummary %}
                     {{ govukErrorSummary({
                         titleText: "There is a problem",
@@ -3055,10 +3064,14 @@ describe('qTransformer', () => {
                     {{ govukWarningText({
                         text: "You could be prosecuted or get less compensation if you give false or misleading information."
                     }) }}
-                    `
+                    `)
             };
 
-            expect(removeIndentation(result.content)).toEqual(removeIndentation(expected.content));
+            expect({
+                pageTitle: result.pageTitle,
+                hasErrors: result.hasErrors,
+                content: removeIndentation(result.content)
+            }).toEqual(expected);
         });
 
         it('should display errors for govukSelect instruction', () => {
