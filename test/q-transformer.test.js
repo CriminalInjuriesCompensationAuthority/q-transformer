@@ -411,8 +411,7 @@ describe('qTransformer', () => {
                             id: 'event-name',
                             name: 'event-name',
                             type: 'text'
-                        },
-                        pageTitle: ''
+                        }
                     };
 
                     expect(result).toEqual(expected);
@@ -450,8 +449,7 @@ describe('qTransformer', () => {
                             name: 'passport-sent',
                             type: 'text',
                             autocomplete: 'street-address'
-                        },
-                        pageTitle: ''
+                        }
                     };
 
                     expect(result).toEqual(expected);
@@ -487,8 +485,7 @@ describe('qTransformer', () => {
                                 text:
                                     'Do not include personal or financial information, like your National Insurance number or credit card details.'
                             }
-                        },
-                        pageTitle: ''
+                        }
                     };
 
                     expect(result).toEqual(expected);
@@ -529,8 +526,7 @@ describe('qTransformer', () => {
                                     'Do not include personal or financial information, like your National Insurance number or credit card details.'
                             },
                             autocomplete: 'street-address'
-                        },
-                        pageTitle: ''
+                        }
                     };
 
                     expect(result).toEqual(expected);
@@ -597,8 +593,7 @@ describe('qTransformer', () => {
                                     text: 'Northern Ireland'
                                 }
                             ]
-                        },
-                        pageTitle: ''
+                        }
                     };
 
                     expect(result).toEqual(expected);
@@ -649,8 +644,7 @@ describe('qTransformer', () => {
                                     name: 'passport-issued[year]'
                                 }
                             ]
-                        },
-                        pageTitle: ''
+                        }
                     };
 
                     expect(result).toEqual(expected);
@@ -708,8 +702,7 @@ describe('qTransformer', () => {
                                     autocomplete: 'bday-year'
                                 }
                             ]
-                        },
-                        pageTitle: ''
+                        }
                     };
 
                     expect(result).toEqual(expected);
@@ -901,8 +894,7 @@ describe('qTransformer', () => {
                                     text: 'Czech Republic'
                                 }
                             ]
-                        },
-                        pageTitle: ''
+                        }
                     };
 
                     expect(result).toEqual(expected);
@@ -966,8 +958,7 @@ describe('qTransformer', () => {
                                 text: 'Farm or agricultural waste'
                             }
                         ]
-                    },
-                    pageTitle: ''
+                    }
                 };
 
                 expect(result).toEqual(expected);
@@ -1022,8 +1013,8 @@ describe('qTransformer', () => {
                 });
 
                 const expected = {
-                    pageTitle: 'Email address - claim criminal injuries compensation - GOV.UK',
-                    transformation: `{% from "input/macro.njk" import govukInput %}
+                    pageTitle: 'Email address',
+                    content: `{% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
                         {% from "details/macro.njk" import govukDetails %}
                         {{ govukInput({
@@ -1109,7 +1100,7 @@ describe('qTransformer', () => {
 
                 const expected = {
                     pageTitle: 'Event name - claim criminal injuries compensation - GOV.UK',
-                    transformation: `
+                    content: `
                         {% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
                         <h1 class="govuk-heading-xl">Event name</h1>
@@ -1129,8 +1120,8 @@ describe('qTransformer', () => {
                             text: "You could be prosecuted or get less compensation if you give false or misleading information."
                         }) }}`
                 };
-                expect(removeIndentation(result.transformation)).toEqual(
-                    removeIndentation(expected.transformation)
+                expect(removeIndentation(result.content)).toEqual(
+                    removeIndentation(expected.content)
                 );
             });
         });
@@ -1175,8 +1166,7 @@ describe('qTransformer', () => {
                                 text: 'No'
                             }
                         ]
-                    },
-                    pageTitle: ''
+                    }
                 };
 
                 expect(result).toEqual(expected);
@@ -1645,9 +1635,8 @@ describe('qTransformer', () => {
                     });
 
                     const expected = {
-                        pageTitle:
-                            'How would you prefer to be contacted? - claim criminal injuries compensation - GOV.UK',
-                        transformation: `
+                        pageTitle: 'How would you prefer to be contacted?',
+                        content: `
                             {% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
                             {% set email %}{{ govukInput({
@@ -1823,9 +1812,8 @@ describe('qTransformer', () => {
                         }
                     });
                     const expected = {
-                        pageTitle:
-                            'How would you prefer to be contacted? - claim criminal injuries compensation - GOV.UK',
-                        transformation: `
+                        pageTitle: 'How would you prefer to be contacted?',
+                        content: `
                             {% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
                             {% set email %}{{ govukInput({
@@ -1888,8 +1876,8 @@ describe('qTransformer', () => {
                                 ]
                             }) }}`
                     };
-                    expect(result.transformation.replace(/\s+/g, '')).toEqual(
-                        expected.transformation.replace(/\s+/g, '')
+                    expect(result.content.replace(/\s+/g, '')).toEqual(
+                        expected.content.replace(/\s+/g, '')
                     );
                 });
 
@@ -2007,9 +1995,8 @@ describe('qTransformer', () => {
                         }
                     });
                     const expected = {
-                        pageTitle:
-                            'How would you prefer to be contacted? - claim criminal injuries compensation - GOV.UK',
-                        transformation: `
+                        pageTitle: 'How would you prefer to be contacted?',
+                        content: `
                         {% from "input/macro.njk" import govukInput %}
                         {% from "radios/macro.njk" import govukRadios %}
                         {% set email %}{{ govukInput({
@@ -2167,9 +2154,8 @@ describe('qTransformer', () => {
                         }
                     });
                     const expected = {
-                        pageTitle:
-                            'How would you prefer to be contacted? - claim criminal injuries compensation - GOV.UK',
-                        transformation: `{% from "input/macro.njk" import govukInput %}
+                        pageTitle: 'How would you prefer to be contacted?',
+                        content: `{% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
                             {% set this_id_cant_be_used_as_a_variable_identifier_as_it_contains_hyphens_email %}{{ govukInput({
                                 "id": "this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email",
@@ -2237,8 +2223,8 @@ describe('qTransformer', () => {
             });
 
             const expected = {
-                pageTitle: 'Email address - claim criminal injuries compensation - GOV.UK',
-                transformation: `{% from "input/macro.njk" import govukInput %}
+                pageTitle: 'Email address',
+                content: `{% from "input/macro.njk" import govukInput %}
                     {{ govukInput({
                         "id": "email",
                         "name": "email",
@@ -2287,8 +2273,7 @@ describe('qTransformer', () => {
                     name: 'event-name',
                     type: 'text',
                     value: 'Peppa Pig'
-                },
-                pageTitle: ''
+                }
             };
 
             expect(result).toEqual(expected);
@@ -2357,8 +2342,7 @@ describe('qTransformer', () => {
                             text: 'Northern Ireland'
                         }
                     ]
-                },
-                pageTitle: ''
+                }
             };
             expect(result).toEqual(expected);
         });
@@ -2423,8 +2407,7 @@ describe('qTransformer', () => {
                             checked: true
                         }
                     ]
-                },
-                pageTitle: ''
+                }
             };
 
             expect(result).toEqual(expected);
@@ -2462,8 +2445,7 @@ describe('qTransformer', () => {
                             'Do not include personal or financial information, like your National Insurance number or credit card details.'
                     },
                     value: 'Peppa Pig'
-                },
-                pageTitle: ''
+                }
             };
 
             expect(result).toEqual(expected);
@@ -2518,8 +2500,7 @@ describe('qTransformer', () => {
                             value: 1980
                         }
                     ]
-                },
-                pageTitle: ''
+                }
             };
 
             expect(result).toEqual(expected);
@@ -2589,8 +2570,7 @@ describe('qTransformer', () => {
                             text: 'Most comments'
                         }
                     ]
-                },
-                pageTitle: ''
+                }
             };
 
             expect(result).toEqual(expected);
@@ -2672,8 +2652,7 @@ describe('qTransformer', () => {
                             text: 'Most comments'
                         }
                     ]
-                },
-                pageTitle: ''
+                }
             };
 
             expect(result).toEqual(expected);
@@ -2716,8 +2695,7 @@ describe('qTransformer', () => {
                     errorMessage: {
                         text: 'Wrong type'
                     }
-                },
-                pageTitle: 'Error: '
+                }
             };
 
             expect(result).toEqual(expected);
@@ -2779,8 +2757,7 @@ describe('qTransformer', () => {
                             value: 0
                         }
                     ]
-                },
-                pageTitle: 'Error: '
+                }
             };
             expect(result).toEqual(expected);
         });
@@ -2851,8 +2828,7 @@ describe('qTransformer', () => {
                             checked: true
                         }
                     ]
-                },
-                pageTitle: 'Error: '
+                }
             };
 
             expect(result).toEqual(expected);
@@ -2907,8 +2883,7 @@ describe('qTransformer', () => {
                             text: 'No'
                         }
                     ]
-                },
-                pageTitle: 'Error: '
+                }
             };
 
             expect(result).toEqual(expected);
@@ -2952,8 +2927,7 @@ describe('qTransformer', () => {
                             'Do not include personal or financial information, like your National Insurance number or credit card details.'
                     },
                     value: 123
-                },
-                pageTitle: 'Error: '
+                }
             };
 
             expect(result).toEqual(expected);
@@ -3011,7 +2985,7 @@ describe('qTransformer', () => {
 
             const expected = {
                 pageTitle: 'Error: Email address - claim criminal injuries compensation - GOV.UK',
-                transformation: `
+                content: `
                 {% from "error-summary/macro.njk" import govukErrorSummary %}
                     {{ govukErrorSummary({
                         titleText: "There is a problem",
@@ -3084,9 +3058,7 @@ describe('qTransformer', () => {
                     `
             };
 
-            expect(removeIndentation(result.transformation)).toEqual(
-                removeIndentation(expected.transformation)
-            );
+            expect(removeIndentation(result.content)).toEqual(removeIndentation(expected.content));
         });
 
         it('should display errors for govukSelect instruction', () => {
@@ -3285,8 +3257,7 @@ describe('qTransformer', () => {
                             text: 'Czech Republic'
                         }
                     ]
-                },
-                pageTitle: 'Error: '
+                }
             };
 
             expect(result).toEqual(expected);
@@ -3321,8 +3292,7 @@ describe('qTransformer', () => {
                     name: 'event-name',
                     type: 'text',
                     classes: 'govuk-input--width-10'
-                },
-                pageTitle: ''
+                }
             };
 
             expect(expected).toEqual(result);
@@ -3355,8 +3325,7 @@ describe('qTransformer', () => {
                     name: 'event-name',
                     type: 'text',
                     classes: 'govuk-input--width-20'
-                },
-                pageTitle: ''
+                }
             };
 
             expect(expected).toEqual(result);
@@ -3389,8 +3358,7 @@ describe('qTransformer', () => {
                     name: 'event-name',
                     type: 'text',
                     classes: 'govuk-input--width-30'
-                },
-                pageTitle: ''
+                }
             };
 
             expect(result).toEqual(expected);
@@ -3425,8 +3393,8 @@ describe('qTransformer', () => {
             });
 
             const expected = {
-                pageTitle: 'Email address - claim criminal injuries compensation - GOV.UK',
-                transformation: `
+                pageTitle: 'Email address',
+                content: `
                     {% from "input/macro.njk" import govukInput %}
                     {{ govukInput({
                         "id": "email",
@@ -3443,8 +3411,8 @@ describe('qTransformer', () => {
                     }) }}
                 `
             };
-            expect(result.transformation.replace(/\s+/g, '')).toEqual(
-                expected.transformation.replace(/\s+/g, '')
+            expect(result.content.replace(/\s+/g, '')).toEqual(
+                expected.content.replace(/\s+/g, '')
             );
         });
     });
@@ -3738,8 +3706,7 @@ describe('qTransformer', () => {
                             text: 'Most comments'
                         }
                     ]
-                },
-                pageTitle: ''
+                }
             };
 
             expect(result).toEqual(expected);
