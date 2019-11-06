@@ -3608,6 +3608,15 @@ describe('qTransformer', () => {
                         expect(actual).toMatch(expected);
                     });
                 });
+                describe('returnPartialDate', () => {
+                    it('Should return the month and year only, given a valid date', () => {
+                        const fullDate = '2019-10-05T14:48:00.000Z';
+
+                        const actual = answerFormatHelper.returnPartialDate(fullDate);
+
+                        expect(actual).toEqual('October 2019');
+                    });
+                });
             });
             describe('arrayFormatter', () => {
                 it('should return all the elements of an array on a new line', () => {
