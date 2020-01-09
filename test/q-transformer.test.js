@@ -1002,6 +1002,7 @@ describe('qTransformer', () => {
                         componentName: 'govukSelect',
                         macroOptions: {
                             name: 'where-do-you-live',
+                            id: 'where-do-you-live',
                             label: {
                                 text: 'Where do you live?'
                             },
@@ -1160,23 +1161,24 @@ describe('qTransformer', () => {
         });
 
         describe('Given a JSON Schema with type:object', () => {
-            it('should render a nunjucks representation of a form', () => {
-                const result = qTransformer.transform({
-                    schemaKey: 'event-name',
-                    schema: {
-                        type: 'object',
-                        propertyNames: {
-                            enum: ['email', 'phone', 'text']
-                        },
-                        properties: {
-                            email: {
-                                type: 'string',
-                                description: 'e.g. something@something.com',
-                                format: 'email',
-                                title: 'Email address'
+            describe('With no format key present', () => {
+                it('should render a nunjucks representation of a form', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'event-name',
+                        schema: {
+                            type: 'object',
+                            propertyNames: {
+                                enum: ['email', 'phone', 'text']
                             },
-                            instructions: {
-                                description: `
+                            properties: {
+                                email: {
+                                    type: 'string',
+                                    description: 'e.g. something@something.com',
+                                    format: 'email',
+                                    title: 'Email address'
+                                },
+                                instructions: {
+                                    description: `
                                     <p>Some instructions</p>
                                     {{ govukWarningText({
                                         text: "Follow these exactly as described"
@@ -1190,26 +1192,26 @@ describe('qTransformer', () => {
                                         text: "Follow the instructions"
                                     }) }}
                                 `
-                            },
-                            phone: {type: 'string', title: 'Phone number'},
-                            text: {type: 'string', title: 'Mobile phone number'},
-                            declaration: {
-                                description: `
+                                },
+                                phone: {type: 'string', title: 'Phone number'},
+                                text: {type: 'string', title: 'Mobile phone number'},
+                                declaration: {
+                                    description: `
                                     <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
                                     {{ govukWarningText({
                                         text: "You could be prosecuted or get less compensation if you give false or misleading information."
                                     }) }}
                                 `
+                                }
                             }
-                        }
-                    },
-                    uiSchema: {}
-                });
+                        },
+                        uiSchema: {}
+                    });
 
-                const expected = {
-                    pageTitle: 'Email address',
-                    hasErrors: false,
-                    content: `{% from "input/macro.njk" import govukInput %}
+                    const expected = {
+                        pageTitle: 'Email address',
+                        hasErrors: false,
+                        content: `{% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
                         {% from "details/macro.njk" import govukDetails %}
                         {{ govukInput({
@@ -1260,43 +1262,43 @@ describe('qTransformer', () => {
                             text: "You could be prosecuted or get less compensation if you give false or misleading information."
                         }) }}
                         `
-                };
+                    };
 
-                expect(removeIndentation(result)).toEqual(removeIndentation(expected));
-            });
+                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                });
 
-            it('should render a nunjucks representation of a form including an h1 if schema.title is present', () => {
-                const result = qTransformer.transform({
-                    schemaKey: 'event-name',
-                    schema: {
-                        type: 'object',
-                        title: 'Event name',
-                        propertyNames: {
-                            enum: ['email']
-                        },
-                        properties: {
-                            email: {
-                                type: 'string',
-                                description: 'e.g. something@something.com',
-                                format: 'email',
-                                title: 'Email address'
+                it('should render a nunjucks representation of a form including an h1 if schema.title is present', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'event-name',
+                        schema: {
+                            type: 'object',
+                            title: 'Event name',
+                            propertyNames: {
+                                enum: ['email']
                             },
-                            declaration: {
-                                description: `
+                            properties: {
+                                email: {
+                                    type: 'string',
+                                    description: 'e.g. something@something.com',
+                                    format: 'email',
+                                    title: 'Email address'
+                                },
+                                declaration: {
+                                    description: `
                                     <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
                                     {{ govukWarningText({
                                         text: "You could be prosecuted or get less compensation if you give false or misleading information."
                                     }) }}`
+                                }
                             }
-                        }
-                    },
-                    uiSchema: {}
-                });
+                        },
+                        uiSchema: {}
+                    });
 
-                const expected = {
-                    pageTitle: 'Event name',
-                    hasErrors: false,
-                    content: removeIndentation(`
+                    const expected = {
+                        pageTitle: 'Event name',
+                        hasErrors: false,
+                        content: removeIndentation(`
                         {% from "input/macro.njk" import govukInput %}
                         {% from "warning-text/macro.njk" import govukWarningText %}
                         <h1 class="govuk-heading-xl">Event name</h1>
@@ -1315,12 +1317,42 @@ describe('qTransformer', () => {
                         {{ govukWarningText({
                             text: "You could be prosecuted or get less compensation if you give false or misleading information."
                         }) }}`)
-                };
-                expect({
-                    pageTitle: result.pageTitle,
-                    hasErrors: result.hasErrors,
-                    content: removeIndentation(result.content)
-                }).toEqual(expected);
+                    };
+                    expect({
+                        pageTitle: result.pageTitle,
+                        hasErrors: result.hasErrors,
+                        content: removeIndentation(result.content)
+                    }).toEqual(expected);
+                });
+            });
+
+            describe('With format equals file', () => {
+                it('should convert it to a govukFileUpload instruction', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'event-name',
+                        schema: {
+                            type: 'object',
+                            title: 'Event name',
+                            format: 'file'
+                        },
+                        uiSchema: {}
+                    });
+
+                    const expected = {
+                        id: 'event-name',
+                        dependencies: ['{% from "file-upload/macro.njk" import govukFileUpload %}'],
+                        componentName: 'govukFileUpload',
+                        macroOptions: {
+                            label: {
+                                html: 'Event name'
+                            },
+                            id: 'event-name',
+                            name: 'event-name'
+                        }
+                    };
+
+                    expect(result).toEqual(expected);
+                });
             });
         });
 
@@ -2774,6 +2806,7 @@ describe('qTransformer', () => {
                 componentName: 'govukSelect',
                 macroOptions: {
                     name: 'sort',
+                    id: 'sort',
                     hint: null,
                     label: {
                         text: 'Sort by'
@@ -2851,6 +2884,7 @@ describe('qTransformer', () => {
                 componentName: 'govukSelect',
                 macroOptions: {
                     name: 'sort',
+                    id: 'sort',
                     hint: null,
                     label: {
                         text: 'Sort by'
@@ -3398,6 +3432,7 @@ describe('qTransformer', () => {
                 componentName: 'govukSelect',
                 macroOptions: {
                     name: 'where-do-you-live',
+                    id: 'where-do-you-live',
                     label: {
                         text: 'Where do you live?'
                     },
@@ -3489,6 +3524,42 @@ describe('qTransformer', () => {
                             text: 'Czech Republic'
                         }
                     ]
+                }
+            };
+
+            expect(result).toEqual(expected);
+        });
+
+        it('should display errors for govukFileUpload instruction', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'event-name',
+                schema: {
+                    type: 'object',
+                    title: 'Event name',
+                    format: 'file'
+                },
+                uiSchema: {},
+                data: {
+                    'event-name': 1 // this should cause an error as it's not a file
+                },
+                schemaErrors: {
+                    'event-name': 'Wrong type'
+                }
+            });
+
+            const expected = {
+                id: 'event-name',
+                dependencies: ['{% from "file-upload/macro.njk" import govukFileUpload %}'],
+                componentName: 'govukFileUpload',
+                macroOptions: {
+                    label: {
+                        html: 'Event name'
+                    },
+                    id: 'event-name',
+                    name: 'event-name',
+                    errorMessage: {
+                        text: 'Wrong type'
+                    }
                 }
             };
 
@@ -3873,6 +3944,7 @@ describe('qTransformer', () => {
                 componentName: 'govukSelect',
                 macroOptions: {
                     name: 'sort',
+                    id: 'sort',
                     hint: null,
                     label: {
                         text: 'Sort by'
