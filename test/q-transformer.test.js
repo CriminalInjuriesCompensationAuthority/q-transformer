@@ -1002,6 +1002,7 @@ describe('qTransformer', () => {
                         componentName: 'govukSelect',
                         macroOptions: {
                             name: 'where-do-you-live',
+                            id: 'where-do-you-live',
                             label: {
                                 text: 'Where do you live?'
                             },
@@ -2774,6 +2775,7 @@ describe('qTransformer', () => {
                 componentName: 'govukSelect',
                 macroOptions: {
                     name: 'sort',
+                    id: 'sort',
                     hint: null,
                     label: {
                         text: 'Sort by'
@@ -2851,6 +2853,7 @@ describe('qTransformer', () => {
                 componentName: 'govukSelect',
                 macroOptions: {
                     name: 'sort',
+                    id: 'sort',
                     hint: null,
                     label: {
                         text: 'Sort by'
@@ -3398,6 +3401,7 @@ describe('qTransformer', () => {
                 componentName: 'govukSelect',
                 macroOptions: {
                     name: 'where-do-you-live',
+                    id: 'where-do-you-live',
                     label: {
                         text: 'Where do you live?'
                     },
@@ -3873,6 +3877,7 @@ describe('qTransformer', () => {
                 componentName: 'govukSelect',
                 macroOptions: {
                     name: 'sort',
+                    id: 'sort',
                     hint: null,
                     label: {
                         text: 'Sort by'
