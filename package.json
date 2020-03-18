@@ -1,6 +1,6 @@
 {
     "name": "q-transformer",
-    "version": "0.7.3",
+    "version": "0.7.4",
     "description": "Transforms a questionnaire's JSON Schema in to a different format",
     "main": "index.js",
     "scripts": {
