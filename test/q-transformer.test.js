@@ -3912,4 +3912,102 @@ describe('qTransformer', () => {
             expect(result).toEqual(expected);
         });
     });
+
+    describe('Additional content', () => {
+        describe('Given a JSON Schema with type:object', () => {
+            describe('And a uiSchema with a "additionalMapping" attribute', () => {
+                it('should convert it to a govukRadios with additional content at the correct index', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'p-some-id',
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                contact: {
+                                    title: 'How would you prefer to be contacted?',
+                                    description: 'Select one option.',
+                                    type: 'string',
+                                    oneOf: [
+                                        {
+                                            title: 'Email',
+                                            const: 'email'
+                                        },
+                                        {
+                                            title: 'Phone',
+                                            const: 'phone'
+                                        },
+                                        {
+                                            title: 'Text message',
+                                            const: 'text'
+                                        }
+                                    ]
+                                }
+                            },
+                            required: ['contact']
+                        },
+                        uiSchema: {
+                            'p-some-id': {
+                                // transformer: 'form',
+                                options: {
+                                    properties: {
+                                        contact: {
+                                            // transformer: 'govukRadios',
+                                            options: {
+                                                additionalMapping: [
+                                                    {
+                                                        itemType: 'divider',
+                                                        itemValue: 'or',
+                                                        itemIndex: 2
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    const expected = {
+                        pageTitle: 'How would you prefer to be contacted?',
+                        hasErrors: false,
+                        content: `
+                            {% from "radios/macro.njk" import govukRadios %}
+                            {{ govukRadios({
+                                "idPrefix": "contact",
+                                "name": "contact",
+                                "fieldset": {
+                                    "legend": {
+                                        "text": "How would you prefer to be contacted?",
+                                        "isPageHeading": true,
+                                        "classes": "govuk-fieldset__legend--xl"
+                                    }
+                                },
+                                "hint": {
+                                    "text": "Select one option."
+                                },
+                                "items": [
+                                    {
+                                        "value": "email",
+                                        "text": "Email"
+                                    },
+                                    {
+                                        "value": "phone",
+                                        "text": "Phone"
+                                    },
+                                    {
+                                        "divider": "or"
+                                    },
+                                    {
+                                        "value": "text",
+                                        "text": "Text message"
+                                    }
+                                ]
+                            }) }}`
+                    };
+
+                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                });
+            });
+        });
+    });
 });
