@@ -1130,6 +1130,7 @@ describe('qTransformer', () => {
                     dependencies: ['{% from "checkboxes/macro.njk" import govukCheckboxes %}'],
                     componentName: 'govukCheckboxes',
                     macroOptions: {
+                        idPrefix: 'waste',
                         name: 'waste[]',
                         fieldset: {
                             legend: {
@@ -1747,121 +1748,122 @@ describe('qTransformer', () => {
     describe('Conditional content', () => {
         describe('Given a JSON Schema with type:object', () => {
             describe('And a uiSchema with a "conditionalComponents" attribute', () => {
-                it('should convert it to a govukRadios with conditional content', () => {
-                    const result = qTransformer.transform({
-                        schemaKey: 'p-some-id',
-                        schema: {
-                            type: 'object',
-                            propertyNames: {
-                                enum: ['contact', 'email', 'phone', 'text']
-                            },
-                            properties: {
-                                contact: {
-                                    title: 'How would you prefer to be contacted?',
-                                    description: 'Select one option.',
-                                    type: 'string',
-                                    oneOf: [
-                                        {
-                                            title: 'Email',
-                                            const: 'email'
+                describe('And given a radio button subSchema', () => {
+                    it('should convert it to a govukRadios with conditional content', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p-some-id',
+                            schema: {
+                                type: 'object',
+                                propertyNames: {
+                                    enum: ['contact', 'email', 'phone', 'text']
+                                },
+                                properties: {
+                                    contact: {
+                                        title: 'How would you prefer to be contacted?',
+                                        description: 'Select one option.',
+                                        type: 'string',
+                                        oneOf: [
+                                            {
+                                                title: 'Email',
+                                                const: 'email'
+                                            },
+                                            {
+                                                title: 'Phone',
+                                                const: 'phone'
+                                            },
+                                            {
+                                                title: 'Text message',
+                                                const: 'text'
+                                            }
+                                        ]
+                                    },
+                                    email: {
+                                        type: 'string',
+                                        description: 'e.g. something@something.com',
+                                        format: 'email',
+                                        title: 'Email address'
+                                    },
+                                    phone: {type: 'string', title: 'Phone number'},
+                                    text: {type: 'string', title: 'Mobile phone number'}
+                                },
+                                required: ['contact'],
+                                allOf: [
+                                    {$ref: '#/definitions/if-email-contact-then-email-is-required'},
+                                    {$ref: '#/definitions/if-phone-contact-then-phone-is-required'},
+                                    {$ref: '#/definitions/if-text-contact-then-text-is-required'}
+                                ],
+                                definitions: {
+                                    'if-email-contact-then-email-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {const: 'email'}
+                                            }
                                         },
-                                        {
-                                            title: 'Phone',
-                                            const: 'phone'
+                                        then: {
+                                            required: ['email'],
+                                            propertyNames: {enum: ['contact', 'email']}
+                                        }
+                                    },
+                                    'if-phone-contact-then-phone-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {const: 'phone'}
+                                            }
                                         },
-                                        {
-                                            title: 'Text message',
-                                            const: 'text'
-                                        }
-                                    ]
-                                },
-                                email: {
-                                    type: 'string',
-                                    description: 'e.g. something@something.com',
-                                    format: 'email',
-                                    title: 'Email address'
-                                },
-                                phone: {type: 'string', title: 'Phone number'},
-                                text: {type: 'string', title: 'Mobile phone number'}
-                            },
-                            required: ['contact'],
-                            allOf: [
-                                {$ref: '#/definitions/if-email-contact-then-email-is-required'},
-                                {$ref: '#/definitions/if-phone-contact-then-phone-is-required'},
-                                {$ref: '#/definitions/if-text-contact-then-text-is-required'}
-                            ],
-                            definitions: {
-                                'if-email-contact-then-email-is-required': {
-                                    if: {
-                                        properties: {
-                                            contact: {const: 'email'}
+                                        then: {
+                                            required: ['phone'],
+                                            propertyNames: {enum: ['contact', 'phone']}
                                         }
                                     },
-                                    then: {
-                                        required: ['email'],
-                                        propertyNames: {enum: ['contact', 'email']}
-                                    }
-                                },
-                                'if-phone-contact-then-phone-is-required': {
-                                    if: {
-                                        properties: {
-                                            contact: {const: 'phone'}
+                                    'if-text-contact-then-text-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {const: 'text'}
+                                            }
+                                        },
+                                        then: {
+                                            required: ['text'],
+                                            propertyNames: {enum: ['contact', 'text']}
                                         }
-                                    },
-                                    then: {
-                                        required: ['phone'],
-                                        propertyNames: {enum: ['contact', 'phone']}
-                                    }
-                                },
-                                'if-text-contact-then-text-is-required': {
-                                    if: {
-                                        properties: {
-                                            contact: {const: 'text'}
-                                        }
-                                    },
-                                    then: {
-                                        required: ['text'],
-                                        propertyNames: {enum: ['contact', 'text']}
                                     }
                                 }
-                            }
-                        },
-                        uiSchema: {
-                            'p-some-id': {
-                                // transformer: 'form',
-                                options: {
-                                    transformOrder: ['email', 'phone', 'text', 'contact'],
-                                    outputOrder: ['contact'],
-                                    properties: {
-                                        contact: {
-                                            // transformer: 'govukRadios',
-                                            options: {
-                                                conditionalComponentMap: [
-                                                    {
-                                                        itemValue: 'email',
-                                                        componentIds: ['email']
-                                                    },
-                                                    {
-                                                        itemValue: 'phone',
-                                                        componentIds: ['phone']
-                                                    },
-                                                    {
-                                                        itemValue: 'text',
-                                                        componentIds: ['text']
-                                                    }
-                                                ]
+                            },
+                            uiSchema: {
+                                'p-some-id': {
+                                    // transformer: 'form',
+                                    options: {
+                                        transformOrder: ['email', 'phone', 'text', 'contact'],
+                                        outputOrder: ['contact'],
+                                        properties: {
+                                            contact: {
+                                                // transformer: 'govukRadios',
+                                                options: {
+                                                    conditionalComponentMap: [
+                                                        {
+                                                            itemValue: 'email',
+                                                            componentIds: ['email']
+                                                        },
+                                                        {
+                                                            itemValue: 'phone',
+                                                            componentIds: ['phone']
+                                                        },
+                                                        {
+                                                            itemValue: 'text',
+                                                            componentIds: ['text']
+                                                        }
+                                                    ]
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
-                    });
+                        });
 
-                    const expected = {
-                        pageTitle: 'How would you prefer to be contacted?',
-                        hasErrors: false,
-                        content: `
+                        const expected = {
+                            pageTitle: 'How would you prefer to be contacted?',
+                            hasErrors: false,
+                            content: `
                             {% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
                             {% set email %}{{ govukInput({
@@ -1929,116 +1931,116 @@ describe('qTransformer', () => {
                                     }
                                 ]
                             }) }}`
-                    };
+                        };
 
-                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
-                });
+                        expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                    });
 
-                it('should convert it to a govukRadios with multiple conditional content', () => {
-                    const result = qTransformer.transform({
-                        schemaKey: 'p-some-id',
-                        schema: {
-                            type: 'object',
-                            propertyNames: {
-                                enum: ['contact', 'email', 'phone', 'text']
-                            },
-                            properties: {
-                                contact: {
-                                    title: 'How would you prefer to be contacted?',
-                                    description: 'Select one option.',
-                                    type: 'string',
-                                    oneOf: [
-                                        {
-                                            title: 'Email',
-                                            const: 'email'
+                    it('should convert it to a govukRadios with multiple conditional content', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p-some-id',
+                            schema: {
+                                type: 'object',
+                                propertyNames: {
+                                    enum: ['contact', 'email', 'phone', 'text']
+                                },
+                                properties: {
+                                    contact: {
+                                        title: 'How would you prefer to be contacted?',
+                                        description: 'Select one option.',
+                                        type: 'string',
+                                        oneOf: [
+                                            {
+                                                title: 'Email',
+                                                const: 'email'
+                                            },
+                                            {
+                                                title: 'Phone',
+                                                const: 'phone'
+                                            },
+                                            {
+                                                title: 'Text message',
+                                                const: 'text'
+                                            }
+                                        ]
+                                    },
+                                    email: {
+                                        type: 'string',
+                                        description: 'e.g. something@something.com',
+                                        format: 'email',
+                                        title: 'Email address'
+                                    },
+                                    phone: {type: 'string', title: 'Phone number'},
+                                    text: {type: 'string', title: 'Mobile phone number'}
+                                },
+                                required: ['contact'],
+                                allOf: [
+                                    {$ref: '#/definitions/if-email-contact-then-email-is-required'},
+                                    {$ref: '#/definitions/if-phone-contact-then-phone-is-required'},
+                                    {$ref: '#/definitions/if-text-contact-then-text-is-required'}
+                                ],
+                                definitions: {
+                                    'if-email-contact-then-email-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {const: 'email'}
+                                            }
                                         },
-                                        {
-                                            title: 'Phone',
-                                            const: 'phone'
+                                        then: {
+                                            required: ['email'],
+                                            propertyNames: {enum: ['contact', 'email']}
+                                        }
+                                    },
+                                    'if-phone-contact-then-phone-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {const: 'phone'}
+                                            }
                                         },
-                                        {
-                                            title: 'Text message',
-                                            const: 'text'
-                                        }
-                                    ]
-                                },
-                                email: {
-                                    type: 'string',
-                                    description: 'e.g. something@something.com',
-                                    format: 'email',
-                                    title: 'Email address'
-                                },
-                                phone: {type: 'string', title: 'Phone number'},
-                                text: {type: 'string', title: 'Mobile phone number'}
-                            },
-                            required: ['contact'],
-                            allOf: [
-                                {$ref: '#/definitions/if-email-contact-then-email-is-required'},
-                                {$ref: '#/definitions/if-phone-contact-then-phone-is-required'},
-                                {$ref: '#/definitions/if-text-contact-then-text-is-required'}
-                            ],
-                            definitions: {
-                                'if-email-contact-then-email-is-required': {
-                                    if: {
-                                        properties: {
-                                            contact: {const: 'email'}
+                                        then: {
+                                            required: ['phone'],
+                                            propertyNames: {enum: ['contact', 'phone']}
                                         }
                                     },
-                                    then: {
-                                        required: ['email'],
-                                        propertyNames: {enum: ['contact', 'email']}
-                                    }
-                                },
-                                'if-phone-contact-then-phone-is-required': {
-                                    if: {
-                                        properties: {
-                                            contact: {const: 'phone'}
+                                    'if-text-contact-then-text-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {const: 'text'}
+                                            }
+                                        },
+                                        then: {
+                                            required: ['text'],
+                                            propertyNames: {enum: ['contact', 'text']}
                                         }
-                                    },
-                                    then: {
-                                        required: ['phone'],
-                                        propertyNames: {enum: ['contact', 'phone']}
-                                    }
-                                },
-                                'if-text-contact-then-text-is-required': {
-                                    if: {
-                                        properties: {
-                                            contact: {const: 'text'}
-                                        }
-                                    },
-                                    then: {
-                                        required: ['text'],
-                                        propertyNames: {enum: ['contact', 'text']}
                                     }
                                 }
-                            }
-                        },
-                        uiSchema: {
-                            'p-some-id': {
-                                // transformer: 'form',
-                                options: {
-                                    transformOrder: ['email', 'phone', 'text', 'contact'],
-                                    outputOrder: ['contact'],
-                                    properties: {
-                                        contact: {
-                                            // transformer: 'govukRadios',
-                                            options: {
-                                                conditionalComponentMap: [
-                                                    {
-                                                        itemValue: 'email',
-                                                        componentIds: ['email', 'phone', 'text']
-                                                    }
-                                                ]
+                            },
+                            uiSchema: {
+                                'p-some-id': {
+                                    // transformer: 'form',
+                                    options: {
+                                        transformOrder: ['email', 'phone', 'text', 'contact'],
+                                        outputOrder: ['contact'],
+                                        properties: {
+                                            contact: {
+                                                // transformer: 'govukRadios',
+                                                options: {
+                                                    conditionalComponentMap: [
+                                                        {
+                                                            itemValue: 'email',
+                                                            componentIds: ['email', 'phone', 'text']
+                                                        }
+                                                    ]
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
-                    });
-                    const expected = {
-                        pageTitle: 'How would you prefer to be contacted?',
-                        content: `
+                        });
+                        const expected = {
+                            pageTitle: 'How would you prefer to be contacted?',
+                            content: `
                             {% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
                             {% set email %}{{ govukInput({
@@ -2100,129 +2102,129 @@ describe('qTransformer', () => {
                                     }
                                 ]
                             }) }}`
-                    };
-                    expect(result.content.replace(/\s+/g, '')).toEqual(
-                        expected.content.replace(/\s+/g, '')
-                    );
-                });
+                        };
+                        expect(result.content.replace(/\s+/g, '')).toEqual(
+                            expected.content.replace(/\s+/g, '')
+                        );
+                    });
 
-                it('should convert it to a govukRadios with properly escaped user answers', () => {
-                    const result = qTransformer.transform({
-                        schemaKey: 'p-some-id',
-                        schema: {
-                            type: 'object',
-                            propertyNames: {
-                                enum: ['contact', 'email', 'phone', 'text']
-                            },
-                            properties: {
-                                contact: {
-                                    title: 'How would you prefer to be contacted?',
-                                    description: 'Select one option.',
-                                    type: 'string',
-                                    oneOf: [
-                                        {
-                                            title: 'Email',
-                                            const: 'email'
+                    it('should convert it to a govukRadios with properly escaped user answers', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p-some-id',
+                            schema: {
+                                type: 'object',
+                                propertyNames: {
+                                    enum: ['contact', 'email', 'phone', 'text']
+                                },
+                                properties: {
+                                    contact: {
+                                        title: 'How would you prefer to be contacted?',
+                                        description: 'Select one option.',
+                                        type: 'string',
+                                        oneOf: [
+                                            {
+                                                title: 'Email',
+                                                const: 'email'
+                                            },
+                                            {
+                                                title: 'Phone',
+                                                const: 'phone'
+                                            },
+                                            {
+                                                title: 'Text message',
+                                                const: 'text'
+                                            }
+                                        ]
+                                    },
+                                    email: {
+                                        type: 'string',
+                                        description: 'e.g. something@something.com',
+                                        format: 'email',
+                                        title: 'Email address'
+                                    },
+                                    phone: {type: 'string', title: 'Phone number'},
+                                    text: {type: 'string', title: 'Mobile phone number'}
+                                },
+                                required: ['contact'],
+                                allOf: [
+                                    {$ref: '#/definitions/if-email-contact-then-email-is-required'},
+                                    {$ref: '#/definitions/if-phone-contact-then-phone-is-required'},
+                                    {$ref: '#/definitions/if-text-contact-then-text-is-required'}
+                                ],
+                                definitions: {
+                                    'if-email-contact-then-email-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {const: 'email'}
+                                            }
                                         },
-                                        {
-                                            title: 'Phone',
-                                            const: 'phone'
+                                        then: {
+                                            required: ['email'],
+                                            propertyNames: {enum: ['contact', 'email']}
+                                        }
+                                    },
+                                    'if-phone-contact-then-phone-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {const: 'phone'}
+                                            }
                                         },
-                                        {
-                                            title: 'Text message',
-                                            const: 'text'
-                                        }
-                                    ]
-                                },
-                                email: {
-                                    type: 'string',
-                                    description: 'e.g. something@something.com',
-                                    format: 'email',
-                                    title: 'Email address'
-                                },
-                                phone: {type: 'string', title: 'Phone number'},
-                                text: {type: 'string', title: 'Mobile phone number'}
-                            },
-                            required: ['contact'],
-                            allOf: [
-                                {$ref: '#/definitions/if-email-contact-then-email-is-required'},
-                                {$ref: '#/definitions/if-phone-contact-then-phone-is-required'},
-                                {$ref: '#/definitions/if-text-contact-then-text-is-required'}
-                            ],
-                            definitions: {
-                                'if-email-contact-then-email-is-required': {
-                                    if: {
-                                        properties: {
-                                            contact: {const: 'email'}
+                                        then: {
+                                            required: ['phone'],
+                                            propertyNames: {enum: ['contact', 'phone']}
                                         }
                                     },
-                                    then: {
-                                        required: ['email'],
-                                        propertyNames: {enum: ['contact', 'email']}
-                                    }
-                                },
-                                'if-phone-contact-then-phone-is-required': {
-                                    if: {
-                                        properties: {
-                                            contact: {const: 'phone'}
+                                    'if-text-contact-then-text-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {const: 'text'}
+                                            }
+                                        },
+                                        then: {
+                                            required: ['text'],
+                                            propertyNames: {enum: ['contact', 'text']}
                                         }
-                                    },
-                                    then: {
-                                        required: ['phone'],
-                                        propertyNames: {enum: ['contact', 'phone']}
-                                    }
-                                },
-                                'if-text-contact-then-text-is-required': {
-                                    if: {
-                                        properties: {
-                                            contact: {const: 'text'}
-                                        }
-                                    },
-                                    then: {
-                                        required: ['text'],
-                                        propertyNames: {enum: ['contact', 'text']}
                                     }
                                 }
-                            }
-                        },
-                        uiSchema: {
-                            'p-some-id': {
-                                // transformer: 'form',
-                                options: {
-                                    transformOrder: ['email', 'phone', 'text', 'contact'],
-                                    outputOrder: ['contact'],
-                                    properties: {
-                                        contact: {
-                                            // transformer: 'govukRadios',
-                                            options: {
-                                                conditionalComponentMap: [
-                                                    {
-                                                        itemValue: 'email',
-                                                        componentIds: ['email']
-                                                    },
-                                                    {
-                                                        itemValue: 'phone',
-                                                        componentIds: ['phone']
-                                                    },
-                                                    {
-                                                        itemValue: 'text',
-                                                        componentIds: ['text']
-                                                    }
-                                                ]
+                            },
+                            uiSchema: {
+                                'p-some-id': {
+                                    // transformer: 'form',
+                                    options: {
+                                        transformOrder: ['email', 'phone', 'text', 'contact'],
+                                        outputOrder: ['contact'],
+                                        properties: {
+                                            contact: {
+                                                // transformer: 'govukRadios',
+                                                options: {
+                                                    conditionalComponentMap: [
+                                                        {
+                                                            itemValue: 'email',
+                                                            componentIds: ['email']
+                                                        },
+                                                        {
+                                                            itemValue: 'phone',
+                                                            componentIds: ['phone']
+                                                        },
+                                                        {
+                                                            itemValue: 'text',
+                                                            componentIds: ['text']
+                                                        }
+                                                    ]
+                                                }
                                             }
                                         }
                                     }
                                 }
+                            },
+                            data: {
+                                text: '"><script>alert("hello");</script>'
                             }
-                        },
-                        data: {
-                            text: '"><script>alert("hello");</script>'
-                        }
-                    });
-                    const expected = {
-                        pageTitle: 'How would you prefer to be contacted?',
-                        hasErrors: false,
-                        content: `
+                        });
+                        const expected = {
+                            pageTitle: 'How would you prefer to be contacted?',
+                            hasErrors: false,
+                            content: `
                         {% from "input/macro.njk" import govukInput %}
                         {% from "radios/macro.njk" import govukRadios %}
                         {% set email %}{{ govukInput({
@@ -2291,98 +2293,98 @@ describe('qTransformer', () => {
                                 }
                             ]
                         }) }}`
-                    };
+                        };
 
-                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
-                });
+                        expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                    });
 
-                it('should ensure the conditional component ids have any invalid characters replaced with "_"', () => {
-                    const result = qTransformer.transform({
-                        schemaKey: 'p-some-id',
-                        schema: {
-                            type: 'object',
-                            propertyNames: {
-                                enum: [
-                                    'contact',
-                                    'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
-                                ]
-                            },
-                            properties: {
-                                contact: {
-                                    title: 'How would you prefer to be contacted?',
-                                    description: 'Select one option.',
-                                    type: 'string',
-                                    oneOf: [
-                                        {
-                                            title: 'Email',
-                                            const: 'email'
-                                        }
+                    it('should ensure the conditional component ids have any invalid characters replaced with "_"', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p-some-id',
+                            schema: {
+                                type: 'object',
+                                propertyNames: {
+                                    enum: [
+                                        'contact',
+                                        'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
                                     ]
                                 },
-                                'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email': {
-                                    type: 'string',
-                                    description: 'e.g. something@something.com',
-                                    format: 'email',
-                                    title: 'Email address'
-                                }
-                            },
-                            required: ['contact'],
-                            allOf: [
-                                {$ref: '#/definitions/if-email-contact-then-email-is-required'}
-                            ],
-                            definitions: {
-                                'if-email-contact-then-email-is-required': {
-                                    if: {
-                                        properties: {
-                                            contact: {const: 'email'}
-                                        }
+                                properties: {
+                                    contact: {
+                                        title: 'How would you prefer to be contacted?',
+                                        description: 'Select one option.',
+                                        type: 'string',
+                                        oneOf: [
+                                            {
+                                                title: 'Email',
+                                                const: 'email'
+                                            }
+                                        ]
                                     },
-                                    then: {
-                                        required: [
-                                            'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
-                                        ],
-                                        propertyNames: {
-                                            enum: [
-                                                'contact',
-                                                'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
-                                            ]
-                                        }
+                                    'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email': {
+                                        type: 'string',
+                                        description: 'e.g. something@something.com',
+                                        format: 'email',
+                                        title: 'Email address'
                                     }
-                                }
-                            }
-                        },
-                        uiSchema: {
-                            'p-some-id': {
-                                // transformer: 'form',
-                                options: {
-                                    transformOrder: [
-                                        'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email',
-                                        'contact'
-                                    ],
-                                    outputOrder: ['contact'],
-                                    properties: {
-                                        contact: {
-                                            // transformer: 'govukRadios',
-                                            options: {
-                                                conditionalComponentMap: [
-                                                    {
-                                                        itemValue: 'email',
-                                                        componentIds: [
-                                                            'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
-                                                        ]
-                                                    }
+                                },
+                                required: ['contact'],
+                                allOf: [
+                                    {$ref: '#/definitions/if-email-contact-then-email-is-required'}
+                                ],
+                                definitions: {
+                                    'if-email-contact-then-email-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {const: 'email'}
+                                            }
+                                        },
+                                        then: {
+                                            required: [
+                                                'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
+                                            ],
+                                            propertyNames: {
+                                                enum: [
+                                                    'contact',
+                                                    'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
                                                 ]
                                             }
                                         }
                                     }
                                 }
+                            },
+                            uiSchema: {
+                                'p-some-id': {
+                                    // transformer: 'form',
+                                    options: {
+                                        transformOrder: [
+                                            'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email',
+                                            'contact'
+                                        ],
+                                        outputOrder: ['contact'],
+                                        properties: {
+                                            contact: {
+                                                // transformer: 'govukRadios',
+                                                options: {
+                                                    conditionalComponentMap: [
+                                                        {
+                                                            itemValue: 'email',
+                                                            componentIds: [
+                                                                'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                        }
-                    });
-                    const expected = {
-                        pageTitle: 'How would you prefer to be contacted?',
-                        hasErrors: false,
-                        content: `{% from "input/macro.njk" import govukInput %}
+                        });
+                        const expected = {
+                            pageTitle: 'How would you prefer to be contacted?',
+                            hasErrors: false,
+                            content: `{% from "input/macro.njk" import govukInput %}
                             {% from "radios/macro.njk" import govukRadios %}
                             {% set this_id_cant_be_used_as_a_variable_identifier_as_it_contains_hyphens_email %}{{ govukInput({
                                 "id": "this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email",
@@ -2417,9 +2419,712 @@ describe('qTransformer', () => {
                                     }
                                 ]
                             }) }}`
-                    };
+                        };
 
-                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                        expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                    });
+                });
+                describe('And given a checkbox subSchema', () => {
+                    it('should convert it to a govukCheckboxes with conditional content', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p-some-id',
+                            schema: {
+                                type: 'object',
+                                propertyNames: {
+                                    enum: ['contact', 'email', 'phone', 'text']
+                                },
+                                properties: {
+                                    contact: {
+                                        title: 'How would you prefer to be contacted?',
+                                        description: 'Select one option.',
+                                        type: 'array',
+                                        items: {
+                                            anyOf: [
+                                                {
+                                                    title: 'Email',
+                                                    const: 'email'
+                                                },
+                                                {
+                                                    title: 'Phone',
+                                                    const: 'phone'
+                                                },
+                                                {
+                                                    title: 'Text message',
+                                                    const: 'text'
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    email: {
+                                        type: 'string',
+                                        description: 'e.g. something@something.com',
+                                        format: 'email',
+                                        title: 'Email address'
+                                    },
+                                    phone: {type: 'string', title: 'Phone number'},
+                                    text: {type: 'string', title: 'Mobile phone number'}
+                                },
+                                required: ['contact'],
+                                allOf: [
+                                    {$ref: '#/definitions/if-email-contact-then-email-is-required'},
+                                    {$ref: '#/definitions/if-phone-contact-then-phone-is-required'},
+                                    {$ref: '#/definitions/if-text-contact-then-text-is-required'}
+                                ],
+                                definitions: {
+                                    'if-email-contact-then-email-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {
+                                                    contains: {
+                                                        const: 'email'
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        then: {
+                                            required: ['email'],
+                                            propertyNames: {enum: ['contact', 'email']}
+                                        }
+                                    },
+                                    'if-phone-contact-then-phone-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {
+                                                    contains: {
+                                                        const: 'phone'
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        then: {
+                                            required: ['phone'],
+                                            propertyNames: {enum: ['contact', 'phone']}
+                                        }
+                                    },
+                                    'if-text-contact-then-text-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {
+                                                    contains: {
+                                                        const: 'text'
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        then: {
+                                            required: ['text'],
+                                            propertyNames: {enum: ['contact', 'text']}
+                                        }
+                                    }
+                                }
+                            },
+                            uiSchema: {
+                                'p-some-id': {
+                                    // transformer: 'form',
+                                    options: {
+                                        transformOrder: ['email', 'phone', 'text', 'contact'],
+                                        outputOrder: ['contact'],
+                                        properties: {
+                                            contact: {
+                                                options: {
+                                                    conditionalComponentMap: [
+                                                        {
+                                                            itemValue: 'email',
+                                                            componentIds: ['email']
+                                                        },
+                                                        {
+                                                            itemValue: 'phone',
+                                                            componentIds: ['phone']
+                                                        },
+                                                        {
+                                                            itemValue: 'text',
+                                                            componentIds: ['text']
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+                        const expected = {
+                            pageTitle: 'How would you prefer to be contacted?',
+                            hasErrors: false,
+                            content: `
+                            {% from "input/macro.njk" import govukInput %}
+                            {% from "checkboxes/macro.njk" import govukCheckboxes %}
+                            {% set email %}{{ govukInput({
+                                "id": "email",
+                                "name": "email",
+                                "type": "email",
+                                "label": {
+                                    "html": "Email address"
+                                },
+                                "hint": {
+                                    "text": "e.g. something@something.com"
+                                }
+                            }) }}{% endset -%}
+                            {% set phone %}{{ govukInput({
+                                "id": "phone",
+                                "name": "phone",
+                                "type": "text",
+                                "label": {
+                                    "html": "Phone number"
+                                },
+                                "hint": null
+                            }) }}{% endset -%}
+                            {% set text %}{{ govukInput({
+                                "id": "text",
+                                "name": "text",
+                                "type": "text",
+                                "label": {
+                                    "html": "Mobile phone number"
+                                },
+                                "hint": null
+                            }) }}{% endset -%}{{ govukCheckboxes({
+                                "idPrefix": "contact",
+                                "name": "contact[]",
+                                "fieldset": {
+                                    "legend": {
+                                        "text": "How would you prefer to be contacted?",
+                                        "isPageHeading": true,
+                                        "classes": "govuk-fieldset__legend--xl"
+                                    }
+                                },
+                                "hint": {
+                                    "text": "Select one option."
+                                },
+                                "items": [
+                                    {
+                                        "value": "email",
+                                        "text": "Email",
+                                        "conditional": {
+                                            "html": ([email] | join())
+                                        }
+                                    },
+                                    {
+                                        "value": "phone",
+                                        "text": "Phone",
+                                        "conditional": {
+                                            "html": ([phone] | join())
+                                        }
+                                    },
+                                    {
+                                        "value": "text",
+                                        "text": "Text message",
+                                        "conditional": {
+                                            "html": ([text] | join())
+                                        }
+                                    }
+                                ]
+                            }) }}`
+                        };
+
+                        expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                    });
+
+                    it('should convert it to a govukCheckboxes with multiple conditional content', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p-some-id',
+                            schema: {
+                                type: 'object',
+                                propertyNames: {
+                                    enum: ['contact', 'email', 'phone', 'text']
+                                },
+                                properties: {
+                                    contact: {
+                                        title: 'How would you prefer to be contacted?',
+                                        description: 'Select one option.',
+                                        type: 'array',
+                                        items: {
+                                            anyOf: [
+                                                {
+                                                    title: 'Email',
+                                                    const: 'email'
+                                                },
+                                                {
+                                                    title: 'Phone',
+                                                    const: 'phone'
+                                                },
+                                                {
+                                                    title: 'Text message',
+                                                    const: 'text'
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    email: {
+                                        type: 'string',
+                                        description: 'e.g. something@something.com',
+                                        format: 'email',
+                                        title: 'Email address'
+                                    },
+                                    phone: {type: 'string', title: 'Phone number'},
+                                    text: {type: 'string', title: 'Mobile phone number'}
+                                },
+                                required: ['contact'],
+                                allOf: [
+                                    {$ref: '#/definitions/if-email-contact-then-email-is-required'},
+                                    {$ref: '#/definitions/if-phone-contact-then-phone-is-required'},
+                                    {$ref: '#/definitions/if-text-contact-then-text-is-required'}
+                                ],
+                                definitions: {
+                                    'if-email-contact-then-email-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {const: 'email'}
+                                            }
+                                        },
+                                        then: {
+                                            required: ['email'],
+                                            propertyNames: {enum: ['contact', 'email']}
+                                        }
+                                    },
+                                    'if-phone-contact-then-phone-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {const: 'phone'}
+                                            }
+                                        },
+                                        then: {
+                                            required: ['phone'],
+                                            propertyNames: {enum: ['contact', 'phone']}
+                                        }
+                                    },
+                                    'if-text-contact-then-text-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {const: 'text'}
+                                            }
+                                        },
+                                        then: {
+                                            required: ['text'],
+                                            propertyNames: {enum: ['contact', 'text']}
+                                        }
+                                    }
+                                }
+                            },
+                            uiSchema: {
+                                'p-some-id': {
+                                    // transformer: 'form',
+                                    options: {
+                                        transformOrder: ['email', 'phone', 'text', 'contact'],
+                                        outputOrder: ['contact'],
+                                        properties: {
+                                            contact: {
+                                                // transformer: 'govukRadios',
+                                                options: {
+                                                    conditionalComponentMap: [
+                                                        {
+                                                            itemValue: 'email',
+                                                            componentIds: ['email', 'phone', 'text']
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        const expected = {
+                            pageTitle: 'How would you prefer to be contacted?',
+                            content: `
+                            {% from "input/macro.njk" import govukInput %}
+                            {% from "checkboxes/macro.njk" import govukCheckboxes %}
+                            {% set email %}{{ govukInput({
+                                "id": "email",
+                                "name": "email",
+                                "type": "email",
+                                "label": {
+                                    "html": "Email address"
+                                },
+                                "hint": {
+                                    "text": "e.g. something@something.com"
+                                }
+                            }) }}{% endset -%}
+                            {% set phone %}{{ govukInput({
+                                "id": "phone",
+                                "name": "phone",
+                                "type": "text",
+                                "label": {
+                                    "html": "Phone number"
+                                },
+                                "hint": null
+                            }) }}{% endset -%}
+                            {% set text %}{{ govukInput({
+                                "id": "text",
+                                "name": "text",
+                                "type": "text",
+                                "label": {
+                                    "html": "Mobile phone number"
+                                },
+                                "hint": null
+                            }) }}{% endset -%}{{ govukCheckboxes({
+                                "idPrefix": "contact",
+                                "name": "contact[]",
+                                "fieldset": {
+                                    "legend": {
+                                        "text": "How would you prefer to be contacted?",
+                                        "isPageHeading": true,
+                                        "classes": "govuk-fieldset__legend--xl"
+                                    }
+                                },
+                                "hint": {
+                                    "text": "Select one option."
+                                },
+                                "items": [
+                                    {
+                                        "value": "email",
+                                        "text": "Email",
+                                        "conditional": {
+                                            "html": ([email, phone, text] | join())
+                                        }
+                                    },
+                                    {
+                                        "value": "phone",
+                                        "text": "Phone"
+                                    },
+                                    {
+                                        "value": "text",
+                                        "text": "Text message"
+                                    }
+                                ]
+                            }) }}`
+                        };
+                        expect(result.content.replace(/\s+/g, '')).toEqual(
+                            expected.content.replace(/\s+/g, '')
+                        );
+                    });
+
+                    it('should convert it to a govukCheckboxes with properly escaped user answers', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p-some-id',
+                            schema: {
+                                type: 'object',
+                                propertyNames: {
+                                    enum: ['contact', 'email', 'phone', 'text']
+                                },
+                                properties: {
+                                    contact: {
+                                        title: 'How would you prefer to be contacted?',
+                                        description: 'Select one option.',
+                                        type: 'array',
+                                        items: {
+                                            anyOf: [
+                                                {
+                                                    title: 'Email',
+                                                    const: 'email'
+                                                },
+                                                {
+                                                    title: 'Phone',
+                                                    const: 'phone'
+                                                },
+                                                {
+                                                    title: 'Text message',
+                                                    const: 'text'
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    email: {
+                                        type: 'string',
+                                        description: 'e.g. something@something.com',
+                                        format: 'email',
+                                        title: 'Email address'
+                                    },
+                                    phone: {type: 'string', title: 'Phone number'},
+                                    text: {type: 'string', title: 'Mobile phone number'}
+                                },
+                                required: ['contact'],
+                                allOf: [
+                                    {$ref: '#/definitions/if-email-contact-then-email-is-required'},
+                                    {$ref: '#/definitions/if-phone-contact-then-phone-is-required'},
+                                    {$ref: '#/definitions/if-text-contact-then-text-is-required'}
+                                ],
+                                definitions: {
+                                    'if-email-contact-then-email-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {
+                                                    contains: {const: 'email'}
+                                                }
+                                            }
+                                        },
+                                        then: {
+                                            required: ['email'],
+                                            propertyNames: {enum: ['contact', 'email']}
+                                        }
+                                    },
+                                    'if-phone-contact-then-phone-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {
+                                                    contains: {const: 'phone'}
+                                                }
+                                            }
+                                        },
+                                        then: {
+                                            required: ['phone'],
+                                            propertyNames: {enum: ['contact', 'phone']}
+                                        }
+                                    },
+                                    'if-text-contact-then-text-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {
+                                                    contains: {const: 'text'}
+                                                }
+                                            }
+                                        },
+                                        then: {
+                                            required: ['text'],
+                                            propertyNames: {enum: ['contact', 'text']}
+                                        }
+                                    }
+                                }
+                            },
+                            uiSchema: {
+                                'p-some-id': {
+                                    // transformer: 'form',
+                                    options: {
+                                        transformOrder: ['email', 'phone', 'text', 'contact'],
+                                        outputOrder: ['contact'],
+                                        properties: {
+                                            contact: {
+                                                // transformer: 'govukRadios',
+                                                options: {
+                                                    conditionalComponentMap: [
+                                                        {
+                                                            itemValue: 'email',
+                                                            componentIds: ['email']
+                                                        },
+                                                        {
+                                                            itemValue: 'phone',
+                                                            componentIds: ['phone']
+                                                        },
+                                                        {
+                                                            itemValue: 'text',
+                                                            componentIds: ['text']
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            data: {
+                                text: '"><script>alert("hello");</script>'
+                            }
+                        });
+                        const expected = {
+                            pageTitle: 'How would you prefer to be contacted?',
+                            hasErrors: false,
+                            content: `
+                        {% from "input/macro.njk" import govukInput %}
+                        {% from "checkboxes/macro.njk" import govukCheckboxes %}
+                        {% set email %}{{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "html": "Email address"
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com"
+                            }
+                        }) }}{% endset -%}
+                        {% set phone %}{{ govukInput({
+                            "id": "phone",
+                            "name": "phone",
+                            "type": "text",
+                            "label": {
+                                "html": "Phone number"
+                            },
+                            "hint": null
+                        }) }}{% endset -%}
+                        {% set text %}{{ govukInput({
+                            "id": "text",
+                            "name": "text",
+                            "type": "text",
+                            "label": {
+                                "html": "Mobile phone number"
+                            },
+                            "hint": null,
+                            "value": "\\"><script>alert(\\"hello\\");</script>"
+                        }) }}{% endset -%}{{ govukCheckboxes({
+                            "idPrefix": "contact",
+                            "name": "contact[]",
+                            "fieldset": {
+                                "legend": {
+                                    "text": "How would you prefer to be contacted?",
+                                    "isPageHeading": true,
+                                    "classes": "govuk-fieldset__legend--xl"
+                                }
+                            },
+                            "hint": {
+                                "text": "Select one option."
+                            },
+                            "items": [
+                                {
+                                    "value": "email",
+                                    "text": "Email",
+                                    "conditional": {
+                                        "html": ([email] | join())
+                                    }
+                                },
+                                {
+                                    "value": "phone",
+                                    "text": "Phone",
+                                    "conditional": {
+                                        "html": ([phone] | join())
+                                    }
+                                },
+                                {
+                                    "value": "text",
+                                    "text": "Text message",
+                                    "conditional": {
+                                        "html": ([text] | join())
+                                    }
+                                }
+                            ]
+                        }) }}`
+                        };
+
+                        expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                    });
+
+                    it('should ensure the conditional component ids have any invalid characters replaced with "_"', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p-some-id',
+                            schema: {
+                                type: 'object',
+                                propertyNames: {
+                                    enum: [
+                                        'contact',
+                                        'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
+                                    ]
+                                },
+                                properties: {
+                                    contact: {
+                                        title: 'How would you prefer to be contacted?',
+                                        description: 'Select one option.',
+                                        type: 'array',
+                                        items: {
+                                            anyOf: [
+                                                {
+                                                    title: 'Email',
+                                                    const: 'email'
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email': {
+                                        type: 'string',
+                                        description: 'e.g. something@something.com',
+                                        format: 'email',
+                                        title: 'Email address'
+                                    }
+                                },
+                                required: ['contact'],
+                                allOf: [
+                                    {$ref: '#/definitions/if-email-contact-then-email-is-required'}
+                                ],
+                                definitions: {
+                                    'if-email-contact-then-email-is-required': {
+                                        if: {
+                                            properties: {
+                                                contact: {
+                                                    contains: {const: 'email'}
+                                                }
+                                            }
+                                        },
+                                        then: {
+                                            required: [
+                                                'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
+                                            ],
+                                            propertyNames: {
+                                                enum: [
+                                                    'contact',
+                                                    'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            uiSchema: {
+                                'p-some-id': {
+                                    // transformer: 'form',
+                                    options: {
+                                        transformOrder: [
+                                            'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email',
+                                            'contact'
+                                        ],
+                                        outputOrder: ['contact'],
+                                        properties: {
+                                            contact: {
+                                                options: {
+                                                    conditionalComponentMap: [
+                                                        {
+                                                            itemValue: 'email',
+                                                            componentIds: [
+                                                                'this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email'
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        const expected = {
+                            pageTitle: 'How would you prefer to be contacted?',
+                            hasErrors: false,
+                            content: `{% from "input/macro.njk" import govukInput %}
+                            {% from "checkboxes/macro.njk" import govukCheckboxes %}
+                            {% set this_id_cant_be_used_as_a_variable_identifier_as_it_contains_hyphens_email %}{{ govukInput({
+                                "id": "this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email",
+                                "name": "this-id-cant-be-used-as-a-variable-identifier-as-it-contains-hyphens-email",
+                                "type": "email",
+                                "label": {
+                                    "html": "Email address"
+                                },
+                                "hint": {
+                                    "text": "e.g. something@something.com"
+                                }
+                            }) }}{% endset -%}{{ govukCheckboxes({
+                                "idPrefix": "contact",
+                                "name": "contact[]",
+                                "fieldset": {
+                                    "legend": {
+                                        "text": "How would you prefer to be contacted?",
+                                        "isPageHeading": true,
+                                        "classes": "govuk-fieldset__legend--xl"
+                                    }
+                                },
+                                "hint": {
+                                    "text": "Select one option."
+                                },
+                                "items": [
+                                    {
+                                        "value": "email",
+                                        "text": "Email",
+                                        "conditional": {
+                                            "html": ([this_id_cant_be_used_as_a_variable_identifier_as_it_contains_hyphens_email] | join())
+                                        }
+                                    }
+                                ]
+                            }) }}`
+                        };
+
+                        expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                    });
                 });
             });
         });
@@ -2610,6 +3315,7 @@ describe('qTransformer', () => {
                 dependencies: ['{% from "checkboxes/macro.njk" import govukCheckboxes %}'],
                 componentName: 'govukCheckboxes',
                 macroOptions: {
+                    idPrefix: 'waste',
                     name: 'waste[]',
                     fieldset: {
                         legend: {
@@ -3031,6 +3737,7 @@ describe('qTransformer', () => {
                 dependencies: ['{% from "checkboxes/macro.njk" import govukCheckboxes %}'],
                 componentName: 'govukCheckboxes',
                 macroOptions: {
+                    idPrefix: 'waste',
                     name: 'waste[]',
                     fieldset: {
                         legend: {
