@@ -1595,8 +1595,8 @@ describe('qTransformer', () => {
                     data: {
                         'p-applicant-enter-your-name': {
                             'q-applicant-title': 'Mr',
-                            'q-applicant-first-name': 'Barry',
-                            'q-applicant-last-name': 'Piccinni'
+                            'q-applicant-first-name': 'Test',
+                            'q-applicant-last-name': 'McTest'
                         }
                     },
                     fullUiSchema: uiSchema
@@ -1605,7 +1605,7 @@ describe('qTransformer', () => {
                 const expected = {
                     componentName: 'summary',
                     content:
-                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Barry Piccinni"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}<h2 class="govuk-heading-l">Police report</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}<h2 class="govuk-heading-l">Other compensation</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Test McTest"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
                     dependencies: ['{% from "summary-list/macro.njk" import govukSummaryList %}'],
                     id: 'p--check-your-answers'
                 };
@@ -1620,8 +1620,8 @@ describe('qTransformer', () => {
                     uiSchema: summaryUIScehma,
                     data: {
                         'p-applicant-enter-your-name': {
-                            'q-applicant-last-name': 'Piccinni',
-                            'q-applicant-first-name': 'Barry',
+                            'q-applicant-last-name': 'McTest',
+                            'q-applicant-first-name': 'Test',
                             'q-applicant-title': 'Mr'
                         },
                         'p-applicant-when-did-the-crime-happen': {
@@ -1634,7 +1634,36 @@ describe('qTransformer', () => {
                 const expected = {
                     componentName: 'summary',
                     content:
-                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Barry Piccinni"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "When did the crime happen?"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">Police report</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}<h2 class="govuk-heading-l">Other compensation</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Test McTest"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "When did the crime happen?"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                    dependencies: ['{% from "summary-list/macro.njk" import govukSummaryList %}'],
+                    id: 'p--check-your-answers'
+                };
+
+                expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+            });
+
+            it('should return a govukSummaryList instructions, headings with no answers should not appear', () => {
+                const result = qTransformer.transform({
+                    schemaKey: 'p--check-your-answers',
+                    schema: summarySchema,
+                    uiSchema: summaryUIScehma,
+                    data: {
+                        'p-applicant-enter-your-name': {
+                            'q-applicant-last-name': 'McTest',
+                            'q-applicant-first-name': 'Test',
+                            'q-applicant-title': 'Mr'
+                        },
+                        'p-applicant-have-you-applied-to-us-before': {
+                            'q-applicant-have-you-applied-to-us-before': 'true'
+                        }
+                    },
+                    fullUiSchema: uiSchema
+                });
+
+                const expected = {
+                    componentName: 'summary',
+                    content:
+                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Test McTest"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">Other compensation</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Have you applied before?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Yes"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-have-you-applied-to-us-before?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Have you applied before?"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
                     dependencies: ['{% from "summary-list/macro.njk" import govukSummaryList %}'],
                     id: 'p--check-your-answers'
                 };
@@ -1649,8 +1678,8 @@ describe('qTransformer', () => {
                     uiSchema: summaryUIScehma,
                     data: {
                         'p-applicant-enter-your-name': {
-                            'q-applicant-last-name': 'Piccinni',
-                            'q-applicant-first-name': 'Barry',
+                            'q-applicant-last-name': 'McTest',
+                            'q-applicant-first-name': 'Test',
                             'q-applicant-title': 'Mr'
                         },
                         'p-applicant-when-did-the-crime-happen': {
@@ -1663,7 +1692,7 @@ describe('qTransformer', () => {
                 const expected = {
                     componentName: 'summary',
                     content:
-                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Barry Piccinni"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "When did the crime happen?"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">Police report</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}<h2 class="govuk-heading-l">Other compensation</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: []\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Test McTest"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "When did the crime happen?"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
                     dependencies: ['{% from "summary-list/macro.njk" import govukSummaryList %}'],
                     id: 'p--check-your-answers'
                 };
@@ -1694,8 +1723,8 @@ describe('qTransformer', () => {
 
                     data: {
                         'p-some-section': {
-                            'q-3': 'Piccinni',
-                            'q-2': 'Barry',
+                            'q-3': 'McTest',
+                            'q-2': 'Test',
                             'q-1': 'Mr',
                             'q-5': 'blah',
                             'q-4': 'foo'
@@ -1735,7 +1764,7 @@ describe('qTransformer', () => {
                 const expected = {
                     componentName: 'summary',
                     content:
-                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr<br>Barry<br>Piccinni<br>blah<br>foo"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/some-section?next=summary",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                        '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr<br>Test<br>McTest<br>blah<br>foo"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/some-section?next=summary",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
                     dependencies: ['{% from "summary-list/macro.njk" import govukSummaryList %}'],
                     id: 'p-summary'
                 };
@@ -4393,8 +4422,8 @@ describe('qTransformer', () => {
                         },
                         'p-applicant-enter-your-name': {
                             'q-applicant-title': 'Mr',
-                            'q-applicant-first-name': 'Barry',
-                            'q-applicant-last-name': 'Piccinni'
+                            'q-applicant-first-name': 'Test',
+                            'q-applicant-last-name': 'McTest'
                         },
                         'p-applicant-enter-your-address': {
                             'q-applicant-building-and-street': 'Alexander Bain House',
@@ -4425,7 +4454,7 @@ describe('qTransformer', () => {
 
                 it('should format a question with more than one but less than 4 answers on a single line', () => {
                     expect(formattedAnswer['p-applicant-enter-your-name']).toMatch(
-                        'Mr Barry Piccinni'
+                        'Mr Test McTest'
                     );
                 });
 
