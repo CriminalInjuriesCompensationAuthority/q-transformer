@@ -903,6 +903,57 @@ describe('qTransformer', () => {
                 });
             });
 
+            describe('And a custom format attribute = "date"', () => {
+                it('should convert it to a govukDateInput instruction', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'passport-issued',
+                        schema: {
+                            type: 'string',
+                            format: 'date-time--today-or-in-past',
+                            title: 'When was your passport issued?',
+                            description: 'For example, 12 11 2007'
+                        },
+                        uiSchema: {}
+                    });
+
+                    const expected = {
+                        id: 'passport-issued',
+                        dependencies: ['{% from "date-input/macro.njk" import govukDateInput %}'],
+                        componentName: 'govukDateInput',
+                        macroOptions: {
+                            id: 'passport-issued',
+                            fieldset: {
+                                legend: {
+                                    text: 'When was your passport issued?'
+                                }
+                            },
+                            hint: {
+                                text: 'For example, 12 11 2007'
+                            },
+                            items: [
+                                {
+                                    label: 'Day',
+                                    classes: 'govuk-input--width-2',
+                                    name: 'passport-issued[day]'
+                                },
+                                {
+                                    label: 'Month',
+                                    classes: 'govuk-input--width-2',
+                                    name: 'passport-issued[month]'
+                                },
+                                {
+                                    label: 'Year',
+                                    classes: 'govuk-input--width-4',
+                                    name: 'passport-issued[year]'
+                                }
+                            ]
+                        }
+                    };
+
+                    expect(result).toEqual(expected);
+                });
+            });
+
             describe('And a oneOf attribute with greater than 20 options', () => {
                 it('should convert it to a govukSelect instruction', () => {
                     const result = qTransformer.transform({
