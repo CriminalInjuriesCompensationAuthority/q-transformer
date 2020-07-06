@@ -1113,7 +1113,8 @@ describe('qTransformer', () => {
                                 },
                                 {
                                     title: 'Waste from mines or quarries',
-                                    const: 'mines'
+                                    const: 'mines',
+                                    description: 'For example, coal mines'
                                 },
                                 {
                                     title: 'Farm or agricultural waste',
@@ -1147,7 +1148,10 @@ describe('qTransformer', () => {
                             },
                             {
                                 value: 'mines',
-                                text: 'Waste from mines or quarries'
+                                text: 'Waste from mines or quarries',
+                                hint: {
+                                    text: 'For example, coal mines'
+                                }
                             },
                             {
                                 value: 'farm',
