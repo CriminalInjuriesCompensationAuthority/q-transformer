@@ -1163,6 +1163,88 @@ describe('qTransformer', () => {
 
                 expect(result).toEqual(expected);
             });
+
+            it('should convert it to a govukCheckboxes instruction with a divider', () => {
+                const result = qTransformer.transform({
+                    schemaKey: 'waste',
+                    schema: {
+                        title: 'Which types of waste do you transport?',
+                        description: 'Select all that apply.',
+                        type: 'array',
+                        items: {
+                            anyOf: [
+                                {
+                                    title: 'Waste from animal carcasses',
+                                    const: 'carcasses'
+                                },
+                                {
+                                    title: 'Waste from mines or quarries',
+                                    const: 'mines',
+                                    description: 'For example, coal mines'
+                                },
+                                {
+                                    title: 'Farm or agricultural waste',
+                                    const: 'farm'
+                                }
+                            ]
+                        }
+                    },
+                    uiSchema: {
+                        waste: {
+                            // transformer: 'govukCheckboxes',
+                            options: {
+                                additionalMapping: [
+                                    {
+                                        itemType: 'divider',
+                                        itemValue: 'or',
+                                        itemIndex: 2
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                });
+
+                const expected = {
+                    id: 'waste',
+                    dependencies: ['{% from "checkboxes/macro.njk" import govukCheckboxes %}'],
+                    componentName: 'govukCheckboxes',
+                    macroOptions: {
+                        idPrefix: 'waste',
+                        name: 'waste[]',
+                        fieldset: {
+                            legend: {
+                                text: 'Which types of waste do you transport?'
+                            }
+                        },
+                        hint: {
+                            text: 'Select all that apply.'
+                        },
+                        items: [
+                            {
+                                value: 'carcasses',
+                                text: 'Waste from animal carcasses'
+                            },
+                            {
+                                value: 'mines',
+                                text: 'Waste from mines or quarries',
+                                hint: {
+                                    text: 'For example, coal mines'
+                                }
+                            },
+                            {
+                                divider: 'or'
+                            },
+                            {
+                                value: 'farm',
+                                text: 'Farm or agricultural waste'
+                            }
+                        ]
+                    }
+                };
+
+                expect(result).toEqual(expected);
+            });
         });
 
         describe('Given a JSON Schema with type:object', () => {
