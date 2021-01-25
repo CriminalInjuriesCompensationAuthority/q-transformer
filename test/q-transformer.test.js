@@ -825,17 +825,26 @@ describe('qTransformer', () => {
                                 {
                                     label: 'Day',
                                     classes: 'govuk-input--width-2',
-                                    name: 'passport-issued[day]'
+                                    name: 'passport-issued[day]',
+                                    attributes: {
+                                        maxlength: '2'
+                                    }
                                 },
                                 {
                                     label: 'Month',
                                     classes: 'govuk-input--width-2',
-                                    name: 'passport-issued[month]'
+                                    name: 'passport-issued[month]',
+                                    attributes: {
+                                        maxlength: '2'
+                                    }
                                 },
                                 {
                                     label: 'Year',
                                     classes: 'govuk-input--width-4',
-                                    name: 'passport-issued[year]'
+                                    name: 'passport-issued[year]',
+                                    attributes: {
+                                        maxlength: '4'
+                                    }
                                 }
                             ]
                         }
@@ -881,19 +890,28 @@ describe('qTransformer', () => {
                                     label: 'Day',
                                     classes: 'govuk-input--width-2',
                                     name: 'passport-issued[day]',
-                                    autocomplete: 'bday-day'
+                                    autocomplete: 'bday-day',
+                                    attributes: {
+                                        maxlength: '2'
+                                    }
                                 },
                                 {
                                     label: 'Month',
                                     classes: 'govuk-input--width-2',
                                     name: 'passport-issued[month]',
-                                    autocomplete: 'bday-month'
+                                    autocomplete: 'bday-month',
+                                    attributes: {
+                                        maxlength: '2'
+                                    }
                                 },
                                 {
                                     label: 'Year',
                                     classes: 'govuk-input--width-4',
                                     name: 'passport-issued[year]',
-                                    autocomplete: 'bday-year'
+                                    autocomplete: 'bday-year',
+                                    attributes: {
+                                        maxlength: '4'
+                                    }
                                 }
                             ]
                         }
@@ -3534,19 +3552,28 @@ describe('qTransformer', () => {
                             label: 'Day',
                             classes: 'govuk-input--width-2',
                             name: 'passport-issued[day]',
-                            value: 1
+                            value: 1,
+                            attributes: {
+                                maxlength: '2'
+                            }
                         },
                         {
                             label: 'Month',
                             classes: 'govuk-input--width-2',
                             name: 'passport-issued[month]',
-                            value: 2
+                            value: 2,
+                            attributes: {
+                                maxlength: '2'
+                            }
                         },
                         {
                             label: 'Year',
                             classes: 'govuk-input--width-4',
                             name: 'passport-issued[year]',
-                            value: 1980
+                            value: 1980,
+                            attributes: {
+                                maxlength: '4'
+                            }
                         }
                     ]
                 }
@@ -3793,19 +3820,28 @@ describe('qTransformer', () => {
                             label: 'Day',
                             classes: 'govuk-input--width-2 govuk-input--error',
                             name: 'event-name[day]',
-                            value: 0
+                            value: 0,
+                            attributes: {
+                                maxlength: '2'
+                            }
                         },
                         {
                             label: 'Month',
                             classes: 'govuk-input--width-2 govuk-input--error',
                             name: 'event-name[month]',
-                            value: 0
+                            value: 0,
+                            attributes: {
+                                maxlength: '2'
+                            }
                         },
                         {
                             label: 'Year',
                             classes: 'govuk-input--width-4 govuk-input--error',
                             name: 'event-name[year]',
-                            value: 0
+                            value: 0,
+                            attributes: {
+                                maxlength: '4'
+                            }
                         }
                     ]
                 }
