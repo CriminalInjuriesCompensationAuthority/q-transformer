@@ -651,7 +651,7 @@ describe('qTransformer', () => {
             });
 
             describe('And a maxLength >= 500', () => {
-                it('should convert it to a govukTextarea instruction', () => {
+                it('should convert it to a govukCharacterCount instruction', () => {
                     const result = qTransformer.transform({
                         schemaKey: 'more-detail',
                         schema: {
@@ -666,8 +666,10 @@ describe('qTransformer', () => {
 
                     const expected = {
                         id: 'more-detail',
-                        dependencies: ['{% from "textarea/macro.njk" import govukTextarea %}'],
-                        componentName: 'govukTextarea',
+                        dependencies: [
+                            '{% from "character-count/macro.njk" import govukCharacterCount %}'
+                        ],
+                        componentName: 'govukCharacterCount',
                         macroOptions: {
                             name: 'more-detail',
                             id: 'more-detail',
@@ -678,7 +680,8 @@ describe('qTransformer', () => {
                             hint: {
                                 text:
                                     'Do not include personal or financial information, like your National Insurance number or credit card details.'
-                            }
+                            },
+                            maxlength: 500
                         }
                     };
 
@@ -706,8 +709,10 @@ describe('qTransformer', () => {
 
                     const expected = {
                         id: 'more-detail',
-                        dependencies: ['{% from "textarea/macro.njk" import govukTextarea %}'],
-                        componentName: 'govukTextarea',
+                        dependencies: [
+                            '{% from "character-count/macro.njk" import govukCharacterCount %}'
+                        ],
+                        componentName: 'govukCharacterCount',
                         macroOptions: {
                             name: 'more-detail',
                             id: 'more-detail',
@@ -719,7 +724,8 @@ describe('qTransformer', () => {
                                 text:
                                     'Do not include personal or financial information, like your National Insurance number or credit card details.'
                             },
-                            autocomplete: 'street-address'
+                            autocomplete: 'street-address',
+                            maxlength: 500
                         }
                     };
 
@@ -3480,7 +3486,7 @@ describe('qTransformer', () => {
             expect(result).toEqual(expected);
         });
 
-        it('should pre-populate a govukTextarea instruction', () => {
+        it('should pre-populate a govukCharacterCount instruction', () => {
             const result = qTransformer.transform({
                 schemaKey: 'more-detail',
                 schema: {
@@ -3498,8 +3504,8 @@ describe('qTransformer', () => {
 
             const expected = {
                 id: 'more-detail',
-                dependencies: ['{% from "textarea/macro.njk" import govukTextarea %}'],
-                componentName: 'govukTextarea',
+                dependencies: ['{% from "character-count/macro.njk" import govukCharacterCount %}'],
+                componentName: 'govukCharacterCount',
                 macroOptions: {
                     name: 'more-detail',
                     id: 'more-detail',
@@ -3511,7 +3517,8 @@ describe('qTransformer', () => {
                         text:
                             'Do not include personal or financial information, like your National Insurance number or credit card details.'
                     },
-                    value: 'Peppa Pig'
+                    value: 'Peppa Pig',
+                    maxlength: 500
                 }
             };
 
@@ -3977,7 +3984,7 @@ describe('qTransformer', () => {
             expect(result).toEqual(expected);
         });
 
-        it('should display errors for govukTextarea instruction', () => {
+        it('should display errors for govukCharacterCount instruction', () => {
             const result = qTransformer.transform({
                 schemaKey: 'more-detail',
                 schema: {
@@ -3998,8 +4005,8 @@ describe('qTransformer', () => {
 
             const expected = {
                 id: 'more-detail',
-                dependencies: ['{% from "textarea/macro.njk" import govukTextarea %}'],
-                componentName: 'govukTextarea',
+                dependencies: ['{% from "character-count/macro.njk" import govukCharacterCount %}'],
+                componentName: 'govukCharacterCount',
                 macroOptions: {
                     name: 'more-detail',
                     id: 'more-detail',
@@ -4014,7 +4021,8 @@ describe('qTransformer', () => {
                         text:
                             'Do not include personal or financial information, like your National Insurance number or credit card details.'
                     },
-                    value: 123
+                    value: 123,
+                    maxlength: 500
                 }
             };
 
