@@ -178,7 +178,9 @@ describe('qTransformer', () => {
                 properties: {
                     'q-applicant-enter-your-date-of-birth': {
                         options: {
-                            autoComplete: true
+                            macroOptions: {
+                                autocomplete: true
+                            }
                         }
                     }
                 }
@@ -528,9 +530,11 @@ describe('qTransformer', () => {
                 properties: {
                     'q-applicant-enter-your-email-address': {
                         options: {
-                            autocomplete: 'email',
-                            attributes: {
-                                spellcheck: 'false'
+                            macroOptions: {
+                                autocomplete: 'email',
+                                attributes: {
+                                    spellcheck: 'false'
+                                }
                             }
                         }
                     }
@@ -622,7 +626,9 @@ describe('qTransformer', () => {
                         uiSchema: {
                             'passport-sent': {
                                 options: {
-                                    autoComplete: 'street-address'
+                                    macroOptions: {
+                                        autocomplete: 'street-address'
+                                    }
                                 }
                             }
                         }
@@ -701,7 +707,9 @@ describe('qTransformer', () => {
                         uiSchema: {
                             'more-detail': {
                                 options: {
-                                    autoComplete: 'street-address'
+                                    macroOptions: {
+                                        autocomplete: 'street-address'
+                                    }
                                 }
                             }
                         }
@@ -832,6 +840,7 @@ describe('qTransformer', () => {
                                     label: 'Day',
                                     classes: 'govuk-input--width-2',
                                     name: 'passport-issued[day]',
+                                    id: 'passport-issued[day]',
                                     attributes: {
                                         maxlength: '2'
                                     }
@@ -840,6 +849,7 @@ describe('qTransformer', () => {
                                     label: 'Month',
                                     classes: 'govuk-input--width-2',
                                     name: 'passport-issued[month]',
+                                    id: 'passport-issued[month]',
                                     attributes: {
                                         maxlength: '2'
                                     }
@@ -848,6 +858,7 @@ describe('qTransformer', () => {
                                     label: 'Year',
                                     classes: 'govuk-input--width-4',
                                     name: 'passport-issued[year]',
+                                    id: 'passport-issued[year]',
                                     attributes: {
                                         maxlength: '4'
                                     }
@@ -871,7 +882,9 @@ describe('qTransformer', () => {
                         uiSchema: {
                             'passport-issued': {
                                 options: {
-                                    autoComplete: 'bday'
+                                    macroOptions: {
+                                        autocomplete: 'bday'
+                                    }
                                 }
                             }
                         }
@@ -896,6 +909,7 @@ describe('qTransformer', () => {
                                     label: 'Day',
                                     classes: 'govuk-input--width-2',
                                     name: 'passport-issued[day]',
+                                    id: 'passport-issued[day]',
                                     autocomplete: 'bday-day',
                                     attributes: {
                                         maxlength: '2'
@@ -905,6 +919,7 @@ describe('qTransformer', () => {
                                     label: 'Month',
                                     classes: 'govuk-input--width-2',
                                     name: 'passport-issued[month]',
+                                    id: 'passport-issued[month]',
                                     autocomplete: 'bday-month',
                                     attributes: {
                                         maxlength: '2'
@@ -914,6 +929,7 @@ describe('qTransformer', () => {
                                     label: 'Year',
                                     classes: 'govuk-input--width-4',
                                     name: 'passport-issued[year]',
+                                    id: 'passport-issued[year]',
                                     autocomplete: 'bday-year',
                                     attributes: {
                                         maxlength: '4'
@@ -3559,6 +3575,7 @@ describe('qTransformer', () => {
                             label: 'Day',
                             classes: 'govuk-input--width-2',
                             name: 'passport-issued[day]',
+                            id: 'passport-issued[day]',
                             value: 1,
                             attributes: {
                                 maxlength: '2'
@@ -3568,6 +3585,7 @@ describe('qTransformer', () => {
                             label: 'Month',
                             classes: 'govuk-input--width-2',
                             name: 'passport-issued[month]',
+                            id: 'passport-issued[month]',
                             value: 2,
                             attributes: {
                                 maxlength: '2'
@@ -3577,6 +3595,7 @@ describe('qTransformer', () => {
                             label: 'Year',
                             classes: 'govuk-input--width-4',
                             name: 'passport-issued[year]',
+                            id: 'passport-issued[year]',
                             value: 1980,
                             attributes: {
                                 maxlength: '4'
@@ -3806,7 +3825,7 @@ describe('qTransformer', () => {
 
             const expected = {
                 id: 'event-name',
-                errorSummaryHREF: '#event-name-event-name[day]',
+                errorSummaryHREF: '#event-name[day]',
                 dependencies: ['{% from "date-input/macro.njk" import govukDateInput %}'],
                 componentName: 'govukDateInput',
                 macroOptions: {
@@ -3827,6 +3846,7 @@ describe('qTransformer', () => {
                             label: 'Day',
                             classes: 'govuk-input--width-2 govuk-input--error',
                             name: 'event-name[day]',
+                            id: 'event-name[day]',
                             value: 0,
                             attributes: {
                                 maxlength: '2'
@@ -3836,6 +3856,7 @@ describe('qTransformer', () => {
                             label: 'Month',
                             classes: 'govuk-input--width-2 govuk-input--error',
                             name: 'event-name[month]',
+                            id: 'event-name[month]',
                             value: 0,
                             attributes: {
                                 maxlength: '2'
@@ -3845,6 +3866,7 @@ describe('qTransformer', () => {
                             label: 'Year',
                             classes: 'govuk-input--width-4 govuk-input--error',
                             name: 'event-name[year]',
+                            id: 'event-name[year]',
                             value: 0,
                             attributes: {
                                 maxlength: '4'
