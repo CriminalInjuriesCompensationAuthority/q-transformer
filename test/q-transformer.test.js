@@ -1301,23 +1301,30 @@ describe('qTransformer', () => {
                             summaryStructure: [
                                 {
                                     title: 'Your details',
-                                    questions: {
-                                        'p-applicant-enter-your-name': 'Name'
-                                    }
+                                    questions: [
+                                        {
+                                            id: 'p-applicant-enter-your-name',
+                                            label: 'Name'
+                                        }
+                                    ]
                                 },
                                 {
                                     title: 'About the crime',
-                                    questions: {
-                                        'p-applicant-when-did-the-crime-happen':
-                                            'When did the crime happen?'
-                                    }
+                                    questions: [
+                                        {
+                                            id: 'p-applicant-when-did-the-crime-happen',
+                                            label: 'When did the crime happen?'
+                                        }
+                                    ]
                                 },
                                 {
                                     title: 'Other compensation',
-                                    questions: {
-                                        'p-applicant-have-you-applied-to-us-before':
-                                            'Have you applied before?'
-                                    }
+                                    questions: [
+                                        {
+                                            id: 'p-applicant-have-you-applied-to-us-before',
+                                            label: 'Have you applied before?'
+                                        }
+                                    ]
                                 }
                             ],
                             lookup: {
@@ -1417,7 +1424,7 @@ describe('qTransformer', () => {
                     expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
 
-                it('should return a govukSummaryList in the order defined in the uiSchema', () => {
+                it('should return a govukSummaryList in the order defined by the template', () => {
                     const result = qTransformer.transform({
                         schemaKey: 'p--check-your-answers',
                         schema: summarySchema,
@@ -1448,7 +1455,7 @@ describe('qTransformer', () => {
                     expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
 
-                it('should return a govukSummaryList in the order defined in the uiSchema and append answers which are supplied in the body but not defined in the uiSchema', () => {
+                it('should return a govukSummaryList in the order defined by the template and append answers which are supplied in the body but not defined in the template', () => {
                     const result = qTransformer.transform({
                         schemaKey: 'p-summary',
                         schema: {
@@ -1460,7 +1467,7 @@ describe('qTransformer', () => {
                                     summaryStructure: [
                                         {
                                             title: 'Your details',
-                                            questions: {'p-some-section': 'Name'}
+                                            questions: [{id: 'p-some-section', label: 'Name'}]
                                         }
                                     ],
                                     lookup: {
