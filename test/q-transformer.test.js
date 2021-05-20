@@ -4743,4 +4743,107 @@ describe('qTransformer', () => {
             });
         });
     });
+
+    describe('Display page title', () => {
+        describe('Schema has a page level title', () => {
+            it('Should display a page level title', () => {
+                const result = qTransformer.transform({
+                    schemaKey: 'event-name',
+                    schema: {
+                        type: 'object',
+                        title: 'Event name',
+                        propertyNames: {
+                            enum: ['email']
+                        },
+                        properties: {
+                            email: {
+                                type: 'string',
+                                description: 'e.g. something@something.com',
+                                format: 'email',
+                                title: 'Email address'
+                            },
+                            declaration: {
+                                description: `
+                                    <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                                    {{ govukWarningText({
+                                        text: "You could be prosecuted or get less compensation if you give false or misleading information."
+                                    }) }}`
+                            }
+                        }
+                    },
+                    uiSchema: {}
+                });
+
+                const expected = {
+                    pageTitle: 'Event name',
+                    hasErrors: false,
+                    content: removeIndentation(`
+                        {% from "input/macro.njk" import govukInput %}
+                        {% from "warning-text/macro.njk" import govukWarningText %}
+                        <h1 class="govuk-heading-xl">Event name</h1>
+                        {{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "html": "Email address"
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com"
+                            }
+                        }) }}
+                        <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                        {{ govukWarningText({
+                            text: "You could be prosecuted or get less compensation if you give false or misleading information."
+                        }) }}`)
+                };
+                expect({
+                    pageTitle: result.pageTitle,
+                    hasErrors: result.hasErrors,
+                    content: removeIndentation(result.content)
+                }).toEqual(expected);
+            });
+        });
+        describe('Schema has no page level title', () => {
+            it('Should display the title of the first property', () => {
+                const result = qTransformer.transform({
+                    schemaKey: 'event-name',
+                    schema: {
+                        type: 'object',
+                        propertyNames: {
+                            enum: ['email']
+                        },
+                        properties: {
+                            declaration: {
+                                title: 'declaration',
+                                description: `
+                                    <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                                    {{ govukWarningText({
+                                        text: "You could be prosecuted or get less compensation if you give false or misleading information."
+                                    }) }}`
+                            }
+                        }
+                    },
+                    uiSchema: {}
+                });
+
+                const expected = {
+                    pageTitle: 'declaration',
+                    hasErrors: false,
+                    content: removeIndentation(`
+                        {% from "warning-text/macro.njk" import govukWarningText %}
+                        <h1 class="govuk-heading-xl">declaration</h1>
+                        <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                        {{ govukWarningText({
+                            text: "You could be prosecuted or get less compensation if you give false or misleading information."
+                        }) }}`)
+                };
+                expect({
+                    pageTitle: result.pageTitle,
+                    hasErrors: result.hasErrors,
+                    content: removeIndentation(result.content)
+                }).toEqual(expected);
+            });
+        });
+    });
 });
