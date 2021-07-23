@@ -1541,6 +1541,7 @@ describe('qTransformer', () => {
                         propertyNames: {
                             enum: ['email', 'phone', 'text']
                         },
+                        required: ['email', 'instructions', 'phone', 'text', 'declaration'],
                         properties: {
                             email: {
                                 type: 'string',
@@ -1647,6 +1648,7 @@ describe('qTransformer', () => {
                         propertyNames: {
                             enum: ['email']
                         },
+                        required: ['email', 'declaration'],
                         properties: {
                             email: {
                                 type: 'string',
@@ -3209,6 +3211,7 @@ describe('qTransformer', () => {
                     propertyNames: {
                         enum: ['email']
                     },
+                    required: ['email'],
                     properties: {
                         email: {
                             type: 'string',
@@ -3984,6 +3987,7 @@ describe('qTransformer', () => {
                     propertyNames: {
                         enum: ['email', 'phone', 'text']
                     },
+                    required: ['email', 'instructions', 'phone', 'text', 'declaration'],
                     properties: {
                         email: {
                             type: 'string',
@@ -4423,6 +4427,7 @@ describe('qTransformer', () => {
                     propertyNames: {
                         enum: ['email', 'phone', 'text']
                     },
+                    required: ['email'],
                     properties: {
                         email: {
                             type: 'string',
@@ -4835,6 +4840,7 @@ describe('qTransformer', () => {
                         propertyNames: {
                             enum: ['email']
                         },
+                        required: ['email', 'declaration'],
                         properties: {
                             email: {
                                 type: 'string',
@@ -4923,6 +4929,205 @@ describe('qTransformer', () => {
                     hasErrors: result.hasErrors,
                     content: removeIndentation(result.content)
                 }).toEqual(expected);
+            });
+        });
+    });
+
+    describe("Display (optional) on properties that aren't required", () => {
+        describe('Property is required', () => {
+            it('Should not display "(optional)"', () => {
+                const result = qTransformer.transform({
+                    schemaKey: 'event-name',
+                    schema: {
+                        type: 'object',
+                        title: 'Event name',
+                        required: ['email'],
+                        properties: {
+                            email: {
+                                type: 'string',
+                                description: 'e.g. something@something.com',
+                                format: 'email',
+                                title: 'Email address'
+                            }
+                        }
+                    },
+                    uiSchema: {}
+                });
+
+                const expected = {
+                    pageTitle: 'Event name',
+                    hasErrors: false,
+                    content: removeIndentation(`
+                        {% from "input/macro.njk" import govukInput %}
+                        <h1 class="govuk-heading-xl">Event name</h1>
+                        {{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "html": "Email address"
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com"
+                            }
+                        }) }}`)
+                };
+                expect({
+                    pageTitle: result.pageTitle,
+                    hasErrors: result.hasErrors,
+                    content: removeIndentation(result.content)
+                }).toEqual(expected);
+            });
+        });
+        describe('Property is not required', () => {
+            describe('Property is page heading', () => {
+                describe('Property has a description', () => {
+                    it('Should append " (optional)" on description', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'event-name',
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    email: {
+                                        type: 'string',
+                                        description: 'e.g. something@something.com',
+                                        format: 'email',
+                                        title: 'Email address'
+                                    }
+                                }
+                            },
+                            uiSchema: {}
+                        });
+
+                        const expected = {
+                            pageTitle: 'Email address',
+                            hasErrors: false,
+                            content: removeIndentation(`
+                        {% from "input/macro.njk" import govukInput %}
+                        {{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "html": "Email address",
+                                "isPageHeading": true,
+                                "classes": "govuk-label--xl"
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com (optional)"
+                            }
+                        }) }}`)
+                        };
+                        expect({
+                            pageTitle: result.pageTitle,
+                            hasErrors: result.hasErrors,
+                            content: removeIndentation(result.content)
+                        }).toEqual(expected);
+                    });
+                });
+                describe('Property does not have a description', () => {
+                    it('Should create a description with a value of "(optional)"', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'event-name',
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    email: {
+                                        type: 'string',
+                                        format: 'email',
+                                        title: 'Email address'
+                                    }
+                                }
+                            },
+                            uiSchema: {}
+                        });
+
+                        const expected = {
+                            pageTitle: 'Email address',
+                            hasErrors: false,
+                            content: removeIndentation(`
+                        {% from "input/macro.njk" import govukInput %}
+                        {{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "html": "Email address",
+                                "isPageHeading": true,
+                                "classes": "govuk-label--xl"
+                            },
+                            "hint": {
+                                "text": "(optional)"
+                            }
+                        }) }}`)
+                        };
+                        expect({
+                            pageTitle: result.pageTitle,
+                            hasErrors: result.hasErrors,
+                            content: removeIndentation(result.content)
+                        }).toEqual(expected);
+                    });
+                });
+            });
+            describe('Property is not a page heading', () => {
+                it('Should append " (optional)" on title', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'event-name',
+                        schema: {
+                            type: 'object',
+                            title: 'Foobar',
+                            properties: {
+                                email: {
+                                    type: 'string',
+                                    description: 'e.g. something@something.com',
+                                    format: 'email',
+                                    title: 'Email address'
+                                },
+                                phone: {
+                                    type: 'string',
+                                    description: 'e.g. 07799111111',
+                                    title: 'Phone'
+                                }
+                            }
+                        },
+                        uiSchema: {}
+                    });
+
+                    const expected = {
+                        pageTitle: 'Foobar',
+                        hasErrors: false,
+                        content: removeIndentation(`
+                        {% from "input/macro.njk" import govukInput %}
+                        <h1 class="govuk-heading-xl">Foobar</h1>
+                        {{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "html": "Email address (optional)"
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com"
+                            }
+                        }) }}
+                        {{ govukInput({
+                            "id": "phone",
+                            "name": "phone",
+                            "type": "text",
+                            "label": {
+                                "html": "Phone (optional)"
+                            },
+                            "hint": {
+                                "text": "e.g. 07799111111"
+                            }
+                        }) }}`)
+                    };
+                    expect({
+                        pageTitle: result.pageTitle,
+                        hasErrors: result.hasErrors,
+                        content: removeIndentation(result.content)
+                    }).toEqual(expected);
+                });
             });
         });
     });
