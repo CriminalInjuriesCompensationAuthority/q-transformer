@@ -1698,49 +1698,106 @@ describe('qTransformer', () => {
         });
 
         describe('Given a JSON Schema with type:boolean', () => {
-            it('should convert it to a govukRadios instruction', () => {
-                const result = qTransformer.transform({
-                    schemaKey: 'changed-name',
-                    schema: {
-                        type: 'boolean',
-                        title: 'Have you changed your name?',
-                        description:
-                            'This includes changing your last name or spelling your name differently.'
-                    },
-                    uiSchema: {}
-                });
-
-                const expected = {
-                    id: 'changed-name',
-                    dependencies: ['{% from "radios/macro.njk" import govukRadios %}'],
-                    componentName: 'govukRadios',
-                    macroOptions: {
-                        classes: 'govuk-radios--inline',
-                        idPrefix: 'changed-name',
-                        name: 'changed-name',
-                        fieldset: {
-                            legend: {
-                                text: 'Have you changed your name?'
-                            }
+            describe('And includes "oneOf" key in the schema', () => {
+                it('should convert it to a vertically aligned govukRadios instruction', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'changed-name',
+                        schema: {
+                            type: 'boolean',
+                            title: 'Have you changed your name?',
+                            description:
+                                'This includes changing your last name or spelling your name differently.',
+                            oneOf: [
+                                {
+                                    title: 'Yes',
+                                    const: true
+                                },
+                                {
+                                    title: 'No',
+                                    const: false
+                                }
+                            ]
                         },
-                        hint: {
-                            text:
+                        uiSchema: {}
+                    });
+
+                    const expected = {
+                        id: 'changed-name',
+                        dependencies: ['{% from "radios/macro.njk" import govukRadios %}'],
+                        componentName: 'govukRadios',
+                        macroOptions: {
+                            idPrefix: 'changed-name',
+                            name: 'changed-name',
+                            fieldset: {
+                                legend: {
+                                    text: 'Have you changed your name?'
+                                }
+                            },
+                            hint: {
+                                text:
+                                    'This includes changing your last name or spelling your name differently.'
+                            },
+                            items: [
+                                {
+                                    value: true,
+                                    text: 'Yes'
+                                },
+                                {
+                                    value: false,
+                                    text: 'No'
+                                }
+                            ]
+                        }
+                    };
+
+                    expect(result).toEqual(expected);
+                });
+            });
+            describe('And does not include "oneOf" key in the schema', () => {
+                it('should convert it to a horizontally aligned govukRadios instruction', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'changed-name',
+                        schema: {
+                            type: 'boolean',
+                            title: 'Have you changed your name?',
+                            description:
                                 'This includes changing your last name or spelling your name differently.'
                         },
-                        items: [
-                            {
-                                value: true,
-                                text: 'Yes'
-                            },
-                            {
-                                value: false,
-                                text: 'No'
-                            }
-                        ]
-                    }
-                };
+                        uiSchema: {}
+                    });
 
-                expect(result).toEqual(expected);
+                    const expected = {
+                        id: 'changed-name',
+                        dependencies: ['{% from "radios/macro.njk" import govukRadios %}'],
+                        componentName: 'govukRadios',
+                        macroOptions: {
+                            classes: 'govuk-radios--inline',
+                            idPrefix: 'changed-name',
+                            name: 'changed-name',
+                            fieldset: {
+                                legend: {
+                                    text: 'Have you changed your name?'
+                                }
+                            },
+                            hint: {
+                                text:
+                                    'This includes changing your last name or spelling your name differently.'
+                            },
+                            items: [
+                                {
+                                    value: true,
+                                    text: 'Yes'
+                                },
+                                {
+                                    value: false,
+                                    text: 'No'
+                                }
+                            ]
+                        }
+                    };
+
+                    expect(result).toEqual(expected);
+                });
             });
         });
     });
