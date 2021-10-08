@@ -1358,248 +1358,417 @@ describe('qTransformer', () => {
         });
 
         describe('Given a JSON Schema with type:object', () => {
-            describe('And the summaryInfo key is present', () => {
-                const summarySchema = {
-                    type: 'object',
-                    properties: {
-                        summaryInfo: {
-                            urlPath: 'apply',
-                            editAnswerText: 'Change',
-                            footerText: `<h2 class="govuk-heading-l">Agree and submit your application</h2>
-                    <p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>
-                <p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>`,
-                            summaryStructure: [
-                                {
-                                    title: 'Your details',
-                                    questions: [
-                                        {
-                                            id: 'p-applicant-enter-your-name',
-                                            label: 'Name'
+            describe('And the summaryStructure key is present in summaryInfo', () => {
+                describe('And the summaryStructure key is present in summaryInfo', () => {
+                    describe('And the summaryStructure is an array of themes', () => {
+                        it('should return a govukSummaryList instruction', () => {
+                            const result = qTransformer.transform({
+                                schemaKey: 'p--check-your-answers',
+                                schema: {
+                                    type: 'object',
+                                    properties: {
+                                        summaryInfo: {
+                                            urlPath: 'apply',
+                                            editAnswerText: 'Change',
+                                            summaryStructure: [
+                                                {
+                                                    type: 'theme',
+                                                    id: 'applicant_details',
+                                                    title: 'Your details',
+                                                    values: [
+                                                        {
+                                                            type: 'composite',
+                                                            id: 'applicant-name',
+                                                            title: 'Enter your name',
+                                                            themeId: 'applicant_details',
+                                                            values: [
+                                                                {
+                                                                    type: 'simple',
+                                                                    id: 'q-applicant-title',
+                                                                    title: 'Title',
+                                                                    closedQuestion: false,
+                                                                    themeId: 'applicant_details',
+                                                                    value: 'Mr'
+                                                                },
+                                                                {
+                                                                    type: 'simple',
+                                                                    id: 'q-applicant-first-name',
+                                                                    title: 'First name',
+                                                                    closedQuestion: false,
+                                                                    themeId: 'applicant_details',
+                                                                    value: 'Foo'
+                                                                },
+                                                                {
+                                                                    type: 'simple',
+                                                                    id: 'q-applicant-last-name',
+                                                                    title: 'Last name',
+                                                                    closedQuestion: false,
+                                                                    themeId: 'applicant_details',
+                                                                    value: 'Bar'
+                                                                }
+                                                            ],
+                                                            sectionId: 'p-applicant-enter-your-name'
+                                                        }
+                                                    ]
+                                                }
+                                            ]
                                         }
-                                    ]
-                                },
-                                {
-                                    title: 'About the crime',
-                                    questions: [
-                                        {
-                                            id: 'p-applicant-when-did-the-crime-happen',
-                                            label: 'When did the crime happen?'
-                                        }
-                                    ]
-                                },
-                                {
-                                    title: 'Other compensation',
-                                    questions: [
-                                        {
-                                            id: 'p-applicant-have-you-applied-to-us-before',
-                                            label: 'Have you applied before?'
-                                        }
-                                    ]
-                                }
-                            ],
-                            lookup: {
-                                true: 'Yes',
-                                false: 'No'
-                            }
-                        }
-                    }
-                };
-                it('should return a govukSummaryList instruction', () => {
-                    const result = qTransformer.transform({
-                        schemaKey: 'p--check-your-answers',
-                        schema: summarySchema,
-                        uiSchema: {},
-                        data: {
-                            'p-applicant-enter-your-name': {
-                                'q-applicant-title': 'Mr',
-                                'q-applicant-first-name': 'Test',
-                                'q-applicant-last-name': 'McTest'
-                            }
-                        },
-                        fullUiSchema: uiSchema
-                    });
-
-                    const expected = {
-                        componentName: 'summary',
-                        content:
-                            '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Test McTest"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
-                        dependencies: [
-                            '{% from "summary-list/macro.njk" import govukSummaryList %}'
-                        ],
-                        id: 'p--check-your-answers'
-                    };
-
-                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
-                });
-
-                it('should return a govukSummaryList instructions under the correct headings', () => {
-                    const result = qTransformer.transform({
-                        schemaKey: 'p--check-your-answers',
-                        schema: summarySchema,
-                        uiSchema: {},
-                        data: {
-                            'p-applicant-enter-your-name': {
-                                'q-applicant-last-name': 'McTest',
-                                'q-applicant-first-name': 'Test',
-                                'q-applicant-title': 'Mr'
-                            },
-                            'p-applicant-when-did-the-crime-happen': {
-                                'q-applicant-when-did-the-crime-happen': '2019-01-01T09:55:22.130Z'
-                            }
-                        },
-                        fullUiSchema: uiSchema
-                    });
-
-                    const expected = {
-                        componentName: 'summary',
-                        content:
-                            '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Test McTest"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "When did the crime happen?"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
-                        dependencies: [
-                            '{% from "summary-list/macro.njk" import govukSummaryList %}'
-                        ],
-                        id: 'p--check-your-answers'
-                    };
-
-                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
-                });
-
-                it('should return a govukSummaryList instructions, headings with no answers should not appear', () => {
-                    const result = qTransformer.transform({
-                        schemaKey: 'p--check-your-answers',
-                        schema: summarySchema,
-                        uiSchema: {},
-                        data: {
-                            'p-applicant-enter-your-name': {
-                                'q-applicant-last-name': 'McTest',
-                                'q-applicant-first-name': 'Test',
-                                'q-applicant-title': 'Mr'
-                            },
-                            'p-applicant-have-you-applied-to-us-before': {
-                                'q-applicant-have-you-applied-to-us-before': 'true'
-                            }
-                        },
-                        fullUiSchema: uiSchema
-                    });
-
-                    const expected = {
-                        componentName: 'summary',
-                        content:
-                            '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Test McTest"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">Other compensation</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Have you applied before?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Yes"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-have-you-applied-to-us-before?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Have you applied before?"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
-                        dependencies: [
-                            '{% from "summary-list/macro.njk" import govukSummaryList %}'
-                        ],
-                        id: 'p--check-your-answers'
-                    };
-
-                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
-                });
-
-                it('should return a govukSummaryList in the order defined by the template', () => {
-                    const result = qTransformer.transform({
-                        schemaKey: 'p--check-your-answers',
-                        schema: summarySchema,
-                        uiSchema: {},
-                        data: {
-                            'p-applicant-enter-your-name': {
-                                'q-applicant-last-name': 'McTest',
-                                'q-applicant-first-name': 'Test',
-                                'q-applicant-title': 'Mr'
-                            },
-                            'p-applicant-when-did-the-crime-happen': {
-                                'q-applicant-when-did-the-crime-happen': '2019-01-01T09:55:22.130Z'
-                            }
-                        },
-                        fullUiSchema: uiSchema
-                    });
-
-                    const expected = {
-                        componentName: 'summary',
-                        content:
-                            '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Test McTest"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "When did the crime happen?"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
-                        dependencies: [
-                            '{% from "summary-list/macro.njk" import govukSummaryList %}'
-                        ],
-                        id: 'p--check-your-answers'
-                    };
-
-                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
-                });
-
-                it('should return a govukSummaryList in the order defined by the template and append answers which are supplied in the body but not defined in the template', () => {
-                    const result = qTransformer.transform({
-                        schemaKey: 'p-summary',
-                        schema: {
-                            type: 'object',
-                            properties: {
-                                summaryInfo: {
-                                    urlPath: 'apply',
-                                    editAnswerText: 'Change',
-                                    summaryStructure: [
-                                        {
-                                            title: 'Your details',
-                                            questions: [{id: 'p-some-section', label: 'Name'}]
-                                        }
-                                    ],
-                                    lookup: {
-                                        true: 'Yes',
-                                        false: 'No'
                                     }
                                 }
-                            }
-                        },
-                        uiSchema: {},
+                            });
 
-                        data: {
-                            'p-some-section': {
-                                'q-3': 'McTest',
-                                'q-2': 'Test',
-                                'q-1': 'Mr',
-                                'q-5': 'blah',
-                                'q-4': 'foo'
-                            }
-                        },
-                        fullUiSchema: {
-                            'p--some-page': {
-                                options: {
-                                    isSummary: true,
-                                    buttonText: 'Agree and Submit',
+                            const expected = {
+                                componentName: 'summary',
+                                content:
+                                    '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Enter your name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Foo Bar"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Enter your name"\n}\n]\n}\n}\n]\n}) }}',
+                                dependencies: [
+                                    '{% from "summary-list/macro.njk" import govukSummaryList %}'
+                                ],
+                                id: 'p--check-your-answers'
+                            };
+
+                            expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                        });
+
+                        it('should return a govukSummaryList instructions under the correct headings', () => {
+                            const result = qTransformer.transform({
+                                schemaKey: 'p--check-your-answers',
+                                schema: {
+                                    type: 'object',
                                     properties: {
-                                        'p-summary': {
-                                            options: {
-                                                summaryStructure: [
-                                                    {
-                                                        title: 'Your details',
-                                                        questions: {'p-some-section': 'Name'}
+                                        summaryInfo: {
+                                            urlPath: 'apply',
+                                            editAnswerText: 'Change',
+                                            summaryStructure: [
+                                                {
+                                                    type: 'theme',
+                                                    id: 'applicant_details',
+                                                    title: 'Your details',
+                                                    values: [
+                                                        {
+                                                            type: 'composite',
+                                                            id: 'applicant-name',
+                                                            title: 'Enter your name',
+                                                            themeId: 'applicant_details',
+                                                            values: [
+                                                                {
+                                                                    type: 'simple',
+                                                                    id: 'q-applicant-title',
+                                                                    title: 'Title',
+                                                                    closedQuestion: false,
+                                                                    themeId: 'applicant_details',
+                                                                    value: 'Mr'
+                                                                },
+                                                                {
+                                                                    type: 'simple',
+                                                                    id: 'q-applicant-first-name',
+                                                                    title: 'First name',
+                                                                    closedQuestion: false,
+                                                                    themeId: 'applicant_details',
+                                                                    value: 'Foo'
+                                                                },
+                                                                {
+                                                                    type: 'simple',
+                                                                    id: 'q-applicant-last-name',
+                                                                    title: 'Last name',
+                                                                    closedQuestion: false,
+                                                                    themeId: 'applicant_details',
+                                                                    value: 'Bar'
+                                                                }
+                                                            ],
+                                                            sectionId: 'p-applicant-enter-your-name'
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    type: 'theme',
+                                                    id: 'crime_details',
+                                                    title: 'About the crime',
+                                                    values: [
+                                                        {
+                                                            type: 'simple',
+                                                            id:
+                                                                'q-applicant-when-did-the-crime-happen',
+                                                            title: 'When did the crime happen?',
+                                                            closedQuestion: false,
+                                                            themeId: 'crime_details',
+                                                            value: '2019-01-01T00:00:00.000Z',
+                                                            sectionId:
+                                                                'p-applicant-when-did-the-crime-happen',
+                                                            format: {
+                                                                value: 'date-time',
+                                                                precision: 'YYYY-MM-DD',
+                                                                defaults: {
+                                                                    DD: '01'
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            });
+
+                            const expected = {
+                                componentName: 'summary',
+                                content:
+                                    '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Enter your name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Foo Bar"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Enter your name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "When did the crime happen?"\n}\n]\n}\n}\n]\n}) }}',
+                                dependencies: [
+                                    '{% from "summary-list/macro.njk" import govukSummaryList %}'
+                                ],
+                                id: 'p--check-your-answers'
+                            };
+
+                            expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                        });
+                    });
+
+                    const summarySchema = {
+                        type: 'object',
+                        properties: {
+                            summaryInfo: {
+                                urlPath: 'apply',
+                                editAnswerText: 'Change',
+                                footerText: `<h2 class="govuk-heading-l">Agree and submit your application</h2>
+                    <p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>
+                <p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>`,
+                                summaryStructure: [
+                                    {
+                                        title: 'Your details',
+                                        questions: [
+                                            {
+                                                id: 'p-applicant-enter-your-name',
+                                                label: 'Name'
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        title: 'About the crime',
+                                        questions: [
+                                            {
+                                                id: 'p-applicant-when-did-the-crime-happen',
+                                                label: 'When did the crime happen?'
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        title: 'Other compensation',
+                                        questions: [
+                                            {
+                                                id: 'p-applicant-have-you-applied-to-us-before',
+                                                label: 'Have you applied before?'
+                                            }
+                                        ]
+                                    }
+                                ],
+                                lookup: {
+                                    true: 'Yes',
+                                    false: 'No'
+                                }
+                            }
+                        }
+                    };
+                    it('should return a govukSummaryList instruction', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p--check-your-answers',
+                            schema: summarySchema,
+                            uiSchema: {},
+                            data: {
+                                'p-applicant-enter-your-name': {
+                                    'q-applicant-title': 'Mr',
+                                    'q-applicant-first-name': 'Test',
+                                    'q-applicant-last-name': 'McTest'
+                                }
+                            },
+                            fullUiSchema: uiSchema
+                        });
+
+                        const expected = {
+                            componentName: 'summary',
+                            content:
+                                '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Test McTest"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                            dependencies: [
+                                '{% from "summary-list/macro.njk" import govukSummaryList %}'
+                            ],
+                            id: 'p--check-your-answers'
+                        };
+
+                        expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                    });
+
+                    it('should return a govukSummaryList instructions under the correct headings', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p--check-your-answers',
+                            schema: summarySchema,
+                            uiSchema: {},
+                            data: {
+                                'p-applicant-enter-your-name': {
+                                    'q-applicant-last-name': 'McTest',
+                                    'q-applicant-first-name': 'Test',
+                                    'q-applicant-title': 'Mr'
+                                },
+                                'p-applicant-when-did-the-crime-happen': {
+                                    'q-applicant-when-did-the-crime-happen':
+                                        '2019-01-01T09:55:22.130Z'
+                                }
+                            },
+                            fullUiSchema: uiSchema
+                        });
+
+                        const expected = {
+                            componentName: 'summary',
+                            content:
+                                '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Test McTest"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "When did the crime happen?"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                            dependencies: [
+                                '{% from "summary-list/macro.njk" import govukSummaryList %}'
+                            ],
+                            id: 'p--check-your-answers'
+                        };
+
+                        expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                    });
+
+                    it('should return a govukSummaryList instructions, headings with no answers should not appear', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p--check-your-answers',
+                            schema: summarySchema,
+                            uiSchema: {},
+                            data: {
+                                'p-applicant-enter-your-name': {
+                                    'q-applicant-last-name': 'McTest',
+                                    'q-applicant-first-name': 'Test',
+                                    'q-applicant-title': 'Mr'
+                                },
+                                'p-applicant-have-you-applied-to-us-before': {
+                                    'q-applicant-have-you-applied-to-us-before': 'true'
+                                }
+                            },
+                            fullUiSchema: uiSchema
+                        });
+
+                        const expected = {
+                            componentName: 'summary',
+                            content:
+                                '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Test McTest"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">Other compensation</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Have you applied before?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Yes"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-have-you-applied-to-us-before?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Have you applied before?"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                            dependencies: [
+                                '{% from "summary-list/macro.njk" import govukSummaryList %}'
+                            ],
+                            id: 'p--check-your-answers'
+                        };
+
+                        expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                    });
+
+                    it('should return a govukSummaryList in the order defined by the template', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p--check-your-answers',
+                            schema: summarySchema,
+                            uiSchema: {},
+                            data: {
+                                'p-applicant-enter-your-name': {
+                                    'q-applicant-last-name': 'McTest',
+                                    'q-applicant-first-name': 'Test',
+                                    'q-applicant-title': 'Mr'
+                                },
+                                'p-applicant-when-did-the-crime-happen': {
+                                    'q-applicant-when-did-the-crime-happen':
+                                        '2019-01-01T09:55:22.130Z'
+                                }
+                            },
+                            fullUiSchema: uiSchema
+                        });
+
+                        const expected = {
+                            componentName: 'summary',
+                            content:
+                                '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Test McTest"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "When did the crime happen?"\n}\n]\n}\n}\n]\n}) }}\n<h2 class="govuk-heading-l">Agree and submit your application</h2>\n<p class="govuk-body">By submitting this application you agree that we can share the details in it with the police. This helps us get the police information that we need to make a decision.</p>\n<p class="govuk-body">To find out more about how we handle your data <a href="https://www.gov.uk/guidance/cica-privacy-notice" target="">read our privacy notice</a>.</p>\n',
+                            dependencies: [
+                                '{% from "summary-list/macro.njk" import govukSummaryList %}'
+                            ],
+                            id: 'p--check-your-answers'
+                        };
+
+                        expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                    });
+
+                    it('should return a govukSummaryList in the order defined by the template and append answers which are supplied in the body but not defined in the template', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p-summary',
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    summaryInfo: {
+                                        urlPath: 'apply',
+                                        editAnswerText: 'Change',
+                                        summaryStructure: [
+                                            {
+                                                title: 'Your details',
+                                                questions: [{id: 'p-some-section', label: 'Name'}]
+                                            }
+                                        ],
+                                        lookup: {
+                                            true: 'Yes',
+                                            false: 'No'
+                                        }
+                                    }
+                                }
+                            },
+                            uiSchema: {},
+
+                            data: {
+                                'p-some-section': {
+                                    'q-3': 'McTest',
+                                    'q-2': 'Test',
+                                    'q-1': 'Mr',
+                                    'q-5': 'blah',
+                                    'q-4': 'foo'
+                                }
+                            },
+                            fullUiSchema: {
+                                'p--some-page': {
+                                    options: {
+                                        isSummary: true,
+                                        buttonText: 'Agree and Submit',
+                                        properties: {
+                                            'p-summary': {
+                                                options: {
+                                                    summaryStructure: [
+                                                        {
+                                                            title: 'Your details',
+                                                            questions: {'p-some-section': 'Name'}
+                                                        }
+                                                    ],
+                                                    lookup: {
+                                                        true: 'Yes',
+                                                        false: 'No'
                                                     }
-                                                ],
-                                                lookup: {
-                                                    true: 'Yes',
-                                                    false: 'No'
                                                 }
                                             }
                                         }
                                     }
-                                }
-                            },
-                            'p-some-section': {
-                                options: {
-                                    outputOrder: ['q-1', 'q-2', 'q-3']
+                                },
+                                'p-some-section': {
+                                    options: {
+                                        outputOrder: ['q-1', 'q-2', 'q-3']
+                                    }
                                 }
                             }
-                        }
+                        });
+
+                        const expected = {
+                            componentName: 'summary',
+                            content:
+                                '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr<br>Test<br>McTest<br>blah<br>foo"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/some-section?next=summary",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}',
+                            dependencies: [
+                                '{% from "summary-list/macro.njk" import govukSummaryList %}'
+                            ],
+                            id: 'p-summary'
+                        };
+
+                        expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                     });
-
-                    const expected = {
-                        componentName: 'summary',
-                        content:
-                            '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr<br>Test<br>McTest<br>blah<br>foo"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/some-section?next=summary",\n"text": "Change",\n"visuallyHiddenText": "Name"\n}\n]\n}\n}\n]\n}) }}',
-                        dependencies: [
-                            '{% from "summary-list/macro.njk" import govukSummaryList %}'
-                        ],
-                        id: 'p-summary'
-                    };
-
-                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
             });
 
@@ -4707,6 +4876,114 @@ describe('qTransformer', () => {
                     expect(actual).toMatch(
                         'i-am-an-answer<br>another-answer<br>a-third-answer<br>'
                     );
+                });
+            });
+            describe('objectFormatter', () => {
+                const helper = answerFormatHelper;
+                describe('Given an an array', () => {
+                    it('should parse into a string with line breaks between items', () => {
+                        const obj = ['foo', 'bar'];
+
+                        const actual = helper.objectFormatter(obj);
+                        const expected = 'foo<br>bar';
+
+                        expect(expected).toMatch(actual);
+                    });
+                });
+                describe('Given an an object', () => {
+                    describe('With 3 or less keys', () => {
+                        it('should parse into a string with spaces between values', () => {
+                            const obj = {
+                                a: 'foo',
+                                b: 'bar',
+                                c: 'biz'
+                            };
+
+                            const actual = helper.objectFormatter(obj);
+                            const expected = 'foo bar biz';
+
+                            expect(expected).toMatch(actual);
+                        });
+                    });
+                    describe('With more than 3 keys', () => {
+                        it('should parse into a string with line breaks between values', () => {
+                            const obj = {
+                                a: 'foo',
+                                b: 'bar',
+                                c: 'biz',
+                                d: 'baz'
+                            };
+
+                            const actual = helper.objectFormatter(obj);
+                            const expected = 'foo<br>bar<br>biz<br>baz';
+
+                            expect(expected).toMatch(actual);
+                        });
+                    });
+                    describe('With a "yes" or "no" value', () => {
+                        it('should append a comma and a space to the value', () => {
+                            const obj = {
+                                a: 'Yes',
+                                b: 'foo',
+                                c: 'bar'
+                            };
+
+                            const actual = helper.objectFormatter(obj);
+                            const expected = 'Yes, foo bar';
+
+                            expect(expected).toMatch(actual);
+                        });
+                    });
+                });
+            });
+            describe('dateFormatterV2', () => {
+                const helper = answerFormatHelper;
+                it('should format a date in a specified format', () => {
+                    const date = '2021-01-01T00:00:00.000Z';
+                    const format = {
+                        value: 'date-time',
+                        precision: 'MMMM YYYY'
+                    };
+
+                    const actual = helper.formatAnswerV2(date, format);
+                    const expected = 'January 2021';
+
+                    expect(expected).toMatch(actual);
+                });
+            });
+            describe('parseDateFormat', () => {
+                const helper = answerFormatHelper;
+                describe('Given a format with only a year', () => {
+                    it('should parse into a user readable date format', () => {
+                        const precision = 'YY';
+
+                        const actual = helper.parseDateFormat(precision);
+                        const expected = 'YYYY';
+
+                        expect(expected).toMatch(actual);
+                    });
+                });
+
+                describe('Given a format with only a year and month', () => {
+                    it('should parse into a user readable date format', () => {
+                        const precision = 'YY-MM';
+
+                        const actual = helper.parseDateFormat(precision);
+                        const expected = 'MMMM YYYY';
+
+                        expect(expected).toMatch(actual);
+                    });
+                });
+
+                describe('Given any other format', () => {
+                    it('should try to parse into the default date format', () => {
+                        const precision = 'YY/MM DDD';
+
+                        const actual = helper.parseDateFormat(precision);
+                        const expected = 'DD MMMM YYYY';
+
+                        expect(expected).toMatch(actual);
+                    });
                 });
             });
         });
