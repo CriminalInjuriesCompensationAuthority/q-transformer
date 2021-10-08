@@ -147,6 +147,85 @@ describe('allOf', () => {
 
                     expect(removeIndentation(result)).toEqual(removeIndentation(expected));
                 });
+
+                it('should render a nunjucks representation of a form with no nested fieldset elements', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'p-applicant-declaration',
+                        schema: {
+                            $schema: 'http://json-schema.org/draft-07/schema#',
+                            type: 'object',
+                            allOf: [
+                                {
+                                    title: 'Declaration',
+                                    required: ['q-applicant-declaration'],
+                                    propertyNames: {
+                                        enum: ['applicant-declaration', 'q-applicant-declaration']
+                                    },
+                                    allOf: [
+                                        {
+                                            properties: {
+                                                'applicant-declaration': {
+                                                    description: '<div id="declaration">blah</div>'
+                                                }
+                                            }
+                                        },
+                                        {
+                                            properties: {
+                                                'q-applicant-declaration': {
+                                                    type: 'array',
+                                                    items: {
+                                                        anyOf: [
+                                                            {
+                                                                title:
+                                                                    'I have read and agree with the <a href="#declaration" class="govuk-link">declaration</a>',
+                                                                const: 'i-agree'
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    errorMessage: {
+                                        required: {
+                                            'q-applicant-declaration': 'Select that you agree'
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        uiSchema: {}
+                    });
+
+                    const expected = {
+                        hasErrors: false,
+                        pageTitle: 'Declaration',
+                        content: `{% from "checkboxes/macro.njk" import govukCheckboxes %}
+                            {% from "fieldset/macro.njk" import govukFieldset %}
+                            {% call govukFieldset({
+                                legend: {
+                                html: "Declaration",
+                                classes: "govuk-fieldset__legend--xl",
+                                isPageHeading: true
+                                }
+                            }) %}
+                            <div id="declaration">blah</div>
+                            {{ govukCheckboxes({
+                                "idPrefix": "q-applicant-declaration",
+                                "name": "q-applicant-declaration[]",
+                                "hint": null,
+                                "items": [
+                                    {
+                                        "value": "i-agree",
+                                        "html": "I have read and agree with the <a href=\\"#declaration\\" class=\\"govuk-link\\">declaration</a>"
+                                    }
+                                ]
+                            }) }}
+                        {% endcall %}`
+                    };
+
+                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                });
             });
         });
     });

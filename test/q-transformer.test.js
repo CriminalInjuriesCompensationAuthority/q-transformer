@@ -3088,6 +3088,10 @@ describe('qTransformer', () => {
                                                 {
                                                     title: 'Email',
                                                     const: 'email'
+                                                },
+                                                {
+                                                    title: 'SMS',
+                                                    const: 'text'
                                                 }
                                             ]
                                         }
@@ -3188,6 +3192,10 @@ describe('qTransformer', () => {
                                         "conditional": {
                                             "html": ([this_id_cant_be_used_as_a_variable_identifier_as_it_contains_hyphens_email] | join())
                                         }
+                                    },
+                                    {
+                                        "value": "text",
+                                        "text": "SMS"
                                     }
                                 ]
                             }) }}`
