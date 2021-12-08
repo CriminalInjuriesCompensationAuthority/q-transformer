@@ -19,6 +19,9 @@ const radioButtonSchemaExpectedContent = require('./fixtures/allof/radioButtonSc
 const twoCompositeAllOfSchema = require('./fixtures/allof/twoCompositeAllOfSchema');
 const twoCompositeAllOfExpectedContent = require('./fixtures/allof/twoCompositeAllOfSchemaExpectedContent');
 
+const radioWithInfoAndCompositeAllOfSchema = require('./fixtures/allof/radioWithInfoAndCompositeAllOfSchema');
+const radioWithInfoAndCompositeExpectedContent = require('./fixtures/allof/radioWithInfoAndCompositeAllOfSchemaExpectedContent');
+
 // Remove indentation from strings when comparing them
 function removeIndentation(val) {
     const regex = /^\s+/gm;
@@ -92,6 +95,15 @@ describe('allOf', () => {
                         qTransformer.transform(twoCompositeAllOfSchema)
                     );
                     const expectedContent = removeIndentation(twoCompositeAllOfExpectedContent);
+                    expect(transformedSchema).toEqual(expectedContent);
+                });
+                it('should render content for two schema within allOf, one radio with info, one composite', () => {
+                    const transformedSchema = removeIndentation(
+                        qTransformer.transform(radioWithInfoAndCompositeAllOfSchema)
+                    );
+                    const expectedContent = removeIndentation(
+                        radioWithInfoAndCompositeExpectedContent
+                    );
                     expect(transformedSchema).toEqual(expectedContent);
                 });
             });
