@@ -97,9 +97,27 @@ describe('allOf', () => {
                     const expectedContent = removeIndentation(twoCompositeAllOfExpectedContent);
                     expect(transformedSchema).toEqual(expectedContent);
                 });
-                it('should render content for two schema within allOf, one radio with info, one composite', () => {
+                it('should render content with correct ordering for two schema within allOf, one radio with info in the wrong order, one composite', () => {
+                    const uiSchema = {
+                        'p-applicant-enter-your-name': {
+                            options: {
+                                outputOrder: [
+                                    'q-applicant-has-crime-reference-number',
+                                    'crn-info',
+                                    'q-applicant-title', // here to test manipulating the order.
+                                    'q-applicant-last-name'
+                                ]
+                            }
+                        }
+                    };
+                    const {schema} = radioWithInfoAndCompositeAllOfSchema;
+                    const {schemaKey} = radioWithInfoAndCompositeAllOfSchema;
                     const transformedSchema = removeIndentation(
-                        qTransformer.transform(radioWithInfoAndCompositeAllOfSchema)
+                        qTransformer.transform({
+                            schemaKey,
+                            schema,
+                            uiSchema
+                        })
                     );
                     const expectedContent = removeIndentation(
                         radioWithInfoAndCompositeExpectedContent
