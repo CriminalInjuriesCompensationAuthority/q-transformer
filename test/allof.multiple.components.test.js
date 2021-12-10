@@ -22,6 +22,9 @@ const twoCompositeAllOfExpectedContent = require('./fixtures/allof/twoCompositeA
 const radioWithInfoAndCompositeAllOfSchema = require('./fixtures/allof/radioWithInfoAndCompositeAllOfSchema');
 const radioWithInfoAndCompositeExpectedContent = require('./fixtures/allof/radioWithInfoAndCompositeAllOfSchemaExpectedContent');
 
+const passportDetailsSchema = require('./fixtures/allof/passportDetailsSchema');
+const passportDetailsExpectedContent = require('./fixtures/allof/passportDetailsExpectedContent');
+
 // Remove indentation from strings when comparing them
 function removeIndentation(val) {
     const regex = /^\s+/gm;
@@ -95,6 +98,47 @@ describe('allOf', () => {
                         qTransformer.transform(twoCompositeAllOfSchema)
                     );
                     const expectedContent = removeIndentation(twoCompositeAllOfExpectedContent);
+                    expect(transformedSchema).toEqual(expectedContent);
+                });
+                it('should render content for two schema, passport details, text, date, within allOf', () => {
+                    const uiSchema = {
+                        'p--was-the-crime-reported-to-police': {
+                            options: {
+                                properties: {
+                                    'q-passport-number': {
+                                        options: {
+                                            macroOptions: {
+                                                label: {
+                                                    classes: 'govuk-label--m'
+                                                }
+                                            }
+                                        }
+                                    },
+                                    'q-expiry-date': {
+                                        options: {
+                                            macroOptions: {
+                                                fieldset: {
+                                                    legend: {
+                                                        classes: 'govuk-fieldset__legend--m'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    const {schema} = passportDetailsSchema;
+                    const {schemaKey} = passportDetailsSchema;
+                    const transformedSchema = removeIndentation(
+                        qTransformer.transform({
+                            schemaKey,
+                            schema,
+                            uiSchema
+                        })
+                    );
+                    const expectedContent = removeIndentation(passportDetailsExpectedContent);
                     expect(transformedSchema).toEqual(expectedContent);
                 });
                 it('should render content with correct ordering for two schema within allOf, one radio with info in the wrong order, one composite', () => {
