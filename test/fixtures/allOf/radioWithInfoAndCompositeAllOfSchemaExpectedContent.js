@@ -1,8 +1,8 @@
 module.exports = {
     pageTitle: 'Page Title',
     hasErrors: false,
-    content: `{% from "details/macro.njk" import govukDetails %}
-    {% from "radios/macro.njk" import govukRadios %}
+    content: `{% from "radios/macro.njk" import govukRadios %}
+    {% from "details/macro.njk" import govukDetails %}
     {% from "input/macro.njk" import govukInput %}
     <h1 class="govuk-heading-xl">Page Title</h1>
     {{ govukRadios({

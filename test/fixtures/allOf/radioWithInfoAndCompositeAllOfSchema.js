@@ -9,10 +9,6 @@ module.exports = {
                 required: ['q-applicant-has-crime-reference-number'],
                 // additionalProperties: true,
                 properties: {
-                    'crn-info': {
-                        description:
-                            '{% from "components/details/macro.njk" import govukDetails %}{{ govukDetails({summaryText: "I do not know the crime reference number",html: \'<p class="govuk-body">If you do not have your crime reference number, call 101 to speak to your local police station. They can help you get this.</p>\'})}}'
-                    },
                     'q-applicant-has-crime-reference-number': {
                         type: 'boolean',
                         title: 'Do you have a crime reference number?',
@@ -39,6 +35,15 @@ module.exports = {
                     required: {
                         'q-applicant-has-crime-reference-number':
                             'Select yes if you know the crime reference number'
+                    }
+                }
+            },
+            {
+                // additionalProperties: true,
+                properties: {
+                    'crn-info': {
+                        description:
+                            '{% from "components/details/macro.njk" import govukDetails %}{{ govukDetails({summaryText: "I do not know the crime reference number",html: \'<p class="govuk-body">If you do not have your crime reference number, call 101 to speak to your local police station. They can help you get this.</p>\'})}}'
                     }
                 }
             },
