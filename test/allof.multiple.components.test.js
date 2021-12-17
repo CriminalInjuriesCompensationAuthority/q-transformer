@@ -1,29 +1,29 @@
 const createQTransformer = require('../lib/q-transformer');
 const defaultTransformer = require('../lib/transformers/default');
 
-const textInputSchema = require('./fixtures/allof/textInputSchema');
-const textInputSchemaExpectedContent = require('./fixtures/allof/textInputSchemaExpectedContent');
+const textInputSchema = require('./fixtures/allof/text-input-schema');
+const textInputSchemaExpectedContent = require('./fixtures/allof/text-input-schema-expected-content');
 
-const enterYourNameExpectedContent = require('./fixtures/allof/enterYourNameExpectedContent');
-const applicantNameSchema = require('./fixtures/allof/enterYourNameSchema');
+const enterYourNameExpectedContent = require('./fixtures/allof/enter-your-name-expected-content');
+const applicantNameSchema = require('./fixtures/allof/enter-your-name-schema');
 
-const textAndCompositeAllOfSchemaExpectedContent = require('./fixtures/allof/textAndCompositeAllOfSchemaExpectedContent');
-const textAndCompositeAllOfSchema = require('./fixtures/allof/textAndCompositeAllOfSchema');
+const textAndCompositeAllOfSchemaExpectedContent = require('./fixtures/allof/text-and-composite-expected-content');
+const textAndCompositeAllOfSchema = require('./fixtures/allof/text-and-composite-schema');
 
-const textAndRadioSchemasExpectedContent = require('./fixtures/allof/textAndRadioSchemaExpectedContent');
-const textAndRadioAllOfSchema = require('./fixtures/allof/textAndRadioAllOfSchema');
+const textAndRadioSchemasExpectedContent = require('./fixtures/allof/text-and-radio-schema-expected-content');
+const textAndRadioAllOfSchema = require('./fixtures/allof/text-and-radio-schema');
 
-const radioButtonSchema = require('./fixtures/allof/radioButtonSchema');
-const radioButtonSchemaExpectedContent = require('./fixtures/allof/radioButtonSchemaExpectedContent');
+const radioButtonSchema = require('./fixtures/allof/radio-button-schema');
+const radioButtonSchemaExpectedContent = require('./fixtures/allof/radio-button-schema-expected-content');
 
-const twoCompositeAllOfSchema = require('./fixtures/allof/twoCompositeAllOfSchema');
-const twoCompositeAllOfExpectedContent = require('./fixtures/allof/twoCompositeAllOfSchemaExpectedContent');
+const twoCompositeAllOfSchema = require('./fixtures/allof/two-composite-schema');
+const twoCompositeAllOfExpectedContent = require('./fixtures/allof/two-composite-schema-expected-content');
 
-const radioWithInfoAndCompositeAllOfSchema = require('./fixtures/allof/radioWithInfoAndCompositeAllOfSchema');
-const radioWithInfoAndCompositeExpectedContent = require('./fixtures/allof/radioWithInfoAndCompositeAllOfSchemaExpectedContent');
+const radioWithInfoAndCompositeAllOfSchema = require('./fixtures/allof/radio-with-Info-and-composite-schema');
+const radioWithInfoAndCompositeExpectedContent = require('./fixtures/allof/radio-with-Info-and-composite-expected-content');
 
-const passportDetailsSchema = require('./fixtures/allof/passportDetailsSchema');
-const passportDetailsExpectedContent = require('./fixtures/allof/passportDetailsExpectedContent');
+const passportDetailsSchema = require('./fixtures/allof/passport-details-schema');
+const passportDetailsExpectedContent = require('./fixtures/allof/passport-details-expected-content');
 
 // Remove indentation from strings when comparing them
 function removeIndentation(val) {
