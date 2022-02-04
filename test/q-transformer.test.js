@@ -1135,6 +1135,76 @@ describe('qTransformer', () => {
                     expect(result).toEqual(expected);
                 });
             });
+
+            describe('And a const attribute', () => {
+                it('should convert it to a govukCheckbox instruction', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'q-applicant-declaration',
+                        schema: {
+                            type: 'string',
+                            title:
+                                'I have read and understood the <a href="#declaration" class="govuk-link">information and declaration</a>',
+                            const: 'i-agree'
+                        },
+                        uiSchema: {}
+                    });
+
+                    const expected = {
+                        id: 'q-applicant-declaration',
+                        dependencies: ['{% from "checkboxes/macro.njk" import govukCheckboxes %}'],
+                        componentName: 'govukCheckboxes',
+                        macroOptions: {
+                            name: 'q-applicant-declaration',
+                            idPrefix: 'q-applicant-declaration',
+                            items: [
+                                {
+                                    value: 'i-agree',
+                                    html:
+                                        'I have read and understood the <a href="#declaration" class="govuk-link">information and declaration</a>'
+                                }
+                            ]
+                        }
+                    };
+
+                    expect(result).toEqual(expected);
+                });
+
+                it('should convert it to a govukCheckbox instruction with additional properties', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'q-applicant-declaration',
+                        schema: {
+                            type: 'string',
+                            title:
+                                'I have read and understood the <a href="#declaration" class="govuk-link">information and declaration</a>',
+                            const: 'i-agree',
+                            description: 'this is a description'
+                        },
+                        uiSchema: {}
+                    });
+
+                    const expected = {
+                        id: 'q-applicant-declaration',
+                        dependencies: ['{% from "checkboxes/macro.njk" import govukCheckboxes %}'],
+                        componentName: 'govukCheckboxes',
+                        macroOptions: {
+                            name: 'q-applicant-declaration',
+                            idPrefix: 'q-applicant-declaration',
+                            items: [
+                                {
+                                    value: 'i-agree',
+                                    html:
+                                        'I have read and understood the <a href="#declaration" class="govuk-link">information and declaration</a>',
+                                    hint: {
+                                        text: 'this is a description'
+                                    }
+                                }
+                            ]
+                        }
+                    };
+
+                    expect(result).toEqual(expected);
+                });
+            });
         });
 
         describe('Given a JSON Schema with type:array', () => {
