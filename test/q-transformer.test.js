@@ -1379,13 +1379,13 @@ describe('qTransformer', () => {
                                                         {
                                                             type: 'composite',
                                                             id: 'applicant-name',
-                                                            title: 'Enter your name',
+                                                            label: 'Enter your name',
                                                             themeId: 'applicant_details',
                                                             values: [
                                                                 {
                                                                     type: 'simple',
                                                                     id: 'q-applicant-title',
-                                                                    title: 'Title',
+                                                                    label: 'Title',
                                                                     closedQuestion: false,
                                                                     themeId: 'applicant_details',
                                                                     value: 'Mr'
@@ -1393,7 +1393,7 @@ describe('qTransformer', () => {
                                                                 {
                                                                     type: 'simple',
                                                                     id: 'q-applicant-first-name',
-                                                                    title: 'First name',
+                                                                    label: 'First name',
                                                                     closedQuestion: false,
                                                                     themeId: 'applicant_details',
                                                                     value: 'Foo'
@@ -1401,7 +1401,7 @@ describe('qTransformer', () => {
                                                                 {
                                                                     type: 'simple',
                                                                     id: 'q-applicant-last-name',
-                                                                    title: 'Last name',
+                                                                    label: 'Last name',
                                                                     closedQuestion: false,
                                                                     themeId: 'applicant_details',
                                                                     value: 'Bar'
@@ -1448,13 +1448,13 @@ describe('qTransformer', () => {
                                                         {
                                                             type: 'composite',
                                                             id: 'applicant-name',
-                                                            title: 'Enter your name',
+                                                            label: 'Enter your name',
                                                             themeId: 'applicant_details',
                                                             values: [
                                                                 {
                                                                     type: 'simple',
                                                                     id: 'q-applicant-title',
-                                                                    title: 'Title',
+                                                                    label: 'Title',
                                                                     closedQuestion: false,
                                                                     themeId: 'applicant_details',
                                                                     value: 'Mr'
@@ -1462,7 +1462,7 @@ describe('qTransformer', () => {
                                                                 {
                                                                     type: 'simple',
                                                                     id: 'q-applicant-first-name',
-                                                                    title: 'First name',
+                                                                    label: 'First name',
                                                                     closedQuestion: false,
                                                                     themeId: 'applicant_details',
                                                                     value: 'Foo'
@@ -1470,7 +1470,7 @@ describe('qTransformer', () => {
                                                                 {
                                                                     type: 'simple',
                                                                     id: 'q-applicant-last-name',
-                                                                    title: 'Last name',
+                                                                    label: 'Last name',
                                                                     closedQuestion: false,
                                                                     themeId: 'applicant_details',
                                                                     value: 'Bar'
@@ -1489,7 +1489,7 @@ describe('qTransformer', () => {
                                                             type: 'simple',
                                                             id:
                                                                 'q-applicant-when-did-the-crime-happen',
-                                                            title: 'When did the crime happen?',
+                                                            label: 'When did the crime happen?',
                                                             closedQuestion: false,
                                                             themeId: 'crime_details',
                                                             value: '2019-01-01T00:00:00.000Z',
@@ -4953,18 +4953,8 @@ describe('qTransformer', () => {
             });
             describe('parseDateFormat', () => {
                 const helper = answerFormatHelper;
-                describe('Given a format with only a year', () => {
-                    it('should parse into a user readable date format', () => {
-                        const precision = 'YY';
 
-                        const actual = helper.parseDateFormat(precision);
-                        const expected = 'YYYY';
-
-                        expect(expected).toMatch(actual);
-                    });
-                });
-
-                describe('Given a format with only a year and month', () => {
+                describe('Given any other format', () => {
                     it('should parse into a user readable date format', () => {
                         const precision = 'YY-MM';
 
@@ -4975,8 +4965,8 @@ describe('qTransformer', () => {
                     });
                 });
 
-                describe('Given any other format', () => {
-                    it('should try to parse into the default date format', () => {
+                describe('Given a format with a day part', () => {
+                    it('should parse into a user readable date format', () => {
                         const precision = 'YY/MM DDD';
 
                         const actual = helper.parseDateFormat(precision);
