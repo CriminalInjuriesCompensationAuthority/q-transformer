@@ -3,24 +3,7 @@ const defaultTransformer = require('../lib/transformers/default');
 const govukSelectTransformer = require('../lib/transformers/govukSelect');
 const answerFormatHelper = require('../lib/helpers/answerHelper');
 
-// Remove indentation from strings when comparing them
-function removeIndentation(val) {
-    const regex = /^\s+/gm;
-
-    if (val && typeof val === 'object' && !Array.isArray(val)) {
-        return JSON.parse(
-            JSON.stringify(val, (key, value) => {
-                if (typeof value === 'string') {
-                    return value.replace(regex, '');
-                }
-
-                return value;
-            })
-        );
-    }
-
-    return val.replace(regex, '');
-}
+const {removeIndentation} = require('./schema-string-helper');
 
 describe('qTransformer', () => {
     let qTransformer;
