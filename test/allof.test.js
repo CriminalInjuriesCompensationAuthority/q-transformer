@@ -1,24 +1,7 @@
 const createQTransformer = require('../lib/q-transformer');
 const defaultTransformer = require('../lib/transformers/default');
 
-// Remove indentation from strings when comparing them
-function removeIndentation(val) {
-    const regex = /^\s+/gm;
-
-    if (val && typeof val === 'object' && !Array.isArray(val)) {
-        return JSON.parse(
-            JSON.stringify(val, (key, value) => {
-                if (typeof value === 'string') {
-                    return value.replace(regex, '');
-                }
-
-                return value;
-            })
-        );
-    }
-
-    return val.replace(regex, '');
-}
+const {removeIndentation} = require('./schema-string-helper');
 
 describe('allOf', () => {
     let qTransformer;
