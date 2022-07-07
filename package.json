@@ -27,7 +27,7 @@
     },
     "dependencies": {
         "lodash.merge": "^4.6.2",
-        "moment": "^2.24.0",
+        "moment": "^2.29.4",
         "nanoid": "^3.2.0"
     },
     "_m0": {
