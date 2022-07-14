@@ -9,10 +9,7 @@ module.exports = {
             'q-radio-button': {
                 title: 'This is a radio button test',
                 type: 'boolean',
-                oneOf: [
-                    {title: 'Yes', const: true},
-                    {title: 'No', const: false}
-                ]
+                oneOf: [{title: 'Yes', const: true}, {title: 'No', const: false}]
             }
         },
         errorMessage: {
