@@ -17,11 +17,13 @@ module.exports = {
                         oneOf: [
                             {
                                 title: 'Yes',
-                                const: true
+                                const: true,
+                                description: 'You can provide any text.'
                             },
                             {
                                 title: 'No',
-                                const: false
+                                const: false,
+                                description: 'You can provide any text.'
                             }
                         ],
                         meta: {
