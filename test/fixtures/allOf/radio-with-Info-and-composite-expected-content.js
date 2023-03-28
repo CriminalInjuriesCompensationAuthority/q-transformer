@@ -19,11 +19,17 @@ module.exports = {
     "items": [
         {
             "value": true,
-            "text": "Yes"
+            "text": "Yes",
+            "hint": {
+                "text": "You can provide any text."
+            }
     },
     {
         "value": false,
-        "text": "No"
+        "text": "No",
+        "hint": {
+            "text": "You can provide any text."
+        }
     }
 ],
 "classes": "govuk-radios--inline"

@@ -16,6 +16,9 @@ const textAndRadioAllOfSchema = require('./fixtures/allOf/text-and-radio-schema'
 const radioButtonSchema = require('./fixtures/allOf/radio-button-schema');
 const radioButtonSchemaExpectedContent = require('./fixtures/allOf/radio-button-schema-expected-content');
 
+const radioButtonSchemaWithoutDescription = require('./fixtures/allOf/radio-button-schema-without-description');
+const radioButtonSchemaExpectedContentWithoutDescription = require('./fixtures/allOf/radio-button-schema-expected-content-without-description');
+
 const twoCompositeAllOfSchema = require('./fixtures/allOf/two-composite-schema');
 const twoCompositeAllOfExpectedContent = require('./fixtures/allOf/two-composite-schema-expected-content');
 
@@ -51,6 +54,15 @@ describe('allOf', () => {
                         qTransformer.transform(radioButtonSchema)
                     );
                     const expectedContent = removeIndentation(radioButtonSchemaExpectedContent);
+                    expect(transformedSchema).toEqual(expectedContent);
+                });
+                it('should render a component for one radio button component without description', () => {
+                    const transformedSchema = removeIndentation(
+                        qTransformer.transform(radioButtonSchemaWithoutDescription)
+                    );
+                    const expectedContent = removeIndentation(
+                        radioButtonSchemaExpectedContentWithoutDescription
+                    );
                     expect(transformedSchema).toEqual(expectedContent);
                 });
             });
