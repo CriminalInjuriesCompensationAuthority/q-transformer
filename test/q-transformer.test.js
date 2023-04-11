@@ -534,7 +534,7 @@ describe('qTransformer', () => {
     });
 
     describe('Defaults', () => {
-        describe('Given a JSON schema with only a description', () => {
+        describe('Given a JSON schema with only a description with nunjuck instruction', () => {
             it('should return a raw content instruction', () => {
                 const result = qTransformer.transform({
                     schemaKey: 'declaration',
@@ -558,6 +558,31 @@ describe('qTransformer', () => {
                         {{ govukWarningText({
                             text: "You could be prosecuted or get less compensation if you give false or misleading information."
                         }) }}
+                    `
+                };
+
+                expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+            });
+        });
+
+        describe('Given a JSON schema with only a description with nunjuck no instruction', () => {
+            it('should return a raw content with no instruction', () => {
+                const result = qTransformer.transform({
+                    schemaKey: 'declaration',
+                    schema: {
+                        description: `
+                            <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
+                        `
+                    },
+                    uiSchema: {}
+                });
+
+                const expected = {
+                    id: 'declaration',
+                    dependencies: [],
+                    componentName: 'rawContent',
+                    content: `
+                        <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
                     `
                 };
 
