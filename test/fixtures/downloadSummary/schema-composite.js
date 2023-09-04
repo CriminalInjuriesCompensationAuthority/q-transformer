@@ -3,6 +3,7 @@ const schemaComposite = {
     schema: {
         type: 'object',
         downloadSummary: true,
+        description: 'Check your answers before sending your application',
         properties: {
             summaryInfo: {
                 urlPath: 'apply',
@@ -55,6 +56,6 @@ const schemaComposite = {
 };
 
 const schemaCompositeContent =
-    '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Enter your name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Foo Bar"\n}\n}\n]\n}) }}';
+    '<h1 class="govuk-heading-l">Check your answers before sending your application</h1>\n<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Enter your name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Foo Bar"\n}\n}\n]\n}) }}';
 
 module.exports = {schemaComposite, schemaCompositeContent};

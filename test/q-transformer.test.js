@@ -1374,6 +1374,8 @@ describe('qTransformer', () => {
                                 schemaKey: 'p--check-your-answers',
                                 schema: {
                                     type: 'object',
+                                    description:
+                                        'Check your answers before sending your application',
                                     properties: {
                                         summaryInfo: {
                                             urlPath: 'apply',
@@ -1428,7 +1430,7 @@ describe('qTransformer', () => {
                             const expected = {
                                 componentName: 'summary',
                                 content:
-                                    '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Enter your name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Foo Bar"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Enter your name"\n}\n]\n}\n}\n]\n}) }}',
+                                    '<h1 class="govuk-heading-l">Check your answers before sending your application</h1>\n<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Enter your name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Foo Bar"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Enter your name"\n}\n]\n}\n}\n]\n}) }}',
                                 dependencies: [
                                     '{% from "summary-list/macro.njk" import govukSummaryList %}'
                                 ],
@@ -1443,6 +1445,8 @@ describe('qTransformer', () => {
                                 schemaKey: 'p--check-your-answers',
                                 schema: {
                                     type: 'object',
+                                    description:
+                                        'Check your answers before sending your application',
                                     properties: {
                                         summaryInfo: {
                                             urlPath: 'apply',
@@ -1522,7 +1526,7 @@ describe('qTransformer', () => {
                             const expected = {
                                 componentName: 'summary',
                                 content:
-                                    '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Enter your name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Foo Bar"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Enter your name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "When did the crime happen?"\n}\n]\n}\n}\n]\n}) }}',
+                                    '<h1 class="govuk-heading-l">Check your answers before sending your application</h1>\n<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Enter your name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Foo Bar"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-enter-your-name?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "Enter your name"\n}\n]\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n},\n"actions": {\n"items": [\n{\n"href": "/apply/applicant-when-did-the-crime-happen?next=check-your-answers",\n"text": "Change",\n"visuallyHiddenText": "When did the crime happen?"\n}\n]\n}\n}\n]\n}) }}',
                                 dependencies: [
                                     '{% from "summary-list/macro.njk" import govukSummaryList %}'
                                 ],

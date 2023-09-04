@@ -3,6 +3,7 @@ const schemaCompositeAndDate = {
     schema: {
         type: 'object',
         downloadSummary: true,
+        description: 'Check your answers before sending your application',
         properties: {
             summaryInfo: {
                 urlPath: 'apply',
@@ -78,6 +79,6 @@ const schemaCompositeAndDate = {
 };
 
 const schemaCompositeAndDateContent =
-    '<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Enter your name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Foo Bar"\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n}\n}\n]\n}) }}';
+    '<h1 class="govuk-heading-l">Check your answers before sending your application</h1>\n<h2 class="govuk-heading-l">Your details</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "Enter your name",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "Mr Foo Bar"\n}\n}\n]\n}) }}<h2 class="govuk-heading-l">About the crime</h2>\n{{ govukSummaryList({\nclasses: \'govuk-!-margin-bottom-9\',\nrows: [\n{\n"key": {\n"text": "When did the crime happen?",\n"classes": "govuk-!-width-one-half"\n},\n"value": {\n"html": "01 January 2019"\n}\n}\n]\n}) }}';
 
 module.exports = {schemaCompositeAndDate, schemaCompositeAndDateContent};
