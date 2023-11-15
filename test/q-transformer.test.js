@@ -2184,73 +2184,247 @@ describe('qTransformer', () => {
                             pageTitle: 'How would you prefer to be contacted?',
                             hasErrors: false,
                             content: `
-                            {% from "input/macro.njk" import govukInput %}
-                            {% from "radios/macro.njk" import govukRadios %}
-                            {% set email %}{{ govukInput({
-                                "id": "email",
-                                "name": "email",
-                                "type": "email",
-                                "label": {
-                                    "html": "Email address"
-                                },
-                                "hint": {
-                                    "text": "e.g. something@something.com"
+                        {% from "input/macro.njk" import govukInput %}
+                        {% from "radios/macro.njk" import govukRadios %}
+                        {% set email %}{{ govukInput({
+                            "id": "email",
+                            "name": "email",
+                            "type": "email",
+                            "label": {
+                                "html": "Email address"
+                            },
+                            "hint": {
+                                "text": "e.g. something@something.com"
+                            }
+                        }) }}{% endset -%}
+                        {% set phone %}{{ govukInput({
+                            "id": "phone",
+                            "name": "phone",
+                            "type": "text",
+                            "label": {
+                                "html": "Phone number"
+                            },
+                            "hint": null
+                        }) }}{% endset -%}
+                        {% set text %}{{ govukInput({
+                            "id": "text",
+                            "name": "text",
+                            "type": "text",
+                            "label": {
+                                "html": "Mobile phone number"
+                            },
+                            "hint": null
+                        }) }}{% endset -%}{{ govukRadios({
+                            "idPrefix": "contact",
+                            "name": "contact",
+                            "fieldset": {
+                                "legend": {
+                                    "text": "How would you prefer to be contacted?",
+                                    "isPageHeading": true,
+                                    "classes": "govuk-fieldset__legend--xl"
                                 }
-                            }) }}{% endset -%}
-                            {% set phone %}{{ govukInput({
-                                "id": "phone",
-                                "name": "phone",
-                                "type": "text",
-                                "label": {
-                                    "html": "Phone number"
-                                },
-                                "hint": null
-                            }) }}{% endset -%}
-                            {% set text %}{{ govukInput({
-                                "id": "text",
-                                "name": "text",
-                                "type": "text",
-                                "label": {
-                                    "html": "Mobile phone number"
-                                },
-                                "hint": null
-                            }) }}{% endset -%}{{ govukRadios({
-                                "idPrefix": "contact",
-                                "name": "contact",
-                                "fieldset": {
-                                    "legend": {
-                                        "text": "How would you prefer to be contacted?",
-                                        "isPageHeading": true,
-                                        "classes": "govuk-fieldset__legend--xl"
+                            },
+                            "hint": {
+                                "text": "Select one option."
+                            },
+                            "items": [
+                                {
+                                    "value": "email",
+                                    "text": "Email",
+                                    "conditional": {
+                                        "html": ([email] | join())
                                     }
                                 },
-                                "hint": {
-                                    "text": "Select one option."
+                                {
+                                    "value": "phone",
+                                    "text": "Phone",
+                                    "conditional": {
+                                        "html": ([phone] | join())
+                                    }
                                 },
-                                "items": [
+                                {
+                                    "value": "text",
+                                    "text": "Text message",
+                                    "conditional": {
+                                        "html": ([text] | join())
+                                    }
+                                }
+                            ]
+                        }) }}`
+                        };
+
+                        expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                    });
+
+                    it('should convert an allOf to a govukRadios with conditional content', () => {
+                        const result = qTransformer.transform({
+                            schemaKey: 'p-some-id',
+                            schema: {
+                                type: 'object',
+                                allOf: [
                                     {
-                                        "value": "email",
-                                        "text": "Email",
-                                        "conditional": {
-                                            "html": ([email] | join())
+                                        title: 'Have you applied to us before?',
+                                        required: ['q-applicant-have-you-applied-to-us-before'],
+                                        propertyNames: {
+                                            enum: [
+                                                'q-applicant-have-you-applied-to-us-before',
+                                                'q-enter-your-previous-reference-number'
+                                            ]
+                                        },
+                                        allOf: [
+                                            {
+                                                properties: {
+                                                    'q-applicant-have-you-applied-to-us-before': {
+                                                        type: 'boolean',
+                                                        oneOf: [
+                                                            {
+                                                                title: 'Yes',
+                                                                const: true
+                                                            },
+                                                            {
+                                                                title: 'No',
+                                                                const: false
+                                                            }
+                                                        ],
+                                                        meta: {
+                                                            classifications: {
+                                                                theme: 'other-compensation'
+                                                            },
+                                                            summary: {
+                                                                title:
+                                                                    'l10nt:q-applicant-have-you-applied-to-us-before.title{?lng,context,ns}'
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                properties: {
+                                                    'q-enter-your-previous-reference-number': {
+                                                        type: 'string',
+                                                        title:
+                                                            'Enter your previous reference number if you know it (optional)',
+                                                        maxLength: 50,
+                                                        errorMessage: {
+                                                            maxLength:
+                                                                'Previous reference number must be 50 characters or less'
+                                                        },
+                                                        meta: {
+                                                            classifications: {
+                                                                theme: 'other-compensation'
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        errorMessage: {
+                                            required: {
+                                                'q-applicant-have-you-applied-to-us-before':
+                                                    'l10nt:q-applicant-have-you-applied-to-us-before.error.required{?lng,context,ns}'
+                                            }
                                         }
+                                    }
+                                ],
+                                examples: [
+                                    {
+                                        'q-applicant-have-you-applied-to-us-before': true,
+                                        'q-enter-your-previous-reference-number': '11//123456'
                                     },
                                     {
-                                        "value": "phone",
-                                        "text": "Phone",
-                                        "conditional": {
-                                            "html": ([phone] | join())
-                                        }
+                                        'q-applicant-have-you-applied-to-us-before': false
+                                    }
+                                ],
+                                invalidExamples: [
+                                    {
+                                        'q-applicant-have-you-applied-to-us-before': false,
+                                        'q-enter-your-previous-reference-number': '11//123456'
                                     },
                                     {
-                                        "value": "text",
-                                        "text": "Text message",
-                                        "conditional": {
-                                            "html": ([text] | join())
-                                        }
+                                        'q-applicant-have-you-applied-to-us-before': true,
+                                        'q-enter-your-previous-reference-number': 12345
                                     }
                                 ]
-                            }) }}`
+                            },
+                            uiSchema: {
+                                'p-applicant-have-you-applied-to-us-before': {
+                                    // transformer: 'form',
+                                    options: {
+                                        transformOrder: [
+                                            'q-enter-your-previous-reference-number',
+                                            'q-applicant-have-you-applied-to-us-before'
+                                        ],
+                                        outputOrder: ['q-applicant-have-you-applied-to-us-before'],
+                                        properties: {
+                                            'q-applicant-have-you-applied-to-us-before': {
+                                                // transformer: 'govukRadios',
+                                                options: {
+                                                    conditionalComponentMap: [
+                                                        {
+                                                            itemValue: true,
+                                                            componentIds: [
+                                                                'q-enter-your-previous-reference-number'
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            'q-enter-your-previous-reference-number': {
+                                                options: {
+                                                    macroOptions: {
+                                                        classes: 'govuk-input--width-20'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+                        const expected = {
+                            pageTitle: 'Have you applied to us before?',
+                            hasErrors: false,
+                            content: `  {% from "radios/macro.njk" import govukRadios %}
+                                        {% from "input/macro.njk" import govukInput %}
+                                        {% from "fieldset/macro.njk" import govukFieldset %}
+                                        {% call govukFieldset({
+                                            legend: {
+                                                html: "Have you applied to us before?",
+                                                classes: "govuk-fieldset__legend--xl",
+                                                isPageHeading: true
+                                            }
+                                        }) %}
+                                        {{ govukRadios({
+                                            "idPrefix": "q-applicant-have-you-applied-to-us-before",
+                                            "name": "q-applicant-have-you-applied-to-us-before",
+                                            "fieldset": {
+                                                "legend": {}
+                                            },
+                                            "hint": null,
+                                            "items": [
+                                                {
+                                                    "value": true,
+                                                    "text": "Yes"
+                                                },
+                                                {
+                                                    "value": false,
+                                                    "text": "No"
+                                                }
+                                            ],
+                                            "classes": "govuk-radios--inline"
+                                        }) }}
+                                        {{ govukInput({
+                                            "id": "q-enter-your-previous-reference-number",
+                                            "name": "q-enter-your-previous-reference-number",
+                                            "type": "text",
+                                            "label": {
+                                                "html": "Enter your previous reference number if you know it (optional)"
+                                            },
+                                            "hint": null,
+                                            "classes": "govuk-input--width-20"
+                                        }) }}
+                                        {% endcall %}`
                         };
 
                         expect(removeIndentation(result)).toEqual(removeIndentation(expected));
