@@ -1,3 +1,5 @@
+'use strict';
+
 const createQTransformer = require('../lib/q-transformer');
 const defaultTransformer = require('../lib/transformers/default');
 const govukSelectTransformer = require('../lib/transformers/govukSelect');
@@ -1534,6 +1536,139 @@ describe('qTransformer', () => {
                             };
 
                             expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                        });
+
+                        describe('Given a UI schema has been provided', () => {
+                            it('should order govukSummaryList adhereing to the UI schema', () => {
+                                const result = qTransformer.transform({
+                                    schemaKey: 'p--check-your-answers',
+                                    schema: {
+                                        type: 'object',
+                                        description:
+                                            'Check your answers before sending your application',
+                                        properties: {
+                                            summaryInfo: {
+                                                urlPath: 'apply',
+                                                editAnswerText: 'Change',
+                                                summaryStructure: [
+                                                    {
+                                                        type: 'theme',
+                                                        id: 'foo',
+                                                        title: 'Foo',
+                                                        values: [
+                                                            {
+                                                                id: 'q-second',
+                                                                type: 'simple',
+                                                                label: 'Second',
+                                                                value: '2',
+                                                                sectionId: 'p-baz',
+                                                                theme: 'foo'
+                                                            },
+                                                            {
+                                                                id: 'q-first',
+                                                                type: 'simple',
+                                                                label: 'First',
+                                                                value: '1',
+                                                                valueLabel: '1',
+                                                                sectionId: 'p-baz',
+                                                                theme: 'foo'
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    fullUiSchema: {
+                                        'p-baz': {
+                                            options: {
+                                                transformOrder: ['q-second', 'q-first'],
+                                                outputOrder: ['q-first'],
+                                                properties: {
+                                                    'q-first': {
+                                                        options: {
+                                                            conditionalComponentMap: [
+                                                                {
+                                                                    itemValue: '1',
+                                                                    componentIds: ['q-second']
+                                                                }
+                                                            ]
+                                                        }
+                                                    },
+                                                    'q-second': {
+                                                        options: {
+                                                            macroOptions: {
+                                                                classes: 'govuk-input--width-20'
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+
+                                const qFirst =
+                                    '"key": {\n' +
+                                    '"text": "First",\n' +
+                                    '"classes": "govuk-!-width-one-half"\n' +
+                                    '},\n' +
+                                    '"value": {\n' +
+                                    '"html": "1"\n' +
+                                    '},\n' +
+                                    '"actions": {\n' +
+                                    '"items": [\n' +
+                                    '{\n' +
+                                    '"href": "/apply/baz?next=info-check-your-answers",\n' +
+                                    '"text": "Change",\n' +
+                                    '"visuallyHiddenText": "First"\n' +
+                                    '}\n' +
+                                    ']\n' +
+                                    '}\n';
+                                const qSecond =
+                                    '"key": {\n' +
+                                    '"text": "Second",\n' +
+                                    '"classes": "govuk-!-width-one-half"\n' +
+                                    '},\n' +
+                                    '"value": {\n' +
+                                    '"html": "2"\n' +
+                                    '},\n' +
+                                    '"actions": {\n' +
+                                    '"items": [\n' +
+                                    '{\n' +
+                                    '"href": "/apply/baz?next=info-check-your-answers",\n' +
+                                    '"text": "Change",\n' +
+                                    '"visuallyHiddenText": "Second"\n' +
+                                    '}\n' +
+                                    ']\n' +
+                                    '}\n';
+                                const expected = {
+                                    componentName: 'summary',
+                                    content:
+                                        // eslint-disable-next-line prefer-template
+                                        '<h1 class="govuk-heading-l">Check your answers before sending your application</h1>\n' +
+                                        '<h2 class="govuk-heading-l">Foo</h2>\n' +
+                                        '{{ govukSummaryList({\n' +
+                                        "classes: 'govuk-!-margin-bottom-9',\n" +
+                                        'rows: [\n' +
+                                        '{\n' +
+                                        qFirst +
+                                        '},\n' +
+                                        '{\n' +
+                                        qSecond +
+                                        '}\n' +
+                                        ']\n' +
+                                        '}) }}',
+                                    dependencies: [
+                                        '{% from "summary-list/macro.njk" import govukSummaryList %}'
+                                    ],
+                                    id: 'p--check-your-answers'
+                                };
+
+                                expect(removeIndentation(result)).toEqual(
+                                    removeIndentation(expected)
+                                );
+                            });
                         });
                     });
 
