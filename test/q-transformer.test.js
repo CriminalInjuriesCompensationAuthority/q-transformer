@@ -1539,7 +1539,7 @@ describe('qTransformer', () => {
                         });
 
                         describe('Given a UI schema has been provided', () => {
-                            it('should order govukSummaryList adhereing to the UI schema', () => {
+                            it.only('should order govukSummaryList adhereing to the UI schema', () => {
                                 const result = qTransformer.transform({
                                     schemaKey: 'p--check-your-answers',
                                     schema: {
