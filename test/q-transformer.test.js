@@ -1570,6 +1570,23 @@ describe('qTransformer', () => {
                                                                 valueLabel: '1',
                                                                 sectionId: 'p-baz',
                                                                 theme: 'foo'
+                                                            },
+                                                            {
+                                                                id: 'q-fourth',
+                                                                type: 'simple',
+                                                                label: 'Fourth',
+                                                                value: '4',
+                                                                sectionId: 'p-bar',
+                                                                theme: 'foo'
+                                                            },
+                                                            {
+                                                                id: 'q-third',
+                                                                type: 'simple',
+                                                                label: 'Third',
+                                                                value: '3',
+                                                                valueLabel: '3',
+                                                                sectionId: 'p-bar',
+                                                                theme: 'foo'
                                                             }
                                                         ]
                                                     }
@@ -1601,6 +1618,12 @@ describe('qTransformer', () => {
                                                         }
                                                     }
                                                 }
+                                            }
+                                        },
+                                        'p-bar': {
+                                            options: {
+                                                outputOrder: ['q-third', 'q-fourth'],
+                                                summaryOrder: ['q-third', 'q-fourth']
                                             }
                                         }
                                     }
@@ -1640,6 +1663,40 @@ describe('qTransformer', () => {
                                     '}\n' +
                                     ']\n' +
                                     '}\n';
+                                const qThird =
+                                    '"key": {\n' +
+                                    '"text": "Third",\n' +
+                                    '"classes": "govuk-!-width-one-half"\n' +
+                                    '},\n' +
+                                    '"value": {\n' +
+                                    '"html": "3"\n' +
+                                    '},\n' +
+                                    '"actions": {\n' +
+                                    '"items": [\n' +
+                                    '{\n' +
+                                    '"href": "/apply/bar?next=info-check-your-answers",\n' +
+                                    '"text": "Change",\n' +
+                                    '"visuallyHiddenText": "Third"\n' +
+                                    '}\n' +
+                                    ']\n' +
+                                    '}\n';
+                                const qFourth =
+                                    '"key": {\n' +
+                                    '"text": "Fourth",\n' +
+                                    '"classes": "govuk-!-width-one-half"\n' +
+                                    '},\n' +
+                                    '"value": {\n' +
+                                    '"html": "4"\n' +
+                                    '},\n' +
+                                    '"actions": {\n' +
+                                    '"items": [\n' +
+                                    '{\n' +
+                                    '"href": "/apply/bar?next=info-check-your-answers",\n' +
+                                    '"text": "Change",\n' +
+                                    '"visuallyHiddenText": "Fourth"\n' +
+                                    '}\n' +
+                                    ']\n' +
+                                    '}\n';
                                 const expected = {
                                     componentName: 'summary',
                                     content:
@@ -1654,6 +1711,12 @@ describe('qTransformer', () => {
                                         '},\n' +
                                         '{\n' +
                                         qSecond +
+                                        '},\n' +
+                                        '{\n' +
+                                        qThird +
+                                        '},\n' +
+                                        '{\n' +
+                                        qFourth +
                                         '}\n' +
                                         ']\n' +
                                         '}) }}',
