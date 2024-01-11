@@ -1,6 +1,6 @@
 {
     "name": "q-transformer",
-    "version": "5.0.1",
+    "version": "5.0.2",
     "engines": {
         "npm": ">=8.5.2",
         "node": ">=16.0.0"
