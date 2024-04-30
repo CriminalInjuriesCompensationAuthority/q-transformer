@@ -5471,4 +5471,138 @@ describe('qTransformer', () => {
             });
         });
     });
+    describe('Options specified in template', () => {
+        describe('Given a page JSON schema with an options property', () => {
+            describe('And a UI schema with options for that schema', () => {
+                it('should merge both options, overwriting duplicated properties using the page JSON schema options', () => {
+                    const result = qTransformer.transform({
+                        schemaKey: 'p-some-id',
+                        schema: {
+                            type: 'object',
+                            propertyNames: {
+                                enum: [
+                                    'q-main-contact-question',
+                                    'q-conditionally-revealed-free-text-question'
+                                ]
+                            },
+                            properties: {
+                                'q-main-contact-question': {
+                                    title: 'How would you prefer to be contacted?',
+                                    description: 'Select one option.',
+                                    type: 'string',
+                                    oneOf: [
+                                        {
+                                            title: 'Email',
+                                            const: 'email'
+                                        }
+                                    ]
+                                },
+                                'q-conditionally-revealed-free-text-question': {
+                                    type: 'string',
+                                    description: 'e.g. something@something.com',
+                                    format: 'email',
+                                    title: 'Email address'
+                                }
+                            },
+                            required: ['q-main-contact-question'],
+                            allOf: [
+                                {$ref: '#/definitions/if-email-contact-then-email-is-required'}
+                            ],
+                            definitions: {
+                                'if-email-contact-then-email-is-required': {
+                                    if: {
+                                        properties: {
+                                            'q-main-contact-question': {const: 'email'}
+                                        }
+                                    },
+                                    then: {
+                                        required: ['q-conditionally-revealed-free-text-question'],
+                                        propertyNames: {
+                                            enum: [
+                                                'q-main-contact-question',
+                                                'q-conditionally-revealed-free-text-question'
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            options: {
+                                transformOrder: [
+                                    'q-conditionally-revealed-free-text-question',
+                                    'q-main-contact-question'
+                                ],
+                                outputOrder: ['q-main-contact-question'],
+                                properties: {
+                                    'q-main-contact-question': {
+                                        options: {
+                                            conditionalComponentMap: [
+                                                {
+                                                    itemValue: 'email',
+                                                    componentIds: [
+                                                        'q-conditionally-revealed-free-text-question'
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        uiSchema: {
+                            'p-some-id': {
+                                options: {
+                                    transformOrder: [
+                                        'q-main-contact-question',
+                                        'q-conditionally-revealed-free-text-question'
+                                    ],
+                                    outputOrder: ['q-main-contact-question']
+                                }
+                            }
+                        }
+                    });
+                    const expected = {
+                        pageTitle: 'How would you prefer to be contacted?',
+                        hasErrors: false,
+                        content: `{% from "input/macro.njk" import govukInput %}
+                            {% from "radios/macro.njk" import govukRadios %}
+                            {% set q_conditionally_revealed_free_text_question %}{{ govukInput({
+                                "id": "q-conditionally-revealed-free-text-question",
+                                "name": "q-conditionally-revealed-free-text-question",
+                                "type": "email",
+                                "label": {
+                                    "html": "Email address"
+                                },
+                                "hint": {
+                                    "text": "e.g. something@something.com"
+                                }
+                            }) }}{% endset -%}{{ govukRadios({
+                                "idPrefix": "q-main-contact-question",
+                                "name": "q-main-contact-question",
+                                "fieldset": {
+                                    "legend": {
+                                        "text": "How would you prefer to be contacted?",
+                                        "isPageHeading": true,
+                                        "classes": "govuk-fieldset__legend--xl"
+                                    }
+                                },
+                                "hint": {
+                                    "text": "Select one option."
+                                },
+                                "items": [
+                                    {
+                                        "value": "email",
+                                        "text": "Email",
+                                        "conditional": {
+                                            "html": ([q_conditionally_revealed_free_text_question] | join())
+                                        }
+                                    }
+                                ],
+                                "classes": "govuk-radios--inline"
+                            }) }}`
+                    };
+                    expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+                });
+            });
+        });
+    });
 });
