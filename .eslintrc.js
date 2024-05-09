@@ -6,10 +6,10 @@ const config = {
     },
     // overwrite airbnb-base to use commonjs instead of ES6 modules
     parserOptions: {
-        ecmaVersion: 2021,
-        sourceType: 'script',
+        ecmaVersion: 9,
+        sourceType: 'module',
         ecmaFeatures: {
-            modules: false
+            modules: true
         }
     },
     rules: {
