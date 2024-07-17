@@ -5605,4 +5605,189 @@ describe('qTransformer', () => {
             });
         });
     });
+
+    describe('govukTaskList transformer', () => {
+        it('should transform a task list schema', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'task-list',
+                schema: {
+                    type: 'object',
+                    title: 'Claim criminal injuries compensation',
+                    description:
+                        'You can <a href="/account/sign-in" class="govuk-link">create a GOV.UK One Login</a> to save your application and return to it later.',
+                    properties: {
+                        taskListInfo: {
+                            type: 'object',
+                            sections: [
+                                {
+                                    id: 's-about-application',
+                                    title: 'About App',
+                                    tasks: [
+                                        {
+                                            id: 't-about-application',
+                                            title: 'About App',
+                                            status: 'completed'
+                                        }
+                                    ]
+                                },
+                                {
+                                    id: 's_applicant_details',
+                                    title: 'Applicant deets',
+                                    tasks: [
+                                        {
+                                            id: 't_applicant_personal-details',
+                                            title: 'Personal details',
+                                            status: 'completed'
+                                        },
+                                        {
+                                            id: 't_applicant_residency-and-nationality',
+                                            title: 'Residency',
+                                            status: 'incomplete'
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                },
+                options: {}
+            });
+
+            const expected = {
+                componentName: 'govukTaskList',
+                dependencies: ['{% from "task-list/macro.njk" import govukTaskList %}'],
+                id: 'task-list',
+                content: `
+                    <h1 class="govuk-heading-xl">Claim criminal injuries compensation</h1>
+                    <p class="govuk-body">You can <a href="/account/sign-in" class="govuk-link">create a GOV.UK One Login</a> to save your application and return to it later.</p>
+                    <h2 id="govuk-task-list-section-heading-s-about-application" class="govuk-heading-m govuk-task-list-section-heading">About App</h2>
+                    {{ govukTaskList({
+                        idPrefix: "s-about-application",
+                        items: [
+                            {
+                                "title": {
+                                    "text": "About App"
+                                },
+                                "status": {
+                                    "text": "Completed",
+                                    "classes": "t-about-application"
+                                }
+                            }
+                        ],
+                        attributes: {
+                            id: "s-about-application"
+                        }
+                    }) }}
+                    <h2 id="govuk-task-list-section-heading-s_applicant_details" class="govuk-heading-m govuk-task-list-section-heading">Applicant deets</h2>
+                    {{ govukTaskList({
+                        idPrefix: "s_applicant_details",
+                        items: [
+                            {
+                                "title": {
+                                    "text": "Personal details"
+                                },
+                                "status": {
+                                    "text": "Completed",
+                                    "classes": "t_applicant_personal-details"
+                                }
+                            },
+                            {
+                                "title": {
+                                    "text": "Residency"
+                                },
+                                "status": {
+                                    "tag": {
+                                        "text": "Incomplete",
+                                        "classes": "t_applicant_residency-and-nationality"
+                                    }
+                                }
+                            }
+                        ],
+                        attributes: {
+                            id: "s_applicant_details"
+                        }
+                    }) }}
+                `
+            };
+
+            expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+        });
+
+        it('should not display headings of sections with no applicable tasks', () => {
+            const result = qTransformer.transform({
+                schemaKey: 'task-list',
+                schema: {
+                    type: 'object',
+                    title: 'Claim criminal injuries compensation',
+                    description:
+                        'You can <a href="/account/sign-in" class="govuk-link">create a GOV.UK One Login</a> to save your application and return to it later.',
+                    properties: {
+                        taskListInfo: {
+                            type: 'object',
+                            sections: [
+                                {
+                                    id: 's-about-application',
+                                    title: 'About App',
+                                    tasks: [
+                                        {
+                                            id: 't-about-application',
+                                            title: 'About App',
+                                            status: 'completed'
+                                        }
+                                    ]
+                                },
+                                {
+                                    id: 's_applicant_details',
+                                    title: 'Applicant deets',
+                                    tasks: [
+                                        {
+                                            id: 't_applicant_personal-details',
+                                            title: 'Personal details',
+                                            status: 'notApplicable'
+                                        },
+                                        {
+                                            id: 't_applicant_residency-and-nationality',
+                                            title: 'Residency',
+                                            status: 'notApplicable'
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                },
+                options: {}
+            });
+
+            const expected = {
+                componentName: 'govukTaskList',
+                dependencies: ['{% from "task-list/macro.njk" import govukTaskList %}'],
+                id: 'task-list',
+                content: `
+                    <h1 class="govuk-heading-xl">Claim criminal injuries compensation</h1>
+                    <p class="govuk-body">You can <a href="/account/sign-in" class="govuk-link">create a GOV.UK One Login</a> to save your application and return to it later.</p>
+                    <h2 id="govuk-task-list-section-heading-s-about-application" class="govuk-heading-m govuk-task-list-section-heading">About App</h2>
+                    {{ govukTaskList({
+                        idPrefix: "s-about-application",
+                        items: [
+                            {
+                                "title": {
+                                    "text": "About App"
+                                },
+                                "status": {
+                                    "text": "Completed",
+                                    "classes": "t-about-application"
+                                }
+                            }
+                        ],
+                        attributes: {
+                            id: "s-about-application"
+                        }
+                    }) }}
+                `
+            };
+
+            expect(removeIndentation(result)).toEqual(removeIndentation(expected));
+        });
+    });
 });
