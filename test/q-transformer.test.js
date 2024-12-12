@@ -611,6 +611,7 @@ describe('qTransformer', () => {
                             label: {
                                 html: 'Event name'
                             },
+                            prefix: null,
                             hint: {
                                 html: "The name you'll use on promotional material."
                             },
@@ -650,6 +651,7 @@ describe('qTransformer', () => {
                             label: {
                                 html: 'Where should we send your passport?'
                             },
+                            prefix: null,
                             hint: {
                                 html: 'Enter an address'
                             },
@@ -2043,7 +2045,8 @@ describe('qTransformer', () => {
                             },
                             "hint": {
                                 "html": "e.g. something@something.com"
-                            }
+                            },
+                            "prefix": null
                         }) }}
                         <p>Some instructions</p>
                         {{ govukWarningText({
@@ -2064,7 +2067,8 @@ describe('qTransformer', () => {
                             "label": {
                                 "html": "Phone number"
                             },
-                            "hint": null
+                            "hint": null,
+                            "prefix": null
                         }) }}
                         {{ govukInput({
                             "id": "text",
@@ -2073,7 +2077,8 @@ describe('qTransformer', () => {
                             "label": {
                                 "html": "Mobile phone number"
                             },
-                            "hint": null
+                            "hint": null,
+                            "prefix": null
                         }) }}
                         <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
                         {{ govukWarningText({
@@ -2129,7 +2134,8 @@ describe('qTransformer', () => {
                             },
                             "hint": {
                                 "html": "e.g. something@something.com"
-                            }
+                            },
+                            "prefix": null
                         }) }}
                         <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
                         {{ govukWarningText({
@@ -2391,7 +2397,8 @@ describe('qTransformer', () => {
                                 },
                                 "hint": {
                                     "html": "e.g. something@something.com"
-                                }
+                                },
+                                "prefix": null
                             }) }}{% endset -%}
                             {% set phone %}{{ govukInput({
                                 "id": "phone",
@@ -2400,7 +2407,8 @@ describe('qTransformer', () => {
                                 "label": {
                                     "html": "Phone number"
                                 },
-                                "hint": null
+                                "hint": null,
+                                "prefix": null
                             }) }}{% endset -%}
                             {% set text %}{{ govukInput({
                                 "id": "text",
@@ -2409,7 +2417,8 @@ describe('qTransformer', () => {
                                 "label": {
                                     "html": "Mobile phone number"
                                 },
-                                "hint": null
+                                "hint": null,
+                                "prefix": null
                             }) }}{% endset -%}{{ govukRadios({
                                 "idPrefix": "contact",
                                 "name": "contact",
@@ -2568,7 +2577,8 @@ describe('qTransformer', () => {
                                 },
                                 "hint": {
                                     "html": "e.g. something@something.com"
-                                }
+                                },
+                                "prefix": null
                             }) }}{% endset -%}
                             {% set phone %}{{ govukInput({
                                 "id": "phone",
@@ -2577,7 +2587,8 @@ describe('qTransformer', () => {
                                 "label": {
                                     "html": "Phone number"
                                 },
-                                "hint": null
+                                "hint": null,
+                                "prefix": null
                             }) }}{% endset -%}
                             {% set text %}{{ govukInput({
                                 "id": "text",
@@ -2586,7 +2597,8 @@ describe('qTransformer', () => {
                                 "label": {
                                     "html": "Mobile phone number"
                                 },
-                                "hint": null
+                                "hint": null,
+                                "prefix": null
                             }) }}{% endset -%}{{ govukRadios({
                                 "idPrefix": "contact",
                                 "name": "contact",
@@ -2752,7 +2764,8 @@ describe('qTransformer', () => {
                             },
                             "hint": {
                                 "html": "e.g. something@something.com"
-                            }
+                            },
+                            "prefix": null
                         }) }}{% endset -%}
                         {% set phone %}{{ govukInput({
                             "id": "phone",
@@ -2761,7 +2774,8 @@ describe('qTransformer', () => {
                             "label": {
                                 "html": "Phone number"
                             },
-                            "hint": null
+                            "hint": null,
+                            "prefix": null
                         }) }}{% endset -%}
                         {% set text %}{{ govukInput({
                             "id": "text",
@@ -2771,6 +2785,7 @@ describe('qTransformer', () => {
                                 "html": "Mobile phone number"
                             },
                             "hint": null,
+                            "prefix": null,
                             "value": "\\"><script>alert(\\"hello\\");</script>"
                         }) }}{% endset -%}{{ govukRadios({
                             "idPrefix": "contact",
@@ -2911,7 +2926,8 @@ describe('qTransformer', () => {
                                 },
                                 "hint": {
                                     "html": "e.g. something@something.com"
-                                }
+                                },
+                                "prefix": null
                             }) }}{% endset -%}{{ govukRadios({
                                 "idPrefix": "contact",
                                 "name": "contact",
@@ -3081,7 +3097,8 @@ describe('qTransformer', () => {
                                 },
                                 "hint": {
                                     "html": "e.g. something@something.com"
-                                }
+                                },
+                                "prefix": null
                             }) }}{% endset -%}
                             {% set phone %}{{ govukInput({
                                 "id": "phone",
@@ -3090,7 +3107,8 @@ describe('qTransformer', () => {
                                 "label": {
                                     "html": "Phone number"
                                 },
-                                "hint": null
+                                "hint": null,
+                                "prefix": null
                             }) }}{% endset -%}
                             {% set text %}{{ govukInput({
                                 "id": "text",
@@ -3099,7 +3117,8 @@ describe('qTransformer', () => {
                                 "label": {
                                     "html": "Mobile phone number"
                                 },
-                                "hint": null
+                                "hint": null,
+                                "prefix": null
                             }) }}{% endset -%}{{ govukCheckboxes({
                                 "idPrefix": "contact",
                                 "name": "contact[]",
@@ -3260,7 +3279,8 @@ describe('qTransformer', () => {
                                 },
                                 "hint": {
                                     "html": "e.g. something@something.com"
-                                }
+                                },
+                                "prefix": null
                             }) }}{% endset -%}
                             {% set phone %}{{ govukInput({
                                 "id": "phone",
@@ -3269,7 +3289,8 @@ describe('qTransformer', () => {
                                 "label": {
                                     "html": "Phone number"
                                 },
-                                "hint": null
+                                "hint": null,
+                                "prefix": null
                             }) }}{% endset -%}
                             {% set text %}{{ govukInput({
                                 "id": "text",
@@ -3278,7 +3299,8 @@ describe('qTransformer', () => {
                                 "label": {
                                     "html": "Mobile phone number"
                                 },
-                                "hint": null
+                                "hint": null,
+                                "prefix": null
                             }) }}{% endset -%}{{ govukCheckboxes({
                                 "idPrefix": "contact",
                                 "name": "contact[]",
@@ -3452,7 +3474,8 @@ describe('qTransformer', () => {
                             },
                             "hint": {
                                 "html": "e.g. something@something.com"
-                            }
+                            },
+                            "prefix": null
                         }) }}{% endset -%}
                         {% set phone %}{{ govukInput({
                             "id": "phone",
@@ -3461,7 +3484,8 @@ describe('qTransformer', () => {
                             "label": {
                                 "html": "Phone number"
                             },
-                            "hint": null
+                            "hint": null,
+                            "prefix": null
                         }) }}{% endset -%}
                         {% set text %}{{ govukInput({
                             "id": "text",
@@ -3471,6 +3495,7 @@ describe('qTransformer', () => {
                                 "html": "Mobile phone number"
                             },
                             "hint": null,
+                            "prefix": null,
                             "value": "\\"><script>alert(\\"hello\\");</script>"
                         }) }}{% endset -%}{{ govukCheckboxes({
                             "idPrefix": "contact",
@@ -3614,7 +3639,8 @@ describe('qTransformer', () => {
                                 },
                                 "hint": {
                                     "html": "e.g. something@something.com"
-                                }
+                                },
+                                "prefix": null
                             }) }}{% endset -%}{{ govukCheckboxes({
                                 "idPrefix": "contact",
                                 "name": "contact[]",
@@ -3687,6 +3713,7 @@ describe('qTransformer', () => {
                         "hint": {
                             "html": "e.g. something@something.com"
                         },
+                        "prefix": null,
                         "value": "peppa@peppapig.com"
                     }) }}`
             };
@@ -3716,6 +3743,7 @@ describe('qTransformer', () => {
                     label: {
                         html: 'Event name'
                     },
+                    prefix: null,
                     hint: {
                         html: "The name you'll use on promotional material."
                     },
@@ -4151,6 +4179,7 @@ describe('qTransformer', () => {
                     label: {
                         html: 'Event name'
                     },
+                    prefix: null,
                     hint: {
                         html: "The name you'll use on promotional material."
                     },
@@ -4505,6 +4534,7 @@ describe('qTransformer', () => {
                         "hint": {
                             "html": "e.g. something@something.com"
                         },
+                        "prefix": null,
                         "errorMessage": {
                             "text": "Please enter a value"
                         }
@@ -4529,6 +4559,7 @@ describe('qTransformer', () => {
                             "html": "Phone number"
                         },
                         "hint": null,
+                        "prefix": null,
                         "errorMessage": {
                             "text": "This is not a valid type"
                         }
@@ -4540,7 +4571,8 @@ describe('qTransformer', () => {
                         "label": {
                             "html": "Mobile phone number"
                         },
-                        "hint": null
+                        "hint": null,
+                        "prefix": null
                     }) }}
                     <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
                     {{ govukWarningText({
@@ -4781,6 +4813,7 @@ describe('qTransformer', () => {
                     label: {
                         html: 'Event name'
                     },
+                    prefix: null,
                     hint: {
                         html: "The name you'll use on promotional material."
                     },
@@ -4814,6 +4847,7 @@ describe('qTransformer', () => {
                     label: {
                         html: 'Event name'
                     },
+                    prefix: null,
                     hint: {
                         html: "The name you'll use on promotional material."
                     },
@@ -4850,6 +4884,7 @@ describe('qTransformer', () => {
                     hint: {
                         html: "The name you'll use on promotional material."
                     },
+                    prefix: null,
                     id: 'event-name',
                     name: 'event-name',
                     type: 'text',
@@ -4903,7 +4938,8 @@ describe('qTransformer', () => {
                         },
                         "hint": {
                             "html": "e.g. something@something.com"
-                        }
+                        },
+                        "prefix": null
                     }) }}
                 `
             };
@@ -5415,7 +5451,8 @@ describe('qTransformer', () => {
                             },
                             "hint": {
                                 "html": "e.g. something@something.com"
-                            }
+                            },
+                            "prefix": null
                         }) }}
                         <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
                         {{ govukWarningText({
@@ -5574,7 +5611,8 @@ describe('qTransformer', () => {
                                 },
                                 "hint": {
                                     "html": "e.g. something@something.com"
-                                }
+                                },
+                                "prefix": null
                             }) }}{% endset -%}{{ govukRadios({
                                 "idPrefix": "q-main-contact-question",
                                 "name": "q-main-contact-question",
