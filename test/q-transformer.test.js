@@ -612,7 +612,7 @@ describe('qTransformer', () => {
                                 html: 'Event name'
                             },
                             hint: {
-                                text: "The name you'll use on promotional material."
+                                html: "The name you'll use on promotional material."
                             },
                             id: 'event-name',
                             name: 'event-name',
@@ -651,7 +651,7 @@ describe('qTransformer', () => {
                                 html: 'Where should we send your passport?'
                             },
                             hint: {
-                                text: 'Enter an address'
+                                html: 'Enter an address'
                             },
                             id: 'passport-sent',
                             name: 'passport-sent',
@@ -692,7 +692,7 @@ describe('qTransformer', () => {
                                 text: 'Can you provide more detail?'
                             },
                             hint: {
-                                text:
+                                html:
                                     'Do not include personal or financial information, like your National Insurance number or credit card details.'
                             },
                             maxlength: 500
@@ -737,7 +737,7 @@ describe('qTransformer', () => {
                                 text: 'Can you provide more detail?'
                             },
                             hint: {
-                                text:
+                                html:
                                     'Do not include personal or financial information, like your National Insurance number or credit card details.'
                             },
                             autocomplete: 'street-address',
@@ -841,7 +841,7 @@ describe('qTransformer', () => {
                                 }
                             },
                             hint: {
-                                text: 'For example, 12 11 2007'
+                                html: 'For example, 12 11 2007'
                             },
                             items: [
                                 {
@@ -910,7 +910,7 @@ describe('qTransformer', () => {
                                 }
                             },
                             hint: {
-                                text: 'For example, 12 11 2007'
+                                html: 'For example, 12 11 2007'
                             },
                             items: [
                                 {
@@ -1257,7 +1257,7 @@ describe('qTransformer', () => {
                             }
                         },
                         hint: {
-                            text: 'Select all that apply.'
+                            html: 'Select all that apply.'
                         },
                         items: [
                             {
@@ -1336,7 +1336,7 @@ describe('qTransformer', () => {
                             }
                         },
                         hint: {
-                            text: 'Select all that apply.'
+                            html: 'Select all that apply.'
                         },
                         items: [
                             {
@@ -2042,7 +2042,7 @@ describe('qTransformer', () => {
                                 "classes": "govuk-label--xl"
                             },
                             "hint": {
-                                "text": "e.g. something@something.com"
+                                "html": "e.g. something@something.com"
                             }
                         }) }}
                         <p>Some instructions</p>
@@ -2128,7 +2128,7 @@ describe('qTransformer', () => {
                                 "html": "Email address"
                             },
                             "hint": {
-                                "text": "e.g. something@something.com"
+                                "html": "e.g. something@something.com"
                             }
                         }) }}
                         <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
@@ -2182,7 +2182,7 @@ describe('qTransformer', () => {
                                     }
                                 },
                                 hint: {
-                                    text:
+                                    html:
                                         'This includes changing your last name or spelling your name differently.'
                                 },
                                 items: [
@@ -2238,7 +2238,7 @@ describe('qTransformer', () => {
                                     }
                                 },
                                 hint: {
-                                    text:
+                                    html:
                                         'This includes changing your last name or spelling your name differently.'
                                 },
                                 items: [
@@ -2390,7 +2390,7 @@ describe('qTransformer', () => {
                                     "html": "Email address"
                                 },
                                 "hint": {
-                                    "text": "e.g. something@something.com"
+                                    "html": "e.g. something@something.com"
                                 }
                             }) }}{% endset -%}
                             {% set phone %}{{ govukInput({
@@ -2421,7 +2421,7 @@ describe('qTransformer', () => {
                                     }
                                 },
                                 "hint": {
-                                    "text": "Select one option."
+                                    "html": "Select one option."
                                 },
                                 "items": [
                                     {
@@ -2567,7 +2567,7 @@ describe('qTransformer', () => {
                                     "html": "Email address"
                                 },
                                 "hint": {
-                                    "text": "e.g. something@something.com"
+                                    "html": "e.g. something@something.com"
                                 }
                             }) }}{% endset -%}
                             {% set phone %}{{ govukInput({
@@ -2598,7 +2598,7 @@ describe('qTransformer', () => {
                                     }
                                 },
                                 "hint": {
-                                    "text": "Select one option."
+                                    "html": "Select one option."
                                 },
                                 "items": [
                                     {
@@ -2751,7 +2751,7 @@ describe('qTransformer', () => {
                                 "html": "Email address"
                             },
                             "hint": {
-                                "text": "e.g. something@something.com"
+                                "html": "e.g. something@something.com"
                             }
                         }) }}{% endset -%}
                         {% set phone %}{{ govukInput({
@@ -2783,7 +2783,7 @@ describe('qTransformer', () => {
                                 }
                             },
                             "hint": {
-                                "text": "Select one option."
+                                "html": "Select one option."
                             },
                             "items": [
                                 {
@@ -2910,7 +2910,7 @@ describe('qTransformer', () => {
                                     "html": "Email address"
                                 },
                                 "hint": {
-                                    "text": "e.g. something@something.com"
+                                    "html": "e.g. something@something.com"
                                 }
                             }) }}{% endset -%}{{ govukRadios({
                                 "idPrefix": "contact",
@@ -2923,7 +2923,7 @@ describe('qTransformer', () => {
                                     }
                                 },
                                 "hint": {
-                                    "text": "Select one option."
+                                    "html": "Select one option."
                                 },
                                 "items": [
                                     {
@@ -3080,7 +3080,7 @@ describe('qTransformer', () => {
                                     "html": "Email address"
                                 },
                                 "hint": {
-                                    "text": "e.g. something@something.com"
+                                    "html": "e.g. something@something.com"
                                 }
                             }) }}{% endset -%}
                             {% set phone %}{{ govukInput({
@@ -3111,7 +3111,7 @@ describe('qTransformer', () => {
                                     }
                                 },
                                 "hint": {
-                                    "text": "Select one option."
+                                    "html": "Select one option."
                                 },
                                 "items": [
                                     {
@@ -3259,7 +3259,7 @@ describe('qTransformer', () => {
                                     "html": "Email address"
                                 },
                                 "hint": {
-                                    "text": "e.g. something@something.com"
+                                    "html": "e.g. something@something.com"
                                 }
                             }) }}{% endset -%}
                             {% set phone %}{{ govukInput({
@@ -3290,7 +3290,7 @@ describe('qTransformer', () => {
                                     }
                                 },
                                 "hint": {
-                                    "text": "Select one option."
+                                    "html": "Select one option."
                                 },
                                 "items": [
                                     {
@@ -3451,7 +3451,7 @@ describe('qTransformer', () => {
                                 "html": "Email address"
                             },
                             "hint": {
-                                "text": "e.g. something@something.com"
+                                "html": "e.g. something@something.com"
                             }
                         }) }}{% endset -%}
                         {% set phone %}{{ govukInput({
@@ -3483,7 +3483,7 @@ describe('qTransformer', () => {
                                 }
                             },
                             "hint": {
-                                "text": "Select one option."
+                                "html": "Select one option."
                             },
                             "items": [
                                 {
@@ -3613,7 +3613,7 @@ describe('qTransformer', () => {
                                     "html": "Email address"
                                 },
                                 "hint": {
-                                    "text": "e.g. something@something.com"
+                                    "html": "e.g. something@something.com"
                                 }
                             }) }}{% endset -%}{{ govukCheckboxes({
                                 "idPrefix": "contact",
@@ -3626,7 +3626,7 @@ describe('qTransformer', () => {
                                     }
                                 },
                                 "hint": {
-                                    "text": "Select one option."
+                                    "html": "Select one option."
                                 },
                                 "items": [
                                     {
@@ -3685,7 +3685,7 @@ describe('qTransformer', () => {
                             "classes": "govuk-label--xl"
                         },
                         "hint": {
-                            "text": "e.g. something@something.com"
+                            "html": "e.g. something@something.com"
                         },
                         "value": "peppa@peppapig.com"
                     }) }}`
@@ -3717,7 +3717,7 @@ describe('qTransformer', () => {
                         html: 'Event name'
                     },
                     hint: {
-                        text: "The name you'll use on promotional material."
+                        html: "The name you'll use on promotional material."
                     },
                     id: 'event-name',
                     name: 'event-name',
@@ -3840,7 +3840,7 @@ describe('qTransformer', () => {
                         }
                     },
                     hint: {
-                        text: 'Select all that apply.'
+                        html: 'Select all that apply.'
                     },
                     items: [
                         {
@@ -3892,7 +3892,7 @@ describe('qTransformer', () => {
                         classes: 'govuk-label govuk-label--l'
                     },
                     hint: {
-                        text:
+                        html:
                             'Do not include personal or financial information, like your National Insurance number or credit card details.'
                     },
                     value: 'Peppa Pig',
@@ -3930,7 +3930,7 @@ describe('qTransformer', () => {
                         }
                     },
                     hint: {
-                        text: 'For example, 12 11 2007'
+                        html: 'For example, 12 11 2007'
                     },
                     items: [
                         {
@@ -4152,7 +4152,7 @@ describe('qTransformer', () => {
                         html: 'Event name'
                     },
                     hint: {
-                        text: "The name you'll use on promotional material."
+                        html: "The name you'll use on promotional material."
                     },
                     id: 'event-name',
                     name: 'event-name',
@@ -4198,7 +4198,7 @@ describe('qTransformer', () => {
                         }
                     },
                     hint: {
-                        text: "The name you'll use on promotional material."
+                        html: "The name you'll use on promotional material."
                     },
                     errorMessage: {
                         text: 'Not a valid date'
@@ -4287,7 +4287,7 @@ describe('qTransformer', () => {
                         }
                     },
                     hint: {
-                        text: 'Select all that apply.'
+                        html: 'Select all that apply.'
                     },
                     errorMessage: {
                         text: 'Please select an option'
@@ -4356,7 +4356,7 @@ describe('qTransformer', () => {
                         }
                     },
                     hint: {
-                        text:
+                        html:
                             'This includes changing your last name or spelling your name differently.'
                     },
                     errorMessage: {
@@ -4412,7 +4412,7 @@ describe('qTransformer', () => {
                         text: 'Please enter more details'
                     },
                     hint: {
-                        text:
+                        html:
                             'Do not include personal or financial information, like your National Insurance number or credit card details.'
                     },
                     value: 123,
@@ -4503,7 +4503,7 @@ describe('qTransformer', () => {
                             "classes": "govuk-label--xl"
                         },
                         "hint": {
-                            "text": "e.g. something@something.com"
+                            "html": "e.g. something@something.com"
                         },
                         "errorMessage": {
                             "text": "Please enter a value"
@@ -4666,7 +4666,7 @@ describe('qTransformer', () => {
                         text: 'Where do you live?'
                     },
                     hint: {
-                        text: 'Select all that apply.'
+                        html: 'Select all that apply.'
                     },
                     errorMessage: {
                         text: 'Please select an option'
@@ -4782,7 +4782,7 @@ describe('qTransformer', () => {
                         html: 'Event name'
                     },
                     hint: {
-                        text: "The name you'll use on promotional material."
+                        html: "The name you'll use on promotional material."
                     },
                     id: 'event-name',
                     name: 'event-name',
@@ -4815,7 +4815,7 @@ describe('qTransformer', () => {
                         html: 'Event name'
                     },
                     hint: {
-                        text: "The name you'll use on promotional material."
+                        html: "The name you'll use on promotional material."
                     },
                     id: 'event-name',
                     name: 'event-name',
@@ -4848,7 +4848,7 @@ describe('qTransformer', () => {
                         html: 'Event name'
                     },
                     hint: {
-                        text: "The name you'll use on promotional material."
+                        html: "The name you'll use on promotional material."
                     },
                     id: 'event-name',
                     name: 'event-name',
@@ -4902,7 +4902,7 @@ describe('qTransformer', () => {
                             "classes": "govuk-label--xl"
                         },
                         "hint": {
-                            "text": "e.g. something@something.com"
+                            "html": "e.g. something@something.com"
                         }
                     }) }}
                 `
@@ -5341,7 +5341,7 @@ describe('qTransformer', () => {
                                     }
                                 },
                                 "hint": {
-                                    "text": "Select one option."
+                                    "html": "Select one option."
                                 },
                                 "items": [
                                     {
@@ -5414,7 +5414,7 @@ describe('qTransformer', () => {
                                 "html": "Email address"
                             },
                             "hint": {
-                                "text": "e.g. something@something.com"
+                                "html": "e.g. something@something.com"
                             }
                         }) }}
                         <p><strong>By continuing you confirm that the information you will give is true as far as you know.</strong></p>
@@ -5573,7 +5573,7 @@ describe('qTransformer', () => {
                                     "html": "Email address"
                                 },
                                 "hint": {
-                                    "text": "e.g. something@something.com"
+                                    "html": "e.g. something@something.com"
                                 }
                             }) }}{% endset -%}{{ govukRadios({
                                 "idPrefix": "q-main-contact-question",
@@ -5586,7 +5586,7 @@ describe('qTransformer', () => {
                                     }
                                 },
                                 "hint": {
-                                    "text": "Select one option."
+                                    "html": "Select one option."
                                 },
                                 "items": [
                                     {
